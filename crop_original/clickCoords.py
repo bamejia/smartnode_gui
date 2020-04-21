@@ -6,7 +6,7 @@ This script allows the user to set cropping coords by clicking an image with the
 Coordinates are stored in a json file 
 '''
 
-
+import tkinter
 import cv2
 import crop_original.jsonCoords as jsonCoords
 import os
@@ -114,6 +114,8 @@ def run():
     newCoords = []
     oldCoords = loadCoords()
 
+
+
     # get local directory
     dir = os.path.dirname(__file__)
 
@@ -127,50 +129,53 @@ def run():
     global srcImage
     srcImage = cv2.imread(srcPath)
 
+    return srcImage
+
     # open a window named 'source'
-    cv2.namedWindow("source")
-
-    # assign click handler to window
-    cv2.setMouseCallback("source", click_handler)
-
-    #make a copy of the image
-    global clone
-    clone = srcImage.copy()
-
-    #display the image until a key is pressed
-    cv2.imshow("source", clone)
-    show_crop()
-
-
-    #loop forever until 'x' is pressed
-    while True:
-        key = cv2.waitKey(0)
-
-        '''
-        if len(newCoords) > 1:
-            print('two clicks!')
-            updateCrop()
-       '''
-        # 'r' key -> reset the cropping region
-        if key == ord("r"):
-            print('\n>Resetting Crop Area')
-            clone = srcImage.copy()
-            newCoords = []
-            show_crop()
-
-        # 'c' key -> crop image
-        if key == ord("c"):
-            print('\n>Cropping Image')
-            cropImage(clone, oldCoords)
-            clone = srcImage.copy()
-            newCoords = []
-            show_crop()
-
-        # 'x' key -> exit
-        if key == ord('x'):
-            print('\n>Exiting Program')
-            exitProgram()
-            break
+    # cv2.namedWindow("source")
+    # cv2.imwrite("source", srcImage)
+    #
+    # # assign click handler to window
+    # cv2.setMouseCallback("source", click_handler)
+    #
+    # #make a copy of the image
+    # global clone
+    # clone = srcImage.copy()
+    #
+    # #display the image until a key is pressed
+    # cv2.imshow("source", clone)
+    # show_crop()
+    #
+    #
+    # #loop forever until 'x' is pressed
+    # while True:
+    #     key = cv2.waitKey(0)
+    #
+    #     '''
+    #     if len(newCoords) > 1:
+    #         print('two clicks!')
+    #         updateCrop()
+    #    '''
+    #     # 'r' key -> reset the cropping region
+    #     if key == ord("r"):
+    #         print('\n>Resetting Crop Area')
+    #         clone = srcImage.copy()
+    #         newCoords = []
+    #         show_crop()
+    #
+    #     # 'c' key -> crop image
+    #     if key == ord("c"):
+    #         print('\n>Cropping Image')
+    #         cropImage(clone, oldCoords)
+    #         clone = srcImage.copy()
+    #         newCoords = []
+    #         show_crop()
+    #
+    #     # 'x' key -> exit
+    #     if key == ord('x'):
+    #         print('\n>Exiting Program')
+    #         exitProgram()
+    #         break
 
 
 #Source: https://www.pyimagesearch.com/2015/03/09/capturing-mouse-click-events-with-python-and-opencv/

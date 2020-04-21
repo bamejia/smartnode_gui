@@ -1,7 +1,11 @@
 import tkinter as tk                # python 3
 from tkinter import font  as tkfont # python 3
+from PIL import Image
+from PIL import ImageTk
+import cv2
 import global_variables as gv
 import test
+import image_capture
 
 #import Tkinter as tk     # python 2
 #import tkFont as tkfont  # python 2
@@ -31,7 +35,7 @@ class SmartnodeGUI(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (MainMenu, Settings, OCRVideoSettings, AudioSettings, AutomationSettings):
+        for F in (MainMenu, Settings, OCRVideoSettings, AudioSettings, AutomationSettings, SetupFrame, KittenFrame):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -99,9 +103,12 @@ class OCRVideoSettings(tk.Frame):
         self.controller = controller
         label = tk.Label(self, text="OCR/Video Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go back",
+        button1 = tk.Button(self, text="Setup OCR",
+                           command=lambda: controller.show_frame("SetupFrame"))
+        button2 = tk.Button(self, text="Go back",
                            command=lambda: controller.show_frame("Settings"))
-        button.pack()
+        button1.pack()
+        button2.pack()
 
 
 class AudioSettings(tk.Frame):
@@ -126,6 +133,49 @@ class AutomationSettings(tk.Frame):
         button = tk.Button(self, text="Go back",
                            command=lambda: controller.show_frame("Settings"))
         button.pack()
+
+class SetupFrame(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = tk.Label(self, text="Setup", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="Go back",
+                           command=lambda: controller.show_frame("OCRVideoSettings"))
+        button.pack()
+
+        image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
+        image = Image.fromarray(image)
+        image = ImageTk.PhotoImage(image)
+
+        panelA = tk.Label(self, image=image)
+        panelA.image = image
+        panelA.pack(side="top", fill="x", pady=10)
+
+    def update(self):
+        image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
+        image = Image.fromarray(image)
+        image = ImageTk.PhotoImage(image)
+
+
+class KittenFrame(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = tk.Label(self, text="Setup", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="Go back",
+                           command=lambda: controller.show_frame("OCRVideoSettings"))
+        button.pack()
+
+def test_func(controller):
+    controller.frames["SetupFrame"].load_image()
+    controller.show_frame("SetupFrame")
+    # controller
 
 
 if __name__ == "__main__":
