@@ -1,14 +1,9 @@
 import tkinter as tk                # python 3
 from tkinter import font  as tkfont # python 3
-from PIL import Image
-from PIL import ImageTk
-import cv2
 import global_variables as gv
 import test
 import image_capture
-
-#import Tkinter as tk     # python 2
-#import tkFont as tkfont  # python 2
+import ocr_gui, audio_gui, finger_gui
 
 
 class SmartnodeGUI(tk.Tk):
@@ -35,7 +30,24 @@ class SmartnodeGUI(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (MainMenu, Settings, OCRVideoSettings, AudioSettings, AutomationSettings, SetupFrame, KittenFrame):
+        frame_classes = (
+            MainMenu,
+            Settings,
+            ocr_gui.OCRRuntime,
+            ocr_gui.OCRSettings,
+            ocr_gui.CropSetup,
+            ocr_gui.CropSetup2,
+            ocr_gui.OCRModeSetup,
+            ocr_gui.OCRStatus,
+            audio_gui.AudioRuntime,
+            audio_gui.AudioSettings,
+            audio_gui.AudioStatus,
+            audio_gui.AudioModeSetup,
+            audio_gui.SampleSetup,
+            finger_gui.FingerSettings
+        )
+
+        for F in frame_classes:
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -45,12 +57,19 @@ class SmartnodeGUI(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
 
+        self.return_frame = "MainMenu"  #  for returning to previous frame from frames that are accessed from multiple other frames
         self.show_frame("MainMenu")
 
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
         frame.tkraise()
+
+    def get_frame(self, page_name):
+        return self.frames[page_name]
+
+    def set_return_frame(self, page_name):
+        self.return_frame = page_name
 
 
 class MainMenu(tk.Frame):
@@ -61,14 +80,26 @@ class MainMenu(tk.Frame):
         label = tk.Label(self, text="Main Menu", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        start_stop_ocr_btn = tk.Button(self, text="Start/Stop OCR",
-                                 command=lambda: test.ocr_test())
-        start_stop_audio_btn = tk.Button(self, text="Start/Stop Audio",
-                                       command=lambda: test.audio_test())
+        ocr_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                                controller.set_return_frame("MainMenu"),
+                                controller.show_frame("OCRRuntime"))
+        audio_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                                  controller.set_return_frame("MainMenu"),
+                                  controller.show_frame("AudioRuntime"))
+        settings_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                                controller.show_frame("Settings"))
+        quit_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                                controller.destroy())
+
+        start_stop_ocr_btn = tk.Button(self, text="OCR",
+                                 command=ocr_btn_func)
+        start_stop_audio_btn = tk.Button(self, text="Audio",
+                                       command=audio_btn_func)
         settings_btn = tk.Button(self, text="Settings",
-                            command=lambda: controller.show_frame("Settings"))
+                            command=settings_btn_func)
         quit_btn = tk.Button(self, text="Quit",
-                            command=lambda: controller.destroy())
+                            command=quit_btn_func)
+
         start_stop_ocr_btn.pack()
         start_stop_audio_btn.pack()
         settings_btn.pack()
@@ -82,100 +113,29 @@ class Settings(tk.Frame):
         self.controller = controller
         label = tk.Label(self, text="Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-        button1 = tk.Button(self, text="OCR/Video Settings",
-                            command=lambda: controller.show_frame("OCRVideoSettings"))
+
+        btn1_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                                controller.show_frame("OCRSettings"))
+        btn2_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                             controller.show_frame("AudioSettings"))
+        btn3_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                             controller.show_frame("FingerSettings"))
+        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                             controller.show_frame("MainMenu"))
+
+        button1 = tk.Button(self, text="OCR Settings",
+                            command=btn1_func)
         button2 = tk.Button(self, text="Audio Settings",
-                            command=lambda: controller.show_frame("AudioSettings"))
-        button3 = tk.Button(self, text="Automation Settings",
-                            command=lambda: controller.show_frame("AutomationSettings"))
+                            command=btn2_func)
+        button3 = tk.Button(self, text="Finger Settings",
+                            command=btn3_func)
         back_button = tk.Button(self, text="Go back",
-                                command=lambda: controller.show_frame("MainMenu"))
+                                command=back_btn_func)
+
         button1.pack()
         button2.pack()
         button3.pack()
         back_button.pack()
-
-
-class OCRVideoSettings(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        label = tk.Label(self, text="OCR/Video Settings", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button1 = tk.Button(self, text="Setup OCR",
-                           command=lambda: controller.show_frame("SetupFrame"))
-        button2 = tk.Button(self, text="Go back",
-                           command=lambda: controller.show_frame("Settings"))
-        button1.pack()
-        button2.pack()
-
-
-class AudioSettings(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        label = tk.Label(self, text="Audio Settings", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go back",
-                           command=lambda: controller.show_frame("Settings"))
-        button.pack()
-
-
-class AutomationSettings(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        label = tk.Label(self, text="Automation Settings", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go back",
-                           command=lambda: controller.show_frame("Settings"))
-        button.pack()
-
-class SetupFrame(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        label = tk.Label(self, text="Setup", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-
-        button = tk.Button(self, text="Go back",
-                           command=lambda: controller.show_frame("OCRVideoSettings"))
-        button.pack()
-
-        image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
-        image = Image.fromarray(image)
-        image = ImageTk.PhotoImage(image)
-
-        panelA = tk.Label(self, image=image)
-        panelA.image = image
-        panelA.pack(side="top", fill="x", pady=10)
-
-    def update(self):
-        image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
-        image = Image.fromarray(image)
-        image = ImageTk.PhotoImage(image)
-
-
-class KittenFrame(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        label = tk.Label(self, text="Setup", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-
-        button = tk.Button(self, text="Go back",
-                           command=lambda: controller.show_frame("OCRVideoSettings"))
-        button.pack()
-
-def test_func(controller):
-    controller.frames["SetupFrame"].load_image()
-    controller.show_frame("SetupFrame")
-    # controller
 
 
 if __name__ == "__main__":
