@@ -4,6 +4,10 @@ import image_capture
 from PIL import Image
 from PIL import ImageTk
 import test
+import time
+
+
+UPDATE_RATE = 500
 
 
 class OCRRuntime(tk.Frame):
@@ -14,15 +18,22 @@ class OCRRuntime(tk.Frame):
         label = tk.Label(self, text="OCR Runtime", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        btn1_fnc = lambda: (test.louis_replace_this_with_your_function_name())
+        # flag for looping OCR
+        self.will_update = False
+        self.user_setup = False
+
+        # List functions called in order on button press
+        start_stop_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
+                            self.ocr_on_off())
         btn2_fnc = lambda: (test.louis_replace_this_with_your_function_name())
         btn3_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
                             controller.show_frame("OCRStatus"))
         back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                  controller.show_frame(controller.return_frame))
 
-        btn1 = tk.Button(self, text="Start/Stop",
-                            command=btn1_fnc)
+
+        start_stop_btn = tk.Button(self, text="Start/Stop",
+                            command=start_stop_fnc)
         btn2 = tk.Button(self, text="Mode: ",
                          command=btn2_fnc)
         btn3 = tk.Button(self, text="Show Status",
@@ -30,10 +41,37 @@ class OCRRuntime(tk.Frame):
         back_button = tk.Button(self, text="Go back",
                                 command=back_btn_func)
 
-        btn1.pack()
+        start_stop_btn.pack()
         btn2.pack()
         btn3.pack()
         back_button.pack()
+
+        self.count = 0
+
+    # def update_ocr(self):
+    #     if self.will_update:
+    #         self.test_loop()
+
+    def ocr_updater(self):
+        # This is the ocr loop by recursion
+        if self.will_update:
+
+            self.ocr_run_once()
+            # return values of external functions can change will_update flag or user_setup
+            # self.will_update = False
+            self.after(UPDATE_RATE, self.ocr_updater)
+        else:
+            return
+
+    def ocr_run_once(self):
+        print("TEST LOOP: " + str(self.count))
+        self.count += 1
+
+    # Starts the loop to call OCR called by button
+    def ocr_on_off(self):
+        self.will_update = not self.will_update
+        if (self.will_update):
+            self.ocr_updater()
 
 
 class OCRStatus(tk.Frame):

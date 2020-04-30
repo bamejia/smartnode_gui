@@ -6,10 +6,15 @@ import image_capture
 import ocr_gui, audio_gui, finger_gui
 
 
+UPDATE_RATE = 1000
+
+
 class SmartnodeGUI(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+        
+        
 
         window_width = round(gv.WINDOW_W / 1)
         window_length = round(gv.WINDOW_L / 1)
@@ -91,7 +96,7 @@ class MainMenu(tk.Frame):
         quit_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                 controller.destroy())
 
-        start_stop_ocr_btn = tk.Button(self, text="OCR",
+        self.start_stop_ocr_btn = tk.Button(self, text="OCR",
                                  command=ocr_btn_func)
         start_stop_audio_btn = tk.Button(self, text="Audio",
                                        command=audio_btn_func)
@@ -100,10 +105,23 @@ class MainMenu(tk.Frame):
         quit_btn = tk.Button(self, text="Quit",
                             command=quit_btn_func)
 
-        start_stop_ocr_btn.pack()
+        self.start_stop_ocr_btn.pack()
         start_stop_audio_btn.pack()
         settings_btn.pack()
         quit_btn.pack()
+
+        self.count = 0
+        self.will_update = True
+        self.updater()
+
+    def update_button1(self):
+        if self.will_update:
+            self.start_stop_ocr_btn["text"] = str(self.count)
+            self.count += 1
+
+    def updater(self):
+        self.update_button1()
+        self.after(UPDATE_RATE, self.updater)
 
 
 class Settings(tk.Frame):
@@ -139,5 +157,10 @@ class Settings(tk.Frame):
 
 
 if __name__ == "__main__":
+
     app = SmartnodeGUI()
     app.mainloop()
+    # while True:
+    #
+    #     app.update_idletasks()
+    #     app.update()
