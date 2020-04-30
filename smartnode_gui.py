@@ -132,27 +132,27 @@ class Settings(tk.Frame):
         label = tk.Label(self, text="Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        btn1_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        ocr_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                 controller.show_frame("OCRSettings"))
-        btn2_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        audio_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
                              controller.show_frame("AudioSettings"))
-        btn3_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        finger_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
                              controller.show_frame("FingerSettings"))
         back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
                              controller.show_frame("MainMenu"))
 
-        button1 = tk.Button(self, text="OCR Settings",
-                            command=btn1_func)
-        button2 = tk.Button(self, text="Audio Settings",
+        ocr_settings_btn = tk.Button(self, text="OCR Settings",
+                            command=ocr_settings_func)
+        audio_settings_btn = tk.Button(self, text="Audio Settings",
                             command=btn2_func)
-        button3 = tk.Button(self, text="Finger Settings",
+        finger_settings_btn = tk.Button(self, text="Finger Settings",
                             command=btn3_func)
         back_button = tk.Button(self, text="Go back",
                                 command=back_btn_func)
 
-        button1.pack()
-        button2.pack()
-        button3.pack()
+        ocr_settings_btn.pack()
+        audio_settings_btn.pack()
+        finger_settings_btn.pack()
         back_button.pack()
 
 
@@ -160,7 +160,3 @@ if __name__ == "__main__":
 
     app = SmartnodeGUI()
     app.mainloop()
-    # while True:
-    #
-    #     app.update_idletasks()
-    #     app.update()

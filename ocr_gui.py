@@ -25,8 +25,8 @@ class OCRRuntime(tk.Frame):
         # List functions called in order on button press
         start_stop_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
                             self.ocr_on_off())
-        btn2_fnc = lambda: (test.louis_replace_this_with_your_function_name())
-        btn3_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
+        mode_fnc = lambda: (test.louis_replace_this_with_your_function_name())
+        show = lambda: (test.louis_replace_this_with_your_function_name(),
                             controller.show_frame("OCRStatus"))
         back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                  controller.show_frame(controller.return_frame))
