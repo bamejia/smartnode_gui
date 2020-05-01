@@ -9,7 +9,7 @@ import time
 
 UPDATE_RATE = 500
 
-
+#   This Screen Displays when the app is currently running the OCR sampling loop
 class OCRRuntime(tk.Frame):
 
     def __init__(self, parent, controller):
