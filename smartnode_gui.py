@@ -94,25 +94,21 @@ class MainMenu(tk.Frame):
         label = tk.Label(self, text="Main Menu", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        ocr_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        ocr_btn_func = lambda: (test.pre_ocr(),
                                 controller.set_return_frame("MainMenu"),
                                 controller.show_frame("OCRRuntime"))
-        audio_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        audio_btn_func = lambda: (test.pre_audio(),
                                   controller.set_return_frame("MainMenu"),
                                   controller.show_frame("AudioRuntime"))
-        settings_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        settings_btn_func = lambda: (test.pre_settings(),
                                 controller.show_frame("Settings"))
-        quit_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        quit_btn_func = lambda: (test.pre_quit(),
                                 controller.destroy())
 
-        self.start_stop_ocr_btn = tk.Button(self, text="OCR",
-                                 command=ocr_btn_func)
-        start_stop_audio_btn = tk.Button(self, text="Audio",
-                                       command=audio_btn_func)
-        settings_btn = tk.Button(self, text="Settings",
-                            command=settings_btn_func)
-        quit_btn = tk.Button(self, text="Quit",
-                            command=quit_btn_func)
+        self.start_stop_ocr_btn = tk.Button(self, text="OCR", command=ocr_btn_func)
+        start_stop_audio_btn = tk.Button(self, text="Audio", command=audio_btn_func)
+        settings_btn = tk.Button(self, text="Settings", command=settings_btn_func)
+        quit_btn = tk.Button(self, text="Quit", command=quit_btn_func)
 
         self.start_stop_ocr_btn.pack()
         start_stop_audio_btn.pack()
@@ -146,23 +142,26 @@ class Settings(tk.Frame):
 
         ocr_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                 controller.show_frame("OCRSettings"))
+        
         audio_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
                              controller.show_frame("AudioSettings"))
+        
         finger_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
                              controller.show_frame("FingerSettings"))
+        
         back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
                              controller.show_frame("MainMenu"))
 
+
         '''     BUTTONS     '''
 
-        ocr_settings_btn = tk.Button(self, text="OCR Settings",
-                            command=ocr_settings_func)
-        audio_settings_btn = tk.Button(self, text="Audio Settings",
-                            command=audio_settings_func)
-        finger_settings_btn = tk.Button(self, text="Finger Settings",
-                            command=finger_settings_func)
-        back_button = tk.Button(self, text="Go back",
-                                command=back_btn_func)
+        ocr_settings_btn = tk.Button(self, text="OCR Settings", command=ocr_settings_func)
+
+        audio_settings_btn = tk.Button(self, text="Audio Settings", command=audio_settings_func)
+
+        finger_settings_btn = tk.Button(self, text="Finger Settings", command=finger_settings_func)
+
+        back_button = tk.Button(self, text="Go back", command=back_btn_func)
 
 
         ocr_settings_btn.pack()
