@@ -24,7 +24,7 @@ class SmartnodeGUI(tk.Tk):
 
         self.geometry(geometry_dimensions)
 
-        self.attributes('-fullscreen', True)
+        self.attributes('-fullscreen', True)  #800x480
         # self.attributes('-zoomed', True)
 
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
