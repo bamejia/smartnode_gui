@@ -158,9 +158,9 @@ class Settings(tk.Frame):
         ocr_settings_btn = tk.Button(self, text="OCR Settings",
                             command=ocr_settings_func)
         audio_settings_btn = tk.Button(self, text="Audio Settings",
-                            command=btn2_func)
+                            command=audio_settings_func)
         finger_settings_btn = tk.Button(self, text="Finger Settings",
-                            command=btn3_func)
+                            command=finger_settings_func)
         back_button = tk.Button(self, text="Go back",
                                 command=back_btn_func)
 
