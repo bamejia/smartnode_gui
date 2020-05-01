@@ -1,14 +1,16 @@
+#   This file contains the tkinter setup processes as well as the classes for
+#   the Main Menu and Settings screens
+
 import tkinter as tk                # python 3
 from tkinter import font  as tkfont # python 3
 import global_variables as gv
 import test
-import image_capture
 import ocr_gui, audio_gui, finger_gui
 
 
 UPDATE_RATE = 1000
 
-
+#   parent container for all the frames that represent the smartNode app
 class SmartnodeGUI(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -34,21 +36,25 @@ class SmartnodeGUI(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
+        # list of all frame classes
         self.frames = {}
         frame_classes = (
             MainMenu,
             Settings,
+
             ocr_gui.OCRRuntime,
             ocr_gui.OCRSettings,
             ocr_gui.CropSetup,
             ocr_gui.CropSetup2,
             ocr_gui.OCRModeSetup,
             ocr_gui.OCRStatus,
+
             audio_gui.AudioRuntime,
             audio_gui.AudioSettings,
             audio_gui.AudioStatus,
             audio_gui.AudioModeSetup,
             audio_gui.SampleSetup,
+
             finger_gui.FingerSettings
         )
 
@@ -62,9 +68,11 @@ class SmartnodeGUI(tk.Tk):
             # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.return_frame = "MainMenu"  #  for returning to previous frame from frames that are accessed from multiple other frames
+        #  for returning to previous frame from frames that are accessed from multiple other frames
+        self.return_frame = "MainMenu"
         self.show_frame("MainMenu")
 
+    #   shows
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
         frame = self.frames[page_name]
@@ -75,6 +83,7 @@ class SmartnodeGUI(tk.Tk):
 
     def set_return_frame(self, page_name):
         self.return_frame = page_name
+
 
 
 class MainMenu(tk.Frame):
@@ -123,7 +132,7 @@ class MainMenu(tk.Frame):
         self.update_button1()
         self.after(UPDATE_RATE, self.updater)
 
-
+#   This is the class declaration for the Main Settings Function
 class Settings(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -131,6 +140,9 @@ class Settings(tk.Frame):
         self.controller = controller
         label = tk.Label(self, text="Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
+
+
+        '''     BUTTON FUNCTIONS    '''
 
         ocr_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                 controller.show_frame("OCRSettings"))
@@ -141,6 +153,8 @@ class Settings(tk.Frame):
         back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
                              controller.show_frame("MainMenu"))
 
+        '''     BUTTONS     '''
+
         ocr_settings_btn = tk.Button(self, text="OCR Settings",
                             command=ocr_settings_func)
         audio_settings_btn = tk.Button(self, text="Audio Settings",
@@ -150,6 +164,7 @@ class Settings(tk.Frame):
         back_button = tk.Button(self, text="Go back",
                                 command=back_btn_func)
 
+
         ocr_settings_btn.pack()
         audio_settings_btn.pack()
         finger_settings_btn.pack()
@@ -158,5 +173,6 @@ class Settings(tk.Frame):
 
 if __name__ == "__main__":
 
+    print("Launching Smartnode GUI")
     app = SmartnodeGUI()
     app.mainloop()
