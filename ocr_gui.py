@@ -26,7 +26,7 @@ class OCRRuntime(tk.Frame):
         start_stop_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
                             self.ocr_on_off())
         mode_fnc = lambda: (test.louis_replace_this_with_your_function_name())
-        show = lambda: (test.louis_replace_this_with_your_function_name(),
+        show_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
                             controller.show_frame("OCRStatus"))
         back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                  controller.show_frame(controller.return_frame))
@@ -34,17 +34,17 @@ class OCRRuntime(tk.Frame):
 
         start_stop_btn = tk.Button(self, text="Start/Stop",
                             command=start_stop_fnc)
-        btn2 = tk.Button(self, text="Mode: ",
-                         command=btn2_fnc)
-        btn3 = tk.Button(self, text="Show Status",
-                         command=btn3_fnc)
-        back_button = tk.Button(self, text="Go back",
+        mode_btn = tk.Button(self, text="Mode: ",
+                         command=mode_fnc)
+        show_btn = tk.Button(self, text="Show Status",
+                         command=show_fnc)
+        back_button_btn = tk.Button(self, text="Go back",
                                 command=back_btn_func)
 
         start_stop_btn.pack()
-        btn2.pack()
-        btn3.pack()
-        back_button.pack()
+        mode_btn.pack()
+        show_btn.pack()
+        back_button_btn.pack()
 
         self.count = 0
 

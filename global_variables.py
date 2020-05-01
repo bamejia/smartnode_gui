@@ -1,3 +1,4 @@
+from win32api import GetSystemMetrics
 
 
 # window variables
@@ -10,8 +11,9 @@ WINDOW_L_RATIO = 7/8
 #                                                           round(GetSystemMetrics(1) * WINDOW_L_RATIO)
 # print(WINDOW_W, WINDOW_L, WINDOW_SIZE)
 
+
 WINDOW_W, WINDOW_L = WINDOW_SIZE = 1024, 900
-WINDOW_W, WINDOW_L = WINDOW_SIZE = 1024, 768
+# WINDOW_W, WINDOW_L = WINDOW_SIZE = GetSystemMetrics(0), GetSystemMetrics(1)  # for windows
 
 # title screen variables
 TITLE_TEXT = "RACING GAME"

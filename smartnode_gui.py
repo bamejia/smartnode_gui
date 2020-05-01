@@ -13,16 +13,18 @@ class SmartnodeGUI(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        
-        
 
         window_width = round(gv.WINDOW_W / 1)
         window_length = round(gv.WINDOW_L / 1)
-        window_x = round(gv.WINDOW_W * 3 / 5)
-        window_y = round(gv.WINDOW_L * 2 / 5)
+        window_x = round(gv.WINDOW_W * 2 / 5)
+        window_y = round(gv.WINDOW_L * 1 / 15)
         geometry_dimensions = "%dx%d+%d+%d" % (window_width, window_length, window_x, window_y)
+        # geometry_dimensions = "%dx%d" % (window_width, window_length)
 
         self.geometry(geometry_dimensions)
+
+        # self.attributes('-fullscreen', True)
+        # self.attributes('-zoomed', True)  for ubuntu
 
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
 
@@ -144,9 +146,9 @@ class Settings(tk.Frame):
         ocr_settings_btn = tk.Button(self, text="OCR Settings",
                             command=ocr_settings_func)
         audio_settings_btn = tk.Button(self, text="Audio Settings",
-                            command=btn2_func)
+                            command=audio_settings_func)
         finger_settings_btn = tk.Button(self, text="Finger Settings",
-                            command=btn3_func)
+                            command=finger_settings_func)
         back_button = tk.Button(self, text="Go back",
                                 command=back_btn_func)
 
