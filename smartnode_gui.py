@@ -24,6 +24,9 @@ class SmartnodeGUI(tk.Tk):
 
         self.geometry(geometry_dimensions)
 
+        self.attributes('-fullscreen', True)
+        # self.attributes('-zoomed', True)
+
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
 
         # the container is where we'll stack a bunch of frames
@@ -144,16 +147,16 @@ class Settings(tk.Frame):
         ocr_settings_btn = tk.Button(self, text="OCR Settings",
                             command=ocr_settings_func)
         audio_settings_btn = tk.Button(self, text="Audio Settings",
-                            command=btn2_func)
+                            command=audio_settings_func)
         finger_settings_btn = tk.Button(self, text="Finger Settings",
-                            command=btn3_func)
-        back_button = tk.Button(self, text="Go back",
+                            command=finger_settings_func)
+        back_button_btn = tk.Button(self, text="Go back",
                                 command=back_btn_func)
 
         ocr_settings_btn.pack()
         audio_settings_btn.pack()
         finger_settings_btn.pack()
-        back_button.pack()
+        back_button_btn.pack()
 
 
 if __name__ == "__main__":
