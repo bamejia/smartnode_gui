@@ -16,7 +16,6 @@ import ocr_gui, audio_gui, finger_gui
 # from firebase_admin import db
 
 
-
 UPDATE_RATE = 1000
 
 

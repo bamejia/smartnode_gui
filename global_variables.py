@@ -1,4 +1,4 @@
-from win32api import GetSystemMetrics
+# from win32api import GetSystemMetrics
 
 
 # window variables
