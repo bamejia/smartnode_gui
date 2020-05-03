@@ -129,16 +129,15 @@ class OCRSettings(tk.Frame):
         }
 
         btn_objs = {
-            'setup': tk.Button(self, text="Setup OCR"),
+            'setup': tk.Button(self, text="Cropping Setup"),
             'mode': tk.Button(self, text="Loop Mode: "),
             'test': tk.Button(self, text="Test Run"),
             'back': tk.Button(self, text="Go back"),
         }
 
         for btn in btn_objs:
-            btn_objs[btn].configure(btn_funcs[btn])
+            btn_objs[btn].configure(command=btn_funcs[btn])
             btn_objs[btn].pack()
-
 
 
 class CropSetup(tk.Frame):
@@ -149,15 +148,38 @@ class CropSetup(tk.Frame):
         label = tk.Label(self, text="Crop Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (
-            # ,
-            controller.show_frame("OCRSettings")
-        ),
+        btn_funcs = {
+            'add': lambda: (
+                # ,
+            ),
 
-        back_btn = tk.Button(self, text="Go back", command=back_btn_func)
+            'remove': lambda: (
+                # ,
+            ),
 
-        back_btn.pack()
+            'show': lambda: (
+                # ,
+            ),
 
+            'back': lambda: (
+                # ,
+                controller.show_frame("OCRSettings")
+            )
+        }
+
+        btn_objs = {
+            'add': tk.Button(self, text="Add Crop Area"),
+            'remove': tk.Button(self, text="Remove Last"),
+            'show': tk.Button(self, text="Show Current"),
+            'back': tk.Button(self, text="Go back"),
+        }
+
+        for btn in btn_objs:
+            btn_objs[btn].configure(command=btn_funcs[btn])
+            btn_objs[btn].pack()
+
+        # vvv what is this? vvv
+        '''
         # self.image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
         # self.image = Image.fromarray(self.image)
         # self.image = ImageTk.PhotoImage(self.image)
@@ -165,6 +187,7 @@ class CropSetup(tk.Frame):
         # panelA = tk.Label(self, image=self.image)
         # panelA.image = self.image
         # panelA.pack(side="top", fill="x", pady=10)
+        '''
 
     def update(self):
         print("CATS")
