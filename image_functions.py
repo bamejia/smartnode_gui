@@ -62,7 +62,7 @@ def closeEvent(event, x, y, flags, param):
 
 
 #   attempts to display the image at the provided path
-def addCrop(cropObjs, imgPath=getFullPath('source.jpg')):
+def addCrop(cropObjs=coordList, imgPath=getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Fool! Run takeSource!")
         return
@@ -133,7 +133,7 @@ def clickHandler(event, x, y, flags, param):
 
 #   generates cropped images based on source image and crop objects
 #   returns a list of file paths for use with ocr
-def cropSource(cropObjs, imgPath=getFullPath('source.jpg')):
+def cropSource(cropObjs=coordList, imgPath=getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Fool! Run takeSource!")
         return
