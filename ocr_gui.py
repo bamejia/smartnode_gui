@@ -3,6 +3,7 @@ import cv2
 import image_capture
 # from PIL import Image
 # from PIL import ImageTk
+import global_variables as gv
 import test
 import time
 
@@ -13,7 +14,7 @@ UPDATE_RATE = 500
 class OCRRuntime(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="OCR Runtime", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -73,7 +74,7 @@ class OCRRuntime(tk.Frame):
 class OCRStatus(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="OCR Status", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -90,7 +91,7 @@ class OCRStatus(tk.Frame):
 class OCRSettings(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="OCR/Video Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -124,7 +125,7 @@ class OCRSettings(tk.Frame):
 class CropSetup(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="Crop Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -155,7 +156,7 @@ class CropSetup(tk.Frame):
 class CropSetup2(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="Crop Setup 2", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -172,7 +173,7 @@ class CropSetup2(tk.Frame):
 class OCRModeSetup(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="OCR Mode Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)

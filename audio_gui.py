@@ -1,15 +1,16 @@
 import tkinter as tk
 import test
 import audio_controller
+import global_variables as gv
 
 
-UPDATE_RATE = 100
+UPDATE_RATE = 500
 
 
 class AudioRuntime(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="Audio Runtime", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -69,7 +70,7 @@ class AudioRuntime(tk.Frame):
 class AudioStatus(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="Audio Status", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -86,7 +87,7 @@ class AudioStatus(tk.Frame):
 class AudioSettings(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="Audio Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -119,7 +120,7 @@ class AudioSettings(tk.Frame):
 class SampleSetup(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="Sample Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -144,7 +145,7 @@ class SampleSetup(tk.Frame):
 class AudioModeSetup(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="Audio Mode Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)

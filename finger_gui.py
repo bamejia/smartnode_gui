@@ -1,11 +1,12 @@
 import tkinter as tk
 import test
+import global_variables as gv
 
 
 class FingerSettings(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="Finger Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)

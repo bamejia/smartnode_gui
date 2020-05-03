@@ -33,10 +33,12 @@ class SmartnodeGUI(tk.Tk):
 
         self.geometry(geometry_dimensions)
 
-        self.attributes('-fullscreen', True)  #800x480
+        # self.attributes('-fullscreen', True)  #800x480
         # self.attributes('-zoomed', True)
+        # self.overrideredirect(True)  # gets rid of top minimizing, maximizing, and closing buttons bar
 
         self.title_font = tkfont.Font(family='Helvetica', size=30, weight="bold", slant="italic")
+        self.button_font = tkfont.Font(size=26)
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -75,7 +77,7 @@ class SmartnodeGUI(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.return_frame = "MainMenu"  #  for returning to previous frame from frames that are accessed from multiple other frames
-        self.current_frame = "fidja"
+        self.current_frame = "MainMenu"
         self.whitelisted_frames = {   #  frames in which firebase can start a loop
             "MainMenu",
             "Settings",
@@ -88,6 +90,7 @@ class SmartnodeGUI(tk.Tk):
 
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
+        self.current_frame = page_name
         frame = self.frames[page_name]
         frame.tkraise()
 
@@ -161,9 +164,10 @@ class SmartnodeGUI(tk.Tk):
 class MainMenu(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="Main Menu", font=controller.title_font)
+        label = tk.Label(self, text="Main Menu", font=controller.title_font, bg=gv.TITLE_COLOR, fg=gv.FONT_COLOR,
+                         bd=gv.TITLE_DEPTH, relief=tk.RAISED, pady=gv.TITLE_PADY)
         label.pack(side="top", fill="x", pady=8)
 
         ocr_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
@@ -178,18 +182,18 @@ class MainMenu(tk.Frame):
                                 controller.destroy())
 
         self.start_stop_ocr_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="OCR",
-                                 command=ocr_btn_func)
+                                 command=ocr_btn_func, bd=gv.BUTTON_DEPTH, bg=gv.BUTTON_COLOR, font=controller.button_font, activebackground=gv.BUTTON_PRESS_COLOR, fg=gv.FONT_COLOR)
         start_stop_audio_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="Audio",
-                                       command=audio_btn_func)
+                                       command=audio_btn_func, bd=gv.BUTTON_DEPTH, bg=gv.BUTTON_COLOR, font=controller.button_font, fg=gv.FONT_COLOR)
         settings_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="Settings",
-                            command=settings_btn_func)
+                            command=settings_btn_func, bd=gv.BUTTON_DEPTH, bg=gv.BUTTON_COLOR, font=controller.button_font, fg=gv.FONT_COLOR)
         quit_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="Quit",
-                            command=quit_btn_func)
+                            command=quit_btn_func, bd=gv.BUTTON_DEPTH, bg=gv.BUTTON_COLOR, font=controller.button_font, fg=gv.FONT_COLOR)
 
-        self.start_stop_ocr_btn.pack()
-        start_stop_audio_btn.pack()
-        settings_btn.pack()
-        quit_btn.pack()
+        self.start_stop_ocr_btn.pack(pady=gv.BUTTON_SPACE)
+        start_stop_audio_btn.pack(pady=gv.BUTTON_SPACE)
+        settings_btn.pack(pady=gv.BUTTON_SPACE)
+        quit_btn.pack(pady=gv.BUTTON_SPACE)
 
         self.count = 0
         self.will_update = True
@@ -208,7 +212,7 @@ class MainMenu(tk.Frame):
 class Settings(tk.Frame):
 
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = tk.Label(self, text="Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
