@@ -1,5 +1,9 @@
 import tkinter as tk
 import test
+import audio_controller
+
+
+UPDATE_RATE = 100
 
 
 class AudioRuntime(tk.Frame):
@@ -10,7 +14,11 @@ class AudioRuntime(tk.Frame):
         label = tk.Label(self, text="Audio Runtime", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        btn1_fnc = lambda: (test.louis_replace_this_with_your_function_name())
+        self.will_update = False
+        self.user_setup = False
+
+        btn1_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
+                            self.audio_on_off())
         btn2_fnc = lambda: (test.louis_replace_this_with_your_function_name())
         btn3_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
                             controller.show_frame("AudioStatus"))
@@ -30,6 +38,32 @@ class AudioRuntime(tk.Frame):
         btn2.pack()
         btn3.pack()
         back_btn.pack()
+
+    def audio_updater(self, mySet):
+        # This is the ocr loop by recursion
+        if self.will_update:
+
+            audio_controller.loop(mySet)
+            # return values of external functions can change will_update flag or user_setup
+            # self.will_update = False
+            self.after(UPDATE_RATE, self.audio_updater, mySet)
+        else:
+            print("\n\nSample Loop Completed!")
+            return
+
+    # Starts the loop to call OCR called by button
+    def audio_on_off(self):
+        self.will_update = not self.will_update
+        if (self.will_update):
+            # checks to see if user recorded a sample
+            print("Audio Start function")
+            self.user_setup = audio_controller.init_Audio()
+            if self.user_setup:
+                mySet = audio_controller.pre_loop()
+                self.audio_updater(mySet)
+            else:  # otherwise will switch to sample setup frame for recording
+                print("\tAudio Not Set Up! -> Running recordRef\n")
+                self.controller.show_frame("SampleSetup")
 
 
 class AudioStatus(tk.Frame):
@@ -90,12 +124,20 @@ class SampleSetup(tk.Frame):
         label = tk.Label(self, text="Sample Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        record_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                               audio_controller.record(),
+                            controller.show_frame("AudioSettings"))
+
+        back_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                  controller.show_frame("AudioSettings"))
 
-        back_btn = tk.Button(self, text="Go back",
-                           command=back_btn_func)
+        record_btn = tk.Button(self, text="Record",
+                           command=record_func)
 
+        back_btn = tk.Button(self, text="Go back",
+                           command=back_func)
+
+        record_btn.pack()
         back_btn.pack()
 
 

@@ -5,6 +5,17 @@ import test
 import image_capture
 import ocr_gui, audio_gui, finger_gui
 
+# from firebase import firebase
+# from firecreds import connect_to_firebase
+# import os
+# import json
+# from firebase_admin import db
+#
+# import firebase_admin
+# from firebase_admin import credentials
+# from firebase_admin import db
+
+
 
 UPDATE_RATE = 1000
 
@@ -13,8 +24,6 @@ class SmartnodeGUI(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-        
-        
 
         window_width = round(gv.WINDOW_W / 1)
         window_length = round(gv.WINDOW_L / 1)
@@ -66,6 +75,15 @@ class SmartnodeGUI(tk.Tk):
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.return_frame = "MainMenu"  #  for returning to previous frame from frames that are accessed from multiple other frames
+        self.current_frame = "fidja"
+        self.whitelisted_frames = {   #  frames in which firebase can start a loop
+            "MainMenu",
+            "Settings",
+            "OCRRUntime",
+            "OCRStatus"
+            "AudioRuntime",
+            "AudioStatus"
+        }
         self.show_frame("MainMenu")
 
     def show_frame(self, page_name):
@@ -73,11 +91,71 @@ class SmartnodeGUI(tk.Tk):
         frame = self.frames[page_name]
         frame.tkraise()
 
-    def get_frame(self, page_name):
-        return self.frames[page_name]
-
     def set_return_frame(self, page_name):
         self.return_frame = page_name
+
+    # def connect_to_firebase():
+    #
+    #     print("Initializing Firebase Connection...")
+    #     # Fetch the service account key JSON file contents
+    #
+    #     FILES_DIR = 'smartnode_key.json'
+    #
+    #     cred = credentials.Certificate(FILES_DIR)
+    #
+    #     print("Credentials Found. ")
+    #
+    #     # Initialize the app with a service account, granting admin privileges
+    #     response = firebase_admin.initialize_app(cred, {'databaseURL': 'https://smartnode-ed0a9.firebaseio.com/%27%7D)'})
+    #
+    # def firebase_setup(self):
+    #
+    #     connect_to_firebase()
+    #
+    #     recent_commands = {"recent_commands": ""}
+    #
+    #     recent_command = {
+    #         '12:24': {
+    #             'command': 'Light_ON',
+    #             'time': '12:24'
+    #         },
+    #
+    #         '12:25': {
+    #             'command': 'Light_OFF',
+    #             'time': '12:25'
+    #         }
+    #     }
+    #
+    #     def show(command):
+    #         print(command)
+    #
+    #     # points to the parent node in firebase directory
+    #     command = db.reference('/recent_commands')
+    #
+    #     # The Dictionary get() method returns the value of the item with the specified key.
+    #     commands = command.get()
+    #
+    #     print(commands)
+    #
+    #     for c in commands:
+    #         show(commands[c]['command'])
+    #
+    #     # erase commands
+    #     # result = db.reference('/').update(recent_commands)
+    #
+    # # from pi_configs import FILES_DIR  # root directory of project
+    #
+    # def firebase_updater(self):
+    #     pass
+    #
+    # def firebase_commands(self, command):
+    #     if command == "OCR_ON_OFF":
+    #
+    #             self.frames["OCRRuntime"].ocr_on_off()
+    #     elif command == "AUDIO_ON_OFF":
+    #         pass
+    #     elif command == "FINGER_PRESS":
+    #         pass
 
 
 class MainMenu(tk.Frame):
@@ -100,8 +178,8 @@ class MainMenu(tk.Frame):
                                 controller.destroy())
 
         self.start_stop_ocr_btn = tk.Button(self, text="OCR",
-                                 command=ocr_btn_func)
-        start_stop_audio_btn = tk.Button(self, text="Audio",
+                                 command=ocr_btn_func, height=1, width=10)
+        start_stop_audio_btn = tk.Button(self, height=2, width=10, text="Audio",
                                        command=audio_btn_func)
         settings_btn = tk.Button(self, text="Settings",
                             command=settings_btn_func)
@@ -160,6 +238,5 @@ class Settings(tk.Frame):
 
 
 if __name__ == "__main__":
-
     app = SmartnodeGUI()
     app.mainloop()

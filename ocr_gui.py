@@ -48,10 +48,6 @@ class OCRRuntime(tk.Frame):
 
         self.count = 0
 
-    # def update_ocr(self):
-    #     if self.will_update:
-    #         self.test_loop()
-
     def ocr_updater(self):
         # This is the ocr loop by recursion
         if self.will_update:
