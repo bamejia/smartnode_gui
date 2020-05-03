@@ -1,14 +1,11 @@
 import tkinter as tk
-import cv2
-import image_capture
+
 # from PIL import Image
 # from PIL import ImageTk
 import global_variables as gv
-import test
-import time
-
 
 UPDATE_RATE = 500
+
 
 #   This Screen Displays when the app is currently running the OCR sampling loop
 class OCRRuntime(tk.Frame):
@@ -24,28 +21,38 @@ class OCRRuntime(tk.Frame):
         self.user_setup = False
 
         # List functions called in order on button press
-        start_stop_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
-                            self.ocr_on_off())
-        mode_fnc = lambda: (test.louis_replace_this_with_your_function_name())
-        show_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
-                            controller.show_frame("OCRStatus"))
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
-                                 controller.show_frame(controller.return_frame))
 
+        btn_funcs = {
+            'toggle': lambda: (
+                # ,
+                self.ocr_on_off()
+            ),
 
-        start_stop_btn = tk.Button(self, text="Start/Stop",
-                            command=start_stop_fnc)
-        mode_btn = tk.Button(self, text="Mode: ",
-                         command=mode_fnc)
-        show_btn = tk.Button(self, text="Show Status",
-                         command=show_fnc)
-        back_button_btn = tk.Button(self, text="Go back",
-                                command=back_btn_func)
+            'mode': lambda: (
+                #
+            ),
 
-        start_stop_btn.pack()
-        mode_btn.pack()
-        show_btn.pack()
-        back_button_btn.pack()
+            'show': lambda: (
+                # ,
+                controller.show_frame("OCRStatus")
+            ),
+
+            'back': lambda: (
+                # ,
+                controller.show_frame(controller.return_frame)
+            )
+        }
+
+        btn_objs = {
+            'toggle': tk.Button(self, text="Start/Stop"),
+            'mode': tk.Button(self, text="Mode: "),
+            'show': tk.Button(self, text="Show Status"),
+            'back': tk.Button(self, text="Go back")
+        }
+
+        for btn in btn_objs:
+            btn_objs[btn].configure(command=btn_funcs[btn])
+            btn_objs[btn].pack()
 
         self.count = 0
 
@@ -79,8 +86,8 @@ class OCRStatus(tk.Frame):
         label = tk.Label(self, text="OCR Status", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
-                                 controller.show_frame("OCRRuntime"))
+        back_btn_func = lambda: (  # ,
+            controller.show_frame("OCRRuntime"))
 
         back_button = tk.Button(self, text="Go back",
                                 command=back_btn_func)
@@ -96,25 +103,25 @@ class OCRSettings(tk.Frame):
         label = tk.Label(self, text="OCR/Video Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        btn1_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
-                            controller.frames["CropSetup"].update(),
-                            controller.show_frame("CropSetup"))
-        btn2_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
-                            controller.show_frame("OCRModeSetup"))
-        btn3_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
-                            controller.set_return_frame("OCRSettings"),
-                            controller.show_frame("OCRRuntime"))
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
-                                 controller.show_frame("Settings"))
+        btn1_fnc = lambda: (  # ,
+            controller.frames["CropSetup"].update(),
+            controller.show_frame("CropSetup"))
+        btn2_fnc = lambda: (  # ,
+            controller.show_frame("OCRModeSetup"))
+        btn3_fnc = lambda: (  # ,
+            controller.set_return_frame("OCRSettings"),
+            controller.show_frame("OCRRuntime"))
+        back_btn_func = lambda: (  # ,
+            controller.show_frame("Settings"))
 
         btn1 = tk.Button(self, text="Setup OCR",
-                            command=btn1_fnc)
+                         command=btn1_fnc)
         btn2 = tk.Button(self, text="Run Mode: ",
                          command=btn2_fnc)
         btn3 = tk.Button(self, text="Test Run",
                          command=btn3_fnc)
         back_btn = tk.Button(self, text="Go back",
-                           command=back_btn_func)
+                             command=back_btn_func)
 
         btn1.pack()
         btn2.pack()
@@ -130,11 +137,11 @@ class CropSetup(tk.Frame):
         label = tk.Label(self, text="Crop Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
-                                 controller.show_frame("OCRSettings"))
+        back_btn_func = lambda: (  # ,
+            controller.show_frame("OCRSettings"))
 
         back_btn = tk.Button(self, text="Go back",
-                           command=back_btn_func)
+                             command=back_btn_func)
 
         back_btn.pack()
 
@@ -161,11 +168,11 @@ class CropSetup2(tk.Frame):
         label = tk.Label(self, text="Crop Setup 2", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
-                                 controller.show_frame("CropSetup"))
+        back_btn_func = lambda: (  # ,
+            controller.show_frame("CropSetup"))
 
         back_btn = tk.Button(self, text="Go back",
-                           command=back_btn_func)
+                             command=back_btn_func)
 
         back_btn.pack()
 
@@ -178,8 +185,8 @@ class OCRModeSetup(tk.Frame):
         label = tk.Label(self, text="OCR Mode Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
-                                 controller.show_frame("OCRSettings"))
+        back_btn_func = lambda: (  # ,
+            controller.show_frame("OCRSettings"))
 
         back_btn = tk.Button(self, text="Go back",
                              command=back_btn_func)
