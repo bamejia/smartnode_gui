@@ -33,10 +33,10 @@ class SmartnodeGUI(tk.Tk):
 
         self.geometry(geometry_dimensions)
 
-        self.attributes('-fullscreen', True)  #800x480
+        # self.attributes('-fullscreen', True)  #800x480
         # self.attributes('-zoomed', True)
 
-        self.title_font = tkfont.Font(family='Helvetica', size=60, weight="bold", slant="italic")
+        self.title_font = tkfont.Font(family='Helvetica', size=30, weight="bold", slant="italic")
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
