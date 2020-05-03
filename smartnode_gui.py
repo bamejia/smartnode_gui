@@ -1,11 +1,11 @@
-import tkinter as tk  # python 3
-from tkinter import font  as tkfont  # python 3
-
-import audio_gui
-import finger_gui
+import tkinter as tk                # python 3
+from tkinter import font  as tkfont # python 3
 import global_variables as gv
-import ocr_gui
 import test
+import image_capture
+import ocr_gui, audio_gui, finger_gui
+import general_button_label as gbl
+
 
 # from firebase import firebase
 # from firecreds import connect_to_firebase
@@ -167,8 +167,7 @@ class MainMenu(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="Main Menu", font=controller.title_font, bg=gv.TITLE_COLOR, fg=gv.FONT_COLOR,
-                         bd=gv.TITLE_DEPTH, relief=tk.RAISED, pady=gv.TITLE_PADY)
+        label = gbl.GLabel(self, "Main Menu", controller.title_font)
         label.pack(side="top", fill="x", pady=8)
 
         ocr_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
@@ -182,14 +181,10 @@ class MainMenu(tk.Frame):
         quit_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                 controller.destroy())
 
-        self.start_stop_ocr_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="OCR",
-                                 command=ocr_btn_func, bd=gv.BUTTON_DEPTH, bg=gv.BUTTON_COLOR, font=controller.button_font, activebackground=gv.BUTTON_PRESS_COLOR, fg=gv.FONT_COLOR)
-        start_stop_audio_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="Audio",
-                                       command=audio_btn_func, bd=gv.BUTTON_DEPTH, bg=gv.BUTTON_COLOR, font=controller.button_font, fg=gv.FONT_COLOR)
-        settings_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="Settings",
-                            command=settings_btn_func, bd=gv.BUTTON_DEPTH, bg=gv.BUTTON_COLOR, font=controller.button_font, fg=gv.FONT_COLOR)
-        quit_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="Quit",
-                            command=quit_btn_func, bd=gv.BUTTON_DEPTH, bg=gv.BUTTON_COLOR, font=controller.button_font, fg=gv.FONT_COLOR)
+        self.start_stop_ocr_btn = gbl.GButton(self, "OCR", ocr_btn_func, controller.button_font)
+        start_stop_audio_btn = gbl.GButton(self, "Audio", audio_btn_func, controller.button_font)
+        settings_btn = gbl.GButton(self, "Settings", settings_btn_func, controller.button_font)
+        quit_btn = gbl.GButton(self, "Quit", quit_btn_func, controller.button_font)
 
         self.start_stop_ocr_btn.pack(pady=gv.BUTTON_SPACE)
         start_stop_audio_btn.pack(pady=gv.BUTTON_SPACE)
@@ -198,7 +193,7 @@ class MainMenu(tk.Frame):
 
         self.count = 0
         self.will_update = True
-        self.updater()
+        # self.updater()
 
     def update_button1(self):
         if self.will_update:
@@ -215,35 +210,27 @@ class Settings(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="Settings", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label = gbl.GLabel(self, "Settings", controller.title_font)
+        label.pack(side="top", fill="x", pady=8)
 
-        btn_funcs = {
-            'ocr_set': lambda: (
-                controller.show_frame("OCRSettings")),
+        ocr_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                                controller.show_frame("OCRSettings"))
+        audio_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                             controller.show_frame("AudioSettings"))
+        finger_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                             controller.show_frame("FingerSettings"))
+        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+                             controller.show_frame("MainMenu"))
 
-            'audio_set:': lambda: (
-                controller.show_frame("AudioSettings")),
+        ocr_settings_btn = gbl.GButton(self, "OCR Settings", ocr_settings_func, controller.button_font)
+        audio_settings_btn = gbl.GButton(self, "Audio Settings", audio_settings_func, controller.button_font)
+        finger_settings_btn = gbl.GButton(self, "Finger Settings", finger_settings_func, controller.button_font)
+        back_button_btn = gbl.GButton(self, "Go back", back_btn_func, controller.button_font)
 
-            'finger_set:': lambda: (
-                controller.show_frame("FingerSettings")),
-
-            'back': lambda: (
-                controller.show_frame("MainMenu"))
-        }
-
-        btn_objs = {
-            'ocr_set:': tk.Button(self, text="OCR Set:"),
-            'audio_set:': tk.Button(self, text="Audio Set:"),
-            'finger_set:': tk.Button(self, text="Finger Set:"),
-            'back': tk.Button(self, text="Go back"),
-        }
-
-        for btn in btn_objs:
-            btn_objs[btn].configure(command=btn_funcs[btn])
-            btn_objs[btn].configure(height=-90, width=-700)
-            btn_objs[btn].configure(font=controller.butt)
-            btn_objs[btn].pack()
+        ocr_settings_btn.pack(pady=gv.BUTTON_SPACE)
+        audio_settings_btn.pack(pady=gv.BUTTON_SPACE)
+        finger_settings_btn.pack(pady=gv.BUTTON_SPACE)
+        back_button_btn.pack(pady=gv.BUTTON_SPACE)
 
 
 if __name__ == "__main__":
