@@ -1,10 +1,24 @@
 from DEFAULTS import *
 from Utility_Functions import *
-from  time import sleep
+
+
 #   This set of function handles saving / loading settings
 
 
+#   checks loop ending conditions common to both kinds of loop
+def check_LoopMode(mySet):
+    if mySet['loopMode'] == 'infinite':
+        return False
 
+    if mySet['loopMode'] == 'single':
+        return True
+
+    #   returns true if enough time has passed
+    if mySet['loopMode'] == 'timed':
+        return checkTime(mySet['loopEnd'])
+
+    else:
+        return False
 
 #   changes setting in object, saves it to file, returns the modified version
 def changeSetting(obj, key, value):
@@ -49,16 +63,6 @@ def loadSettings(fileName):
         #print(f"Settings File '{fileName}' Located and Non-Empty")
         with open(filePath, 'r') as myFile:
             settingsObj = json.load(myFile)
-
-        #print("\tFile Loaded Successfully")
-       # print()
-
-    '''
-    print("settings object in load settings function:")
-    for i in settingsObj:
-        print(f"\t{i}: {settingsObj[i]}")
-    print()
-    '''
 
     return settingsObj
 

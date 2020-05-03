@@ -1,6 +1,7 @@
-from PiResponses import respond, check_LoopMode
-from audio_functions import *
+# from PiResponses import respond, check_LoopMode
 from FireBase_Functions import postFirebase
+from audio_functions import *
+
 
 #   record new sample
 def getData(samplePath):
@@ -70,13 +71,6 @@ def getEndConditions(mySet):
         print("\tLoop Ended Due to Internal Trigger")
         print()
         return True
-
-    #   Checks for loop end from to external input
-    if respond("check", "audio") == "Stop":
-        print("\tLoop Ended Due to External Trigger")
-        print()
-        return True
-
 
     print("\tLoop Continuing")
     return False
