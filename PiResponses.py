@@ -1,6 +1,14 @@
+'''
+
+TODO: delete this
+
+'''
+
+import time
+
 from FireBase_Functions import checkCommands
 from Utility_Functions import checkTime
-import time
+
 
 #   Functions that allow looping functions to check if
 #   These responses can originate from Firebse or the GUI
