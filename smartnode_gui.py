@@ -5,6 +5,7 @@ import test
 import image_capture
 import ocr_gui, audio_gui, finger_gui
 
+
 # from firebase import firebase
 # from firecreds import connect_to_firebase
 # import os
@@ -35,7 +36,7 @@ class SmartnodeGUI(tk.Tk):
         self.attributes('-fullscreen', True)  #800x480
         # self.attributes('-zoomed', True)
 
-        self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
+        self.title_font = tkfont.Font(family='Helvetica', size=60, weight="bold", slant="italic")
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -163,7 +164,7 @@ class MainMenu(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="Main Menu", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=8)
 
         ocr_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                 controller.set_return_frame("MainMenu"),
@@ -176,13 +177,13 @@ class MainMenu(tk.Frame):
         quit_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
                                 controller.destroy())
 
-        self.start_stop_ocr_btn = tk.Button(self, text="OCR",
-                                 command=ocr_btn_func, height=1, width=10)
-        start_stop_audio_btn = tk.Button(self, height=2, width=10, text="Audio",
+        self.start_stop_ocr_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="OCR",
+                                 command=ocr_btn_func)
+        start_stop_audio_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="Audio",
                                        command=audio_btn_func)
-        settings_btn = tk.Button(self, text="Settings",
+        settings_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="Settings",
                             command=settings_btn_func)
-        quit_btn = tk.Button(self, text="Quit",
+        quit_btn = tk.Button(self, height=gv.BUTTON_HEIGHT, width=gv.BUTTON_WIDTH, text="Quit",
                             command=quit_btn_func)
 
         self.start_stop_ocr_btn.pack()
