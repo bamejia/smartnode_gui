@@ -1,10 +1,19 @@
+'''''
+
+TODO: DELETE THIS
+
+'''
+
+
 import os
+
 import cv2
 
 
 def capture_image():
     # #print opening message
     # print("\nPress:\t'c' to crop\t'r' to reset\t'x' to  exit")
+
     # print("Click:\t1) top-left\t2) bot-right\t3) save area")
     #
     #
