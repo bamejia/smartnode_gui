@@ -1,8 +1,8 @@
 import tkinter as tk
 import cv2
 import image_capture
-from PIL import Image
-from PIL import ImageTk
+# from PIL import Image
+# from PIL import ImageTk
 import test
 import time
 
@@ -137,19 +137,19 @@ class CropSetup(tk.Frame):
 
         back_btn.pack()
 
-        self.image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
-        self.image = Image.fromarray(self.image)
-        self.image = ImageTk.PhotoImage(self.image)
+        # self.image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
+        # self.image = Image.fromarray(self.image)
+        # self.image = ImageTk.PhotoImage(self.image)
 
-        panelA = tk.Label(self, image=self.image)
-        panelA.image = self.image
-        panelA.pack(side="top", fill="x", pady=10)
+        # panelA = tk.Label(self, image=self.image)
+        # panelA.image = self.image
+        # panelA.pack(side="top", fill="x", pady=10)
 
     def update(self):
         print("CATS")
-        self.image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
-        self.image = Image.fromarray(self.image)
-        self.image = ImageTk.PhotoImage(self.image)
+        # self.image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
+        # self.image = Image.fromarray(self.image)
+        # self.image = ImageTk.PhotoImage(self.image)
 
 
 class CropSetup2(tk.Frame):
