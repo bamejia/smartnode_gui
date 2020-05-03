@@ -241,6 +241,7 @@ class Settings(tk.Frame):
 
         for btn in btn_objs:
             btn_objs[btn].configure(command=btn_funcs[btn])
+            btn_objs[btn].configure(height=-90, width=-700)
             btn_objs[btn].configure(font=controller.butt)
             btn_objs[btn].pack()
 
