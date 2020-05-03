@@ -1,10 +1,11 @@
-import tkinter as tk                # python 3
-from tkinter import font  as tkfont # python 3
-import global_variables as gv
-import test
-import image_capture
-import ocr_gui, audio_gui, finger_gui
+import tkinter as tk  # python 3
+from tkinter import font  as tkfont  # python 3
 
+import audio_gui
+import finger_gui
+import global_variables as gv
+import ocr_gui
+import test
 
 # from firebase import firebase
 # from firecreds import connect_to_firebase
@@ -217,28 +218,31 @@ class Settings(tk.Frame):
         label = tk.Label(self, text="Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        ocr_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
-                                controller.show_frame("OCRSettings"))
-        audio_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
-                             controller.show_frame("AudioSettings"))
-        finger_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
-                             controller.show_frame("FingerSettings"))
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
-                             controller.show_frame("MainMenu"))
+        btn_funcs = {
+            'ocr_set': lambda: (
+                controller.show_frame("OCRSettings")),
 
-        ocr_settings_btn = tk.Button(self, text="OCR Settings",
-                            command=ocr_settings_func)
-        audio_settings_btn = tk.Button(self, text="Audio Settings",
-                            command=audio_settings_func)
-        finger_settings_btn = tk.Button(self, text="Finger Settings",
-                            command=finger_settings_func)
-        back_button_btn = tk.Button(self, text="Go back",
-                                command=back_btn_func)
+            'audio_set:': lambda: (
+                controller.show_frame("AudioSettings")),
 
-        ocr_settings_btn.pack()
-        audio_settings_btn.pack()
-        finger_settings_btn.pack()
-        back_button_btn.pack()
+            'finger_set:': lambda: (
+                controller.show_frame("FingerSettings")),
+
+            'back': lambda: (
+                controller.show_frame("MainMenu"))
+        }
+
+        btn_objs = {
+            'ocr_set:': tk.Button(self, text="OCR Set:"),
+            'audio_set:': tk.Button(self, text="Audio Set:"),
+            'finger_set:': tk.Button(self, text="Finger Set:"),
+            'back': tk.Button(self, text="Go back"),
+        }
+
+        for btn in btn_objs:
+            btn_objs[btn].configure(command=btn_funcs[btn])
+            btn_objs[btn].configure(font=controller.butt)
+            btn_objs[btn].pack()
 
 
 if __name__ == "__main__":
