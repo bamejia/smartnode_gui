@@ -21,8 +21,11 @@ def check_LoopMode(mySet):
         return False
 
 #   changes setting in object, saves it to file, returns the modified version
-def changeSetting(obj, key, value):
-    obj[key] = str(value)
+def changeSetting(obj, key, value, subvalue=''):
+    if isinstance(obj[key], dict):
+        obj[key][value] = subvalue
+    else:
+        obj[key] = str(value)
 
     #   every settings object has an attribute called self
     #   which is the local path to where it is saved
