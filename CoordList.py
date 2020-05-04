@@ -125,6 +125,11 @@ class coordList():
             print("no object found")
             return None
 
+    #   return the last entry in the list
+    def peekLast(self):
+        index = len(self.myList) - 1
+        return self.getObjIndex(index)
+
     #   loads a data set from file
     def loadSet(self):
 
