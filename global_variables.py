@@ -3,8 +3,8 @@
 
 # window variables
 WINDOW_NAME = "Smartnode"
-WINDOW_X_POS = 300
-WINDOW_Y_POS = 100
+# WINDOW_X_POS = 300
+# WINDOW_Y_POS = 100
 WINDOW_W_RATIO = 5/8
 WINDOW_L_RATIO = 7/8
 
