@@ -30,9 +30,7 @@ class SmartnodeGUI(tk.Tk):
         window_length = round(gv.WINDOW_L / 1)
         window_x = round(gv.WINDOW_W * 3 / 5)
         window_y = round(gv.WINDOW_L * 2 / 5)
-        # geometry_dimensions = "%dx%d+%d+%d" % (window_width, window_length, window_x, window_y)
-        dims = "%dx%d+%d+%d" % (800, 480, 0, 0)
-        self.geometry(dims)
+        geometry_dimensions = "%dx%d+%d+%d" % (window_width, window_length, window_x, window_y)
 
         self.attributes('-fullscreen', True)  #800x480
         # self.attributes('-zoomed', True)
@@ -98,6 +96,7 @@ class SmartnodeGUI(tk.Tk):
     def set_return_frame(self, page_name):
         self.return_frame = page_name
 
+    '''
     # def connect_to_firebase():
     #
     #     print("Initializing Firebase Connection...")
@@ -160,7 +159,7 @@ class SmartnodeGUI(tk.Tk):
     #         pass
     #     elif command == "FINGER_PRESS":
     #         pass
-
+    '''
 
 class MainMenu(tk.Frame):
 

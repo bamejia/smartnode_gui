@@ -20,9 +20,11 @@ def check_LoopMode(mySet):
     else:
         return False
 
+
 #   changes setting in object, saves it to file, returns the modified version
 def changeSetting(obj, key, value, subvalue=''):
-    if isinstance(obj[key], dict):
+    #   if modifying a dict behave differently if a 4th value is provided
+    if len(subvalue) > 0 and isinstance(obj[key], dict):
         obj[key][value] = subvalue
     else:
         obj[key] = str(value)
@@ -40,7 +42,6 @@ def changeSetting(obj, key, value, subvalue=''):
 
 #   returns a settings object from a filename
 def loadSettings(fileName):
-
     filePath = getFullPath(fileName)
 
     #   check if file is missing and / or empty
@@ -60,10 +61,7 @@ def loadSettings(fileName):
         print("\tFile Created Successfully")
         print()
 
-
-    #   load
     else:
-        #print(f"Settings File '{fileName}' Located and Non-Empty")
         with open(filePath, 'r') as myFile:
             settingsObj = json.load(myFile)
 
@@ -72,7 +70,7 @@ def loadSettings(fileName):
 
 #   generates settings file automatically from data in DEFAULTS
 #   saves file and returns object
-def genSettings(name, path):
+def genSettings(name, path, save=True):
     print(f"Generating Default Settings File: {name}")
 
     defSetting = {}
@@ -84,12 +82,24 @@ def genSettings(name, path):
         print(f"No settings default for {name}...")
         exit('Terminating in genSettings: cannot find default object')
 
-        #   write object to file
-    with open(path, 'w') as myFile:
-        myFile.write(json.dumps(defSetting))
+    #   write object to file
+    if (save):
+        with open(path, 'w') as myFile:
+            myFile.write(json.dumps(defSetting))
 
     return defSetting
 
+
+#   resets the key in object to its default value
+def resetDefault(obj, key):
+    path = getFullPath(obj['self'])
+    tempObj = genSettings(obj['self'], path, False)
+    obj[key] = tempObj[key]
+
+    with open(path, 'w') as myFile:
+        myFile.write(json.dumps(obj))
+
+    return obj
 
 #   sets the end time attribute of the provided settings object
 #   based upon the provided offset(hours)

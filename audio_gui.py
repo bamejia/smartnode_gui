@@ -1,8 +1,7 @@
 import tkinter as tk
-import test
+
 import audio_controller
 import global_variables as gv
-
 
 UPDATE_RATE = 500
 
