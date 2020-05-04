@@ -20,7 +20,7 @@ class AudioRuntime(tk.Frame):
 
         btn1_fnc = lambda: (
                             self.audio_on_off())
-        btn2_fnc = lambda: (test.louis_replace_this_with_your_function_name())
+        btn2_fnc = lambda: ()
         btn3_fnc = lambda: (
                             controller.show_frame("AudioStatus"))
         back_btn_func = lambda: (
