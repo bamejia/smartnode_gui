@@ -2,7 +2,6 @@ import tkinter as tk                # python 3
 from tkinter import font  as tkfont # python 3
 import global_variables as gv
 import test
-import image_capture
 import ocr_gui, audio_gui, finger_gui
 import general_button_label as gbl
 
@@ -170,15 +169,15 @@ class MainMenu(tk.Frame):
         label = gbl.GLabel(self, "Main Menu", controller.title_font)
         label.pack(side="top", fill="x", pady=8)
 
-        ocr_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        ocr_btn_func = lambda: (
                                 controller.set_return_frame("MainMenu"),
                                 controller.show_frame("OCRRuntime"))
-        audio_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        audio_btn_func = lambda: (
                                   controller.set_return_frame("MainMenu"),
                                   controller.show_frame("AudioRuntime"))
-        settings_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        settings_btn_func = lambda: (
                                 controller.show_frame("Settings"))
-        quit_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        quit_btn_func = lambda: (
                                 controller.destroy())
 
         self.start_stop_ocr_btn = gbl.GButton(self, "OCR", ocr_btn_func, controller.button_font)
@@ -213,13 +212,13 @@ class Settings(tk.Frame):
         label = gbl.GLabel(self, "Settings", controller.title_font)
         label.pack(side="top", fill="x", pady=8)
 
-        ocr_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        ocr_settings_func = lambda: (
                                 controller.show_frame("OCRSettings"))
-        audio_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        audio_settings_func = lambda: (
                              controller.show_frame("AudioSettings"))
-        finger_settings_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        finger_settings_func = lambda: (
                              controller.show_frame("FingerSettings"))
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        back_btn_func = lambda: (
                              controller.show_frame("MainMenu"))
 
         ocr_settings_btn = gbl.GButton(self, "OCR Settings", ocr_settings_func, controller.button_font)

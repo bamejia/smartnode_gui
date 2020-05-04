@@ -18,12 +18,12 @@ class AudioRuntime(tk.Frame):
         self.will_update = False
         self.user_setup = False
 
-        btn1_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
+        btn1_fnc = lambda: (
                             self.audio_on_off())
         btn2_fnc = lambda: (test.louis_replace_this_with_your_function_name())
-        btn3_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
+        btn3_fnc = lambda: (
                             controller.show_frame("AudioStatus"))
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        back_btn_func = lambda: (
                                  controller.show_frame(controller.return_frame))
 
         btn1 = tk.Button(self, text="Start/Stop",
@@ -75,7 +75,7 @@ class AudioStatus(tk.Frame):
         label = tk.Label(self, text="Audio Status", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        back_btn_func = lambda: (
                                  controller.show_frame("AudioRuntime"))
 
         back_button = tk.Button(self, text="Go back",
@@ -92,14 +92,14 @@ class AudioSettings(tk.Frame):
         label = tk.Label(self, text="Audio Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        btn1_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
+        btn1_fnc = lambda: (
                             controller.show_frame("SampleSetup"))
-        btn2_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
+        btn2_fnc = lambda: (
                             controller.show_frame("AudioModeSetup"))
-        btn3_fnc = lambda: (test.louis_replace_this_with_your_function_name(),
+        btn3_fnc = lambda: (
                             controller.set_return_frame("AudioSettings"),
                             controller.show_frame("AudioRuntime"))
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        back_btn_func = lambda: (
                                  controller.show_frame("Settings"))
 
         btn1 = tk.Button(self, text="Record Sample",
@@ -125,11 +125,11 @@ class SampleSetup(tk.Frame):
         label = tk.Label(self, text="Sample Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        record_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        record_func = lambda: (
                                audio_controller.record(),
                             controller.show_frame("AudioSettings"))
 
-        back_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        back_func = lambda: (
                                  controller.show_frame("AudioSettings"))
 
         record_btn = tk.Button(self, text="Record",
@@ -150,7 +150,7 @@ class AudioModeSetup(tk.Frame):
         label = tk.Label(self, text="Audio Mode Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        back_btn_func = lambda: (
                                  controller.show_frame("AudioSettings"))
 
         back_btn = tk.Button(self, text="Go back",

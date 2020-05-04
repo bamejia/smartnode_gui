@@ -207,7 +207,7 @@ class CropSetup2(tk.Frame):
         back_btn_func = lambda: (
             # ,
             controller.show_frame("CropSetup")
-        ),
+        )
 
         back_btn = tk.Button(self, text="Go back", command=back_btn_func)
 
@@ -225,7 +225,7 @@ class OCRModeSetup(tk.Frame):
         back_btn_func = lambda: (
             # ,
             controller.show_frame("OCRSettings")
-        ),
+        )
 
         back_btn = tk.Button(self, text="Go back", command=back_btn_func)
         back_btn.pack()

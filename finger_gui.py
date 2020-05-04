@@ -11,7 +11,7 @@ class FingerSettings(tk.Frame):
         label = tk.Label(self, text="Finger Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (test.louis_replace_this_with_your_function_name(),
+        back_btn_func = lambda: (
                                  controller.show_frame("Settings"))
 
         back_btn = tk.Button(self, text="Go back",
