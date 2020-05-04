@@ -1,6 +1,6 @@
 # functions used by buttons in frams from ocr_gui.py
 
-from Settings_Functions import loadSettings, changeSetting
+from Settings_Functions import loadSettings, changeSetting, resetDefault
 from image_functions import *
 
 
@@ -19,10 +19,19 @@ def cropSetup_add():
 
     #   modify all settings pertaining to doing ocr on the entry
     mySet = loadSettings('OCRSettings.json')
-    changeSetting(mySet, 'cropImgs', newname, newname + '.jpg')
-    changeSetting(mySet, 'cropPSM', newname, '7')
-    changeSetting(mySet, 'cropLang', newname, 'ssd')
-    changeSetting(mySet, 'cropTxt', newname, 'null')
+
+    #   if user has removed all items reset to default
+    if len(mySet['cropImgs']) == 0:
+        print("removed last entry -> resetting to default")
+        modList = ('cropImgs', 'cropPSM', 'cropLang', 'cropTxt')
+        for entry in modList:
+            resetDefault(mySet, entry)
+
+    else:
+        changeSetting(mySet, 'cropImgs', newname, newname + '.jpg')
+        changeSetting(mySet, 'cropPSM', newname, '7')
+        changeSetting(mySet, 'cropLang', newname, 'ssd')
+        changeSetting(mySet, 'cropTxt', newname, 'null')
 
 
 #   removes a cropping area
@@ -34,6 +43,7 @@ def cropSetup_remove():
 
         myList = coordList()
         myList.popLast()
+        myList.saveSet()
 
         print("removing last entry from Settings file")
         #   modify all settings pertaining to doing ocr on the entry
@@ -45,6 +55,9 @@ def cropSetup_remove():
             temp = mySet[entry]
             temp.popitem()
             changeSetting(mySet, entry, temp)
+
+        #   if we removed all the entries reset the flag in mainSettings
+        changeSetting(loadSettings('mainSettings.json'), 'OCR_Setup', 'False')
 
     else:
         print("no entries remaining -> nothing removed")
