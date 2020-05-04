@@ -2,12 +2,20 @@ import os
 import shutil
 
 import cv2
-import picamera
 
 from CoordList import coordList
 from CoordObj import coordObj
 from DEFAULTS import SCREEN_DIMS
 from Utility_Functions import getFullPath
+
+# import picamera
+
+
+try:
+    import pycamera
+
+except ModuleNotFoundError:
+    print("pycamera can't be used ")
 
 
 #   takes the source picture

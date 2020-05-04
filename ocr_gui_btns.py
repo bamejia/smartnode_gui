@@ -1,5 +1,8 @@
 # functions used by buttons in frams from ocr_gui.py
 
+import json
+
+from Settings_Functions import loadSettings, changeSetting
 from image_functions import *
 
 
@@ -14,4 +17,13 @@ def cropSetup_add():
 
     #   load use size of coordList to get name of next entry
     tempList = coordList()
-    newObj = 'crop' + str(len(tempList.myList))
+    newname = 'crop' + str(len(tempList.myList))
+    newFile = newname + '.jpg'
+
+    mySet = loadSettings('OCRSettings.json')
+    changeSetting(mySet, 'cropImgs', mySet['cropImgs'].append(json.dumps(newname, newFile)))
+    #
+    # 'cropImgs': {'crop1': 'crop1.jpg'},
+    # 'cropPSM': {'crop1': '7'},
+    # 'cropLang': {'crop1': 'ssd'},
+    # 'cropTxt': {'crop1': ''}
