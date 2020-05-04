@@ -20,9 +20,11 @@ def check_LoopMode(mySet):
     else:
         return False
 
+
 #   changes setting in object, saves it to file, returns the modified version
 def changeSetting(obj, key, value, subvalue=''):
-    if isinstance(obj[key], dict):
+    #   if modifying a dict behave differently if a 4th value is provided
+    if len(subvalue) > 0 and isinstance(obj[key], dict):
         obj[key][value] = subvalue
     else:
         obj[key] = str(value)
@@ -40,7 +42,6 @@ def changeSetting(obj, key, value, subvalue=''):
 
 #   returns a settings object from a filename
 def loadSettings(fileName):
-
     filePath = getFullPath(fileName)
 
     #   check if file is missing and / or empty
@@ -63,7 +64,7 @@ def loadSettings(fileName):
 
     #   load
     else:
-        #print(f"Settings File '{fileName}' Located and Non-Empty")
+        # print(f"Settings File '{fileName}' Located and Non-Empty")
         with open(filePath, 'r') as myFile:
             settingsObj = json.load(myFile)
 

@@ -20,7 +20,7 @@ OCR_OBJ = {
             'cropImgs': {'crop1': 'crop1.jpg'},
             'cropPSM': {'crop1': '7'},
             'cropLang': {'crop1': 'ssd'},
-            'cropTxt': {'crop1': ''}
+    'cropTxt': {'crop1': "null"}
 
 }
 

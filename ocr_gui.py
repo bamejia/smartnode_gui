@@ -1,8 +1,7 @@
 import tkinter as tk
 
-# from PIL import Image
-# from PIL import ImageTk
 import global_variables as gv
+from ocr_gui_btns import *
 
 UPDATE_RATE = 500
 
@@ -150,15 +149,15 @@ class CropSetup(tk.Frame):
 
         btn_funcs = {
             'add': lambda: (
-                # ,
+                cropSetup_add(),
             ),
 
             'remove': lambda: (
-                # ,
+                cropSetup_remove(),
             ),
 
             'show': lambda: (
-                # ,
+                cropSetup_remove()
             ),
 
             'back': lambda: (

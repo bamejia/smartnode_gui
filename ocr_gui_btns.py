@@ -6,7 +6,7 @@ from image_functions import *
 
 #   Functions for CropSetup Frame
 
-#   adds a
+#   adds a cropping area
 def cropSetup_add():
     print("adding crop bounding box")
     addCrop()
@@ -22,4 +22,35 @@ def cropSetup_add():
     changeSetting(mySet, 'cropImgs', newname, newname + '.jpg')
     changeSetting(mySet, 'cropPSM', newname, '7')
     changeSetting(mySet, 'cropLang', newname, 'ssd')
-    changeSetting(mySet, 'cropLang', newname, '')
+    changeSetting(mySet, 'cropTxt', newname, 'null')
+
+
+#   removes a cropping area
+def cropSetup_remove():
+    mySet = loadSettings('OCRSettings.json')
+    if len(mySet['cropImgs']) >= 1:
+
+        print("removing last entry from coordList")
+
+        myList = coordList()
+        myList.popLast()
+
+        print("removing last entry from Settings file")
+        #   modify all settings pertaining to doing ocr on the entry
+        mySet = loadSettings('OCRSettings.json')
+
+        modList = ('cropImgs', 'cropPSM', 'cropLang', 'cropTxt')
+        for entry in modList:
+            print(f"removing from {entry}")
+            temp = mySet[entry]
+            temp.popitem()
+            changeSetting(mySet, entry, temp)
+
+    else:
+        print("no entries remaining -> nothing removed")
+
+
+#   displays source image with crop regions
+def cropSetup_show():
+    print("displaying image with crop areas")
+    showImage()
