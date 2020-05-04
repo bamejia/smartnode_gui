@@ -16,13 +16,10 @@ def cropSetup_add():
     #   load use size of coordList to get name of next entry
     tempList = coordList()
     newname = 'crop' + str(len(tempList.myList))
-    newFile = newname + '.jpg'
 
+    #   modify all settings pertaining to doing ocr on the entry
     mySet = loadSettings('OCRSettings.json')
-
-    changeSetting(mySet, 'srcImg', 'source.jpg')
-    #
-    # 'cropImgs': {'crop1': 'crop1.jpg'},
-    # 'cropPSM': {'crop1': '7'},
-    # 'cropLang': {'crop1': 'ssd'},
-    # 'cropTxt': {'crop1': ''}
+    changeSetting(mySet, 'cropImgs', newname, newname + '.jpg')
+    changeSetting(mySet, 'cropPSM', newname, '7')
+    changeSetting(mySet, 'cropLang', newname, 'ssd')
+    changeSetting(mySet, 'cropLang', newname, '')
