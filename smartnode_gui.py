@@ -6,9 +6,6 @@ import finger_gui
 import general_button_label as gbl
 import global_variables as gv
 import ocr_gui
-import test
-import ocr_gui, audio_gui, finger_gui
-import general_button_label as gbl
 
 # from firebase import firebase
 # from firecreds import connect_to_firebase
@@ -184,10 +181,10 @@ class MainMenu(tk.Frame):
         quit_btn_func = lambda: (
                                 controller.destroy())
 
-        self.start_stop_ocr_btn = gbl.GButton(self, "OCR", ocr_btn_func, controller.button_font)
-        start_stop_audio_btn = gbl.GButton(self, "Audio", audio_btn_func, controller.button_font)
-        settings_btn = gbl.GButton(self, "Settings", settings_btn_func, controller.button_font)
-        quit_btn = gbl.GButton(self, "Quit", quit_btn_func, controller.button_font)
+        self.start_stop_ocr_btn = gbl.GButton(self, "OCR", ocr_btn_func)
+        start_stop_audio_btn = gbl.GButton(self, "Audio", audio_btn_func)
+        settings_btn = gbl.GButton(self, "Settings", settings_btn_func)
+        quit_btn = gbl.GButton(self, "Quit", quit_btn_func)
 
         self.start_stop_ocr_btn.pack(pady=gv.BUTTON_SPACE)
         start_stop_audio_btn.pack(pady=gv.BUTTON_SPACE)
@@ -225,10 +222,10 @@ class Settings(tk.Frame):
         back_btn_func = lambda: (
                              controller.show_frame("MainMenu"))
 
-        ocr_settings_btn = gbl.GButton(self, "OCR Settings", ocr_settings_func, controller.button_font)
-        audio_settings_btn = gbl.GButton(self, "Audio Settings", audio_settings_func, controller.button_font)
-        finger_settings_btn = gbl.GButton(self, "Finger Settings", finger_settings_func, controller.button_font)
-        back_button_btn = gbl.GButton(self, "Go back", back_btn_func, controller.button_font)
+        ocr_settings_btn = gbl.GButton(self, "OCR Settings", ocr_settings_func)
+        audio_settings_btn = gbl.GButton(self, "Audio Settings", audio_settings_func)
+        finger_settings_btn = gbl.GButton(self, "Finger Settings", finger_settings_func)
+        back_button_btn = gbl.GButton(self, "Go back", back_btn_func)
 
         ocr_settings_btn.pack(pady=gv.BUTTON_SPACE)
         audio_settings_btn.pack(pady=gv.BUTTON_SPACE)
