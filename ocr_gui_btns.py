@@ -1,7 +1,5 @@
 # functions used by buttons in frams from ocr_gui.py
 
-import json
-
 from Settings_Functions import loadSettings, changeSetting
 from image_functions import *
 
@@ -21,7 +19,8 @@ def cropSetup_add():
     newFile = newname + '.jpg'
 
     mySet = loadSettings('OCRSettings.json')
-    changeSetting(mySet, 'cropImgs', mySet['cropImgs'].append(json.dumps(newname, newFile)))
+
+    changeSetting(mySet, 'srcImg', 'source.jpg')
     #
     # 'cropImgs': {'crop1': 'crop1.jpg'},
     # 'cropPSM': {'crop1': '7'},
