@@ -1,11 +1,12 @@
-import tkinter as tk                # python 3
-from tkinter import font  as tkfont # python 3
-import global_variables as gv
-import test
-import image_capture
-import ocr_gui, audio_gui, finger_gui
-import general_button_label as gbl
+import tkinter as tk  # python 3
+from tkinter import font  as tkfont  # python 3
 
+import audio_gui
+import finger_gui
+import general_button_label as gbl
+import global_variables as gv
+import ocr_gui
+import test
 
 # from firebase import firebase
 # from firecreds import connect_to_firebase
