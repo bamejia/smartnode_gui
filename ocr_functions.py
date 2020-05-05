@@ -8,6 +8,7 @@ import Settings_Functions as settings
 
 
 #   cycles through list of entries in ocrData, capturing text from each
+#   saves OCRData to file and returns modified version
 def doOCR_All(ocrData):
     #   get list of ocrObjects
     objects = getOCRObjects(ocrData)
@@ -20,22 +21,23 @@ def doOCR_All(ocrData):
 
     #   write these values to file once completed
     saveOCRData(ocrData)
+    return ocrData
 
 
 #   actual OCR function -> accepts options, returns a string
-def doOCR_Single(file='', PSM='', lang='', options=None):
+def doOCR_Single(options=None):
     #   copy from options if it was provided as an array(from getOptions function)
-    if options:
-        file = options[0]
-        PSM = options[1]
-        lang = options[2]
+
+    file = options[0]
+    PSM = options[1]
+    lang = options[2]
 
     print(f"Performing OCR on file: {file}")
     print("\t**IMPLEMENTED BUT NOT INTEGRATED -> David's Code")
 
     print(f"\tpath: {file}, PSM: {PSM}, lang: {lang}")
 
-    return path + '_empty'
+    return file + '_empty'
 
 
 #   attempts to display the image at the provided path
@@ -153,4 +155,4 @@ def setOCRText(ocrData, name, newText=""):
 
 #   saves ocrData to file after sample run has been completed
 def saveOCRData(ocrData):
-    settings.changeSetting(ocrData, 'dataset', ocrData['dataSet'])
+    settings.changeSetting(ocrData, 'dataset', ocrData['dataset'])
