@@ -20,16 +20,12 @@ def check_LoopMode(mySet):
 
 
 #   changes setting in object, saves it to file, returns the modified version
-def changeSetting(obj, key, value, subvalue=''):
-    #   if modifying a dict behave differently if a 4th value is provided
-    if len(subvalue) > 0 and isinstance(obj[key], dict):
-        obj[key][value] = subvalue
-    else:
-        obj[key] = str(value)
+def changeSetting(obj, key, value):
 
     #   every settings object has an attribute called self
     #   which is the local path to where it is saved
     path = getFullPath(obj['self'])
+    obj[key] = value
 
     #   save to file
     with open(path, 'w') as myFile:
@@ -87,11 +83,13 @@ def genSettings(name, path, save=True):
 
     return defSetting
 
-
 #   resets the key in object to its default value
 def resetDefault(obj, key):
-    path = getFullPath(obj['self'])
-    tempObj = genSettings(obj['self'], path, False)
+    name = obj['self']
+    path = getFullPath(name)
+
+    print(f"resetting default for {name} at path {path}")
+    tempObj = genSettings(name, path, False)
     obj[key] = tempObj[key]
 
     with open(path, 'w') as myFile:

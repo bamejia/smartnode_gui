@@ -21,14 +21,15 @@ OCR_OBJ = {
 }
 
 OCR_DATA = {
-    'self': 'ocrData.json',
-    'data': {
+    'self': 'OCRData.json',
+    'dataset': {
         'crop1': {
             'name': 'crop1',
+            'file': 'crop1.jpg',
             'psm': '7',
             'lang': 'ssd',
-            'txt': 'null'
-        },
+            'text': 'null'
+        }
     }
 }
 
@@ -66,3 +67,12 @@ LOOP_TYPES = {'infinite', 'single', 'timed'}
 
 #   touchscreen dimensions
 SCREEN_DIMS = {'width': 800, 'height': 480}
+
+#   default OCR_DATA['dataset'] entry
+OCR_DATA_ENTRY = {
+    'name': 'crop1',
+    'file': 'crop1.jpg',
+    'psm': '7',
+    'lang': 'ssd',
+    'text': 'null'
+}
