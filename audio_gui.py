@@ -1,9 +1,8 @@
 import tkinter as tk
 
-import Settings_Functions as sf
 import audio_controller
 import global_variables as gv
-from audio_controller import loopOnce
+from Settings_Functions import loadSettings
 
 UPDATE_RATE = 500
 
@@ -41,18 +40,20 @@ class AudioRuntime(tk.Frame):
         btn3.pack()
         back_btn.pack()
 
-    #   loops once, will_update set by check_LoopMode
+    #   will_update
     def audio_updater(self, mySet):
 
+        #   run one loop
+        audio_controller.loopOnce(mySet)
+
+        #   checks
+        self.will_update = audio_controller.getEndConditions(mySet)
+
         if self.will_update:
-            #   run one loop
-            loopOnce(mySet)
 
-            #   checks if loop ends due to loopMode
-            self.will_update = sf.check_LoopMode(mySet)
-
+            # return values of external functions can change will_update flag or user_setup
+            # self.will_update = False
             self.after(UPDATE_RATE, self.audio_updater, mySet)
-
         else:
             print("\n\nSample Loop Completed!")
             return
@@ -69,7 +70,7 @@ class AudioRuntime(tk.Frame):
             self.user_setup = audio_controller.init_Audio()
 
             if self.user_setup:
-                mySet = sf.loadSettings('audioSettings.json')
+                mySet = loadSettings('audioSettings.json')
                 print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
                 self.audio_updater(mySet)
 
@@ -93,6 +94,7 @@ class AudioStatus(tk.Frame):
                                 command=back_btn_func)
 
         back_button.pack()
+
 
 
 class AudioSettings(tk.Frame):
