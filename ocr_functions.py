@@ -1,61 +1,45 @@
-#   All OCR-related functions go in here
-from Settings_Functions import *
-import shutil
+#   All OCR-related functions go in here -> image captuer / cropping files are in image_functions
+import os
+
 import cv2
-from DEFAULTS import SCREEN_DIMS
 
-try:
-    import picamera
-except ModuleNotFoundError:
-    print('picamera not found - camera functions will not work')
+import DEFAULTS as defaults
+import Settings_Functions as settings
 
 
-#   takes the source picture
-def takeSource(srcPath=getFullPath('source.jpg')):
-    print(f"Capturing Source Image, saving to \n\t'{srcPath}'")
+#   cycles through list of entries in ocrData, capturing text from each
+def doOCR_All(ocrData):
+    #   get list of ocrObjects
+    objects = getOCRObjects(ocrData)
 
-    try:
-        with picamera.PiCamera() as camera:
-            camera.capture(srcPath)
-            camera.stop_preview()
-            camera.close()
+    #   iterate through list
+    for obj in objects:
+        options = getOCROptions(ocrData, obj)
+        newText = doOCR_Single(options=options)
+        setOCRText(ocrData, obj, newText)
 
-    except NameError:
-        print('**Cannot Use Camera On This System')
-        print('->\tDuplicating Default \'kittens.jpg\' as \'source.jpg\'')
-        shutil.copy(getFullPath('kittens.jpg'), srcPath)
-
-    print('\tSource Image Captured!\n')
+    #   write these values to file once completed
+    saveOCRData(ocrData)
 
 
-#   Generates Cropped Images from a Source Image
-def cropSource(cropImgs):
-    print("Cropping Source Image...")
-    print("\t**NOT IMPLEMENTED-> CROP SOURCE IMAGE")
-    print("\tcontents of arguments")
-    for entry in cropImgs:
-        print(f"\t\t{entry}")
-    print()
+#   actual OCR function -> accepts options, returns a string
+def doOCR_Single(file='', PSM='', lang='', options=None):
+    #   copy from options if it was provided as an array(from getOptions function)
+    if options:
+        file = options[0]
+        PSM = options[1]
+        lang = options[2]
 
-
-#   Performs OCR on each of the Cropped Images
-def doOCR(image, PSM, lang):
-    print("Performing OCR")
+    print(f"Performing OCR on file: {file}")
     print("\t**IMPLEMENTED BUT NOT INTEGRATED -> David's Code")
-    print(f"\tpath: {image}, PSM: {PSM}, lang: {lang}")
 
+    print(f"\tpath: {file}, PSM: {PSM}, lang: {lang}")
 
-#   Cropping Setup Function
-def cropSetup():
-    print("Cropping Setup Function")
-    print("\t**IN DEVELOPMENT BY BRYAN")
-
-    print("\tManually Setting OCR Setup Flag to True in Main Settings")
-    changeSetting(loadSettings('mainSettings.json'), 'OCR_Setup', True)
+    return path + '_empty'
 
 
 #   attempts to display the image at the provided path
-def showImage(imgPath=getFullPath('source.jpg')):
+def showImage(imgPath=settings.getFullPath('source.jpg')):
     print("print displaying image... Warning, this may crash all your shit...")
 
     def closeWin(event, x, y, flags, param):
@@ -71,8 +55,102 @@ def showImage(imgPath=getFullPath('source.jpg')):
         windowName = "Source Image"
 
         cv2.namedWindow(windowName, cv2.WINDOW_AUTOSIZE)
-        cv2.resizeWindow(windowName, SCREEN_DIMS['width'], SCREEN_DIMS['height'])
+        cv2.resizeWindow(windowName, defaults.SCREEN_DIMS['width'], defaults.SCREEN_DIMS['height'])
         cv2.setMouseCallback(windowName, closeWin)
 
         cv2.imshow(windowName, image)
         cv2.waitKey(0)
+
+
+#   prints the contents of ocrData['dataset']
+def printDataSet(ocrData):
+    dataset = ocrData['dataset']
+    print("\nContents of OCRData")
+    #   each obj in dataset has entries like name, file, and ocr settings/output
+    for obj in dataset:
+        print(f"\n{obj}:")
+        objData = dataset[obj]
+
+        #   print out the individual key/value fields in the current entry
+        for entry in objData:
+            print(f"\t'{entry}': '{objData[entry]}'")
+
+
+#   remove last entry from OCRData['dataset']
+#   argument is the parent container, OcrData
+#   returns modified version
+def removeLast_OCRData(ocrData):
+    #   copy dataset from ocrData file
+    dataset = ocrData['dataset']
+    print(f"entries in dataset: {len(dataset)}")
+
+    #   remove last entry
+    if len(dataset) > 0:
+        removed = dataset.popitem()
+        print(f"removed {removed} from dataset")
+
+        #   if size is now zero set ocrSetup flag in mainSettings to True
+        if len(dataset) == 0:
+            mainSet = settings.loadSettings('mainSettings.json')
+            settings.changeSetting(mainSet, 'OCR_Setup', 'True')
+
+        #   save changes
+        return settings.changeSetting(ocrData, 'dataset', dict(dataset))
+
+    else:
+        print("Unable to remove from empty dataset")
+    return ocrData
+
+
+#   adds an entry to OCRData -> needs ocrData object in order to save changes
+#   returns modified version
+def addEntry_OCRData(ocrData, newName):
+    #   copy dataset from ocrData file
+    dataset = ocrData['dataset']
+
+    #   default data object from DEFAULTS
+    defObj = defaults.OCR_DATA_ENTRY
+
+    #   change default name and file
+    defObj['name'] = newName
+    defObj['file'] = newName + '.jpg'
+
+    #   use builtin setdefault method to automatically append
+    dataset.setdefault(newName, defObj)
+
+    #   if size of dataset is now exactly 1 it was empty when it started
+    #       -> set ocr setup flag to true
+    if len(dataset) == 1:
+        mainSet = settings.loadSettings('mainSettings.json')
+        settings.changeSetting(mainSet, 'OCR_Setup', 'True')
+
+    #   save changes to file and return modified version
+    return settings.changeSetting(ocrData, 'dataset', dict(dataset))
+
+
+#   returns a list of the entries in ocrData['dataset']
+def getOCRObjects(ocrData):
+    return list(ocrData['dataset'].keys())
+
+
+#   returns array containing ocr options for the spcified entry
+#   return is [file, psm, lang]
+def getOCROptions(ocrData, name):
+    entry = ocrData['dataset'][name]
+    return [entry['file'], entry['psm'], entry['lang']]
+
+
+#   changes text field of the provided entry in OCRData
+#   DOES NOT SAVE (can also be used to access text)
+def setOCRText(ocrData, name, newText=""):
+    #   modify ocrData object with newText if it is provided and return modified version
+    if newText:
+        ocrData['dataset'][name]['text'] = newText
+        return ocrData
+    else:
+        return ocrData['dataset'][name]['text']
+
+
+#   saves ocrData to file after sample run has been completed
+def saveOCRData(ocrData):
+    settings.changeSetting(ocrData, 'dataset', ocrData['dataSet'])
