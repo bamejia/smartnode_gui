@@ -1,7 +1,9 @@
 import tkinter as tk
 
+import Settings_Functions as sf
 import audio_controller
 import global_variables as gv
+from audio_controller import loopOnce
 
 UPDATE_RATE = 500
 
@@ -18,49 +20,59 @@ class AudioRuntime(tk.Frame):
         self.user_setup = False
 
         btn1_fnc = lambda: (
-                            self.audio_on_off())
+            self.audio_on_off())
         btn2_fnc = lambda: ()
         btn3_fnc = lambda: (
-                            controller.show_frame("AudioStatus"))
+            controller.show_frame("AudioStatus"))
         back_btn_func = lambda: (
-                                 controller.show_frame(controller.return_frame))
+            controller.show_frame(controller.return_frame))
 
         btn1 = tk.Button(self, text="Start/Stop",
-                            command=btn1_fnc)
+                         command=btn1_fnc)
         btn2 = tk.Button(self, text="Mode: ",
                          command=btn2_fnc)
         btn3 = tk.Button(self, text="Show Status",
                          command=btn3_fnc)
         back_btn = tk.Button(self, text="Go back",
-                           command=back_btn_func)
+                             command=back_btn_func)
 
         btn1.pack()
         btn2.pack()
         btn3.pack()
         back_btn.pack()
 
+    #   loops once, will_update set by check_LoopMode
     def audio_updater(self, mySet):
-        # This is the ocr loop by recursion
-        if self.will_update:
 
-            audio_controller.loop(mySet)
-            # return values of external functions can change will_update flag or user_setup
-            # self.will_update = False
+        if self.will_update:
+            #   run one loop
+            loopOnce(mySet)
+
+            #   checks if loop ends due to loopMode
+            self.will_update = sf.check_LoopMode(mySet)
+
             self.after(UPDATE_RATE, self.audio_updater, mySet)
+
         else:
             print("\n\nSample Loop Completed!")
             return
 
     # Starts the loop to call OCR called by button
     def audio_on_off(self):
+
         self.will_update = not self.will_update
-        if (self.will_update):
-            # checks to see if user recorded a sample
+
+        if self.will_update:
+
+            #   Checks flag in mainSettings.json to see if record sample has been run
             print("Audio Start function")
             self.user_setup = audio_controller.init_Audio()
+
             if self.user_setup:
-                mySet = audio_controller.pre_loop()
+                mySet = sf.loadSettings('audioSettings.json')
+                print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
                 self.audio_updater(mySet)
+
             else:  # otherwise will switch to sample setup frame for recording
                 print("\tAudio Not Set Up! -> Running recordRef\n")
                 self.controller.show_frame("SampleSetup")
@@ -75,7 +87,7 @@ class AudioStatus(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         back_btn_func = lambda: (
-                                 controller.show_frame("AudioRuntime"))
+            controller.show_frame("AudioRuntime"))
 
         back_button = tk.Button(self, text="Go back",
                                 command=back_btn_func)
@@ -92,14 +104,14 @@ class AudioSettings(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         btn1_fnc = lambda: (
-                            controller.show_frame("SampleSetup"))
+            controller.show_frame("SampleSetup"))
         btn2_fnc = lambda: (
-                            controller.show_frame("AudioModeSetup"))
+            controller.show_frame("AudioModeSetup"))
         btn3_fnc = lambda: (
-                            controller.set_return_frame("AudioSettings"),
-                            controller.show_frame("AudioRuntime"))
+            controller.set_return_frame("AudioSettings"),
+            controller.show_frame("AudioRuntime"))
         back_btn_func = lambda: (
-                                 controller.show_frame("Settings"))
+            controller.show_frame("Settings"))
 
         btn1 = tk.Button(self, text="Record Sample",
                          command=btn1_fnc)
@@ -108,7 +120,7 @@ class AudioSettings(tk.Frame):
         btn3 = tk.Button(self, text="Test Run",
                          command=btn3_fnc)
         back_btn = tk.Button(self, text="Go back",
-                           command=back_btn_func)
+                             command=back_btn_func)
 
         btn1.pack()
         btn2.pack()
@@ -125,17 +137,17 @@ class SampleSetup(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         record_func = lambda: (
-                               audio_controller.record(),
-                            controller.show_frame("AudioSettings"))
+            audio_controller.record(),
+            controller.show_frame("AudioSettings"))
 
         back_func = lambda: (
-                                 controller.show_frame("AudioSettings"))
+            controller.show_frame("AudioSettings"))
 
         record_btn = tk.Button(self, text="Record",
-                           command=record_func)
+                               command=record_func)
 
         back_btn = tk.Button(self, text="Go back",
-                           command=back_func)
+                             command=back_func)
 
         record_btn.pack()
         back_btn.pack()
@@ -150,7 +162,7 @@ class AudioModeSetup(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         back_btn_func = lambda: (
-                                 controller.show_frame("AudioSettings"))
+            controller.show_frame("AudioSettings"))
 
         back_btn = tk.Button(self, text="Go back",
                              command=back_btn_func)

@@ -1,23 +1,24 @@
 # from PiResponses import respond, check_LoopMode
+import Settings_Functions as sf
+import audio_functions as af
 from FireBase_Functions import postFirebase
-from audio_functions import *
 
 
 #   record new sample
 def getData(samplePath):
     print("\tRecording Sample")
-    recordAudio(samplePath)
+    af.recordAudio(samplePath)
 
 
 #   called during loop
 #   get fundamental from sample, compare with reference, return result
 def processData(samplePath, reference):
     print("\tgetting Fundamental from sample")
-    newFund = float(getFund(samplePath))
+    newFund = float(af.getFund(samplePath))
     reference = float(reference)
 
     #print("\tcomparing with reference fundamental")
-    detected = compareFreqs(newFund, reference)
+    detected = af.compareFreqs(newFund, reference)
 
     print(f"\tDone Comparison -> reference detected: {detected}")
     print()
@@ -32,7 +33,7 @@ def updateLocal(mySet, detected):
     if(True):
         print("Updating Local Stuff")
         print(f"\tSetting Audio Setting 'detected' to {detected}")
-        mySet = changeSetting(mySet, 'detected', detected)
+        mySet = af.changeSetting(mySet, 'detected', detected)
 
         print("\t**NOT IMPLEMENTED-> UPDATE SCREEN")
         print()
@@ -60,14 +61,8 @@ def updateServer(fb_url, detected):
 #   checks internal end conditions for the sampling loop
 def getEndConditions(mySet):
     print("Checking OCR End Conditions")
-
-
-    #   loop mode -> run once or run for time
-
-
-
     #   checks for loop end due to loopMode mySet (in Utility Functions)
-    if check_LoopMode(mySet):
+    if af.heck_LoopMode(mySet):
         print("\tLoop Ended Due to Internal Trigger")
         print()
         return True
@@ -79,7 +74,7 @@ def getEndConditions(mySet):
 def init_Audio():
     print("In init_Audio: Checking Audio Initialization")
 
-    mainSet = loadSettings('mainSettings.json')
+    mainSet = af.loadSettings('mainSettings.json')
     flag = mainSet['Audio_Setup']
     print(f"Main Settings Audio Setup Flag: {flag}")
 
@@ -100,13 +95,13 @@ def start():
         print("\tAudio Not Set Up! -> Running recordRef\n")
 
         #   map this function to the record button
-        recordRef()
+        af.recordRef()
         print("\tdone\n")
 
 
     #   copy this
     print("Loading Audio Settings")
-    mySet = loadSettings('audioSettings.json')
+    mySet = sf.loadSettings('audioSettings.json')
 
     print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
 
@@ -138,18 +133,7 @@ def loopOnce(mySet):
     print("\n>-------Loop COMPLETE-------<\n")
 
 
-def pre_loop():
-    print("Loading Audio Settings")
-    mySet = loadSettings('audioSettings.json')
-    print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
-    return mySet
-
-
-def loop(mySet):
-    loopOnce(mySet)
-    return getEndConditions(mySet)
-
 def record():
     print("RECORDING")
-    recordRef()
+    af.recordRef()
     print("\tdone\n")

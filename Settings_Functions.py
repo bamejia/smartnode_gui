@@ -1,9 +1,7 @@
 from DEFAULTS import *
 from Utility_Functions import *
 
-
 #   This set of function handles saving / loading settings
-
 
 #   checks loop ending conditions common to both kinds of loop
 def check_LoopMode(mySet):
