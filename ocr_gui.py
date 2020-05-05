@@ -1,6 +1,9 @@
 import tkinter as tk
 
+import Settings_Functions as settings
 import global_variables as gv
+import image_functions as image
+import ocr_functions as ocr
 from ocr_gui_btns import *
 
 UPDATE_RATE = 500
@@ -68,6 +71,11 @@ class OCRRuntime(tk.Frame):
 
     def ocr_run_once(self):
         print("TEST LOOP: " + str(self.count))
+        # mySet = settings.loadSettings('OCRSettings.json')
+        ocrData = settings.loadSettings('OCRData.json')
+        image.takeSource()
+        image.cropSource()
+        ocrData = ocr.doOCR_All(ocrData)
         self.count += 1
 
     # Starts the loop to call OCR called by button
