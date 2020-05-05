@@ -147,7 +147,7 @@ def pre_loop():
 def loop(mySet):
     loopOnce(mySet)
     endLoop = getEndConditions(mySet)
-    print(f"Loop ended = {endLoop} -> Returning {not endLoop}")
+    print(f"Loop ended = {endLoop} -> Returning: {not endLoop}")
     return not endLoop
 
 

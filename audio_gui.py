@@ -43,13 +43,9 @@ class AudioRuntime(tk.Frame):
     #   will_update
     def audio_updater(self, mySet):
 
-        #   run one loop
-        audio_controller.loopOnce(mySet)
-
-        #   checks
-        self.will_update = audio_controller.getEndConditions(mySet)
-
         if self.will_update:
+            #   checks
+            self.will_update = audio_controller.loop(mySet)
 
             # return values of external functions can change will_update flag or user_setup
             # self.will_update = False
