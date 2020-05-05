@@ -1,57 +1,48 @@
 # functions used by buttons in frams from ocr_gui.py
-
-from Settings_Functions import loadSettings, changeSetting
-from image_functions import *
+import Settings_Functions as settings
+import image_functions as image
+import ocr_functions as ocr
+from CoordList import coordList
 
 
 #   Functions for CropSetup Frame
 
-#   adds a cropping area
+#   calls addCrop function in image functions
+#   modifies ocrData file (setup flag modified here)
 def cropSetup_add():
     print("adding crop bounding box")
-    addCrop()
+    image.addCrop()
 
-    print("modifying ocrSettings")
-
+    print("adding ocrData entry")
     #   load use size of coordList to get name of next entry
     tempList = coordList()
-    newname = 'crop' + str(len(tempList.myList))
+    newName = 'crop' + str(len(tempList.myList))
 
-    #   modify all settings pertaining to doing ocr on the entry
-    mySet = loadSettings('OCRSettings.json')
+    ocrData = settings.loadSettings('ocrData.json')
+    ocr.addEntry_OCRData(ocrData, newName)
 
 
-
-#   removes a cropping area
+#   removes coord object and ocrData entry (setup flag modified here)
+#   returns true on success
 def cropSetup_remove():
-    mySet = loadSettings('OCRSettings.json')
+    mySet = settings.loadSettings('OCRSettings.json')
     if len(mySet['cropImgs']) >= 1:
-
         print("removing last entry from coordList")
-
         myList = coordList()
         myList.popLast()
         myList.saveSet()
 
         print("removing last entry from Settings file")
-        #   modify all settings pertaining to doing ocr on the entry
-        mySet = loadSettings('OCRSettings.json')
+        ocrData = settings.loadSettings('ocrData.json')
+        ocr.removeLast_OCRData(ocrData)
 
-        modList = ('cropImgs', 'cropPSM', 'cropLang', 'cropTxt')
-        for entry in modList:
-            print(f"removing from {entry}")
-            temp = mySet[entry]
-            temp.popitem()
-            changeSetting(mySet, entry, temp)
-
-        #   if we removed all the entries reset the flag in mainSettings
-        changeSetting(loadSettings('mainSettings.json'), 'OCR_Setup', 'False')
-
+        return True
     else:
-        print("no entries remaining -> nothing removed")
+        print("Noting removed - data is empty")
+        return False
 
 
 #   displays source image with crop regions
 def cropSetup_show():
     print("displaying image with crop areas")
-    showImage()
+    image.showImage()

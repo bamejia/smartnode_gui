@@ -69,7 +69,8 @@ def closeEvent(event, x, y, flags, param):
     cv2.destroyAllWindows()
 
 
-#   attempts to display the image at the provided path
+#   displays current image with cropping regions,
+#   allows user to add an additional one by tapping the screen
 def addCrop(cropObjs=coordList, imgPath=getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Fool! Run takeSource!")
