@@ -13,6 +13,7 @@ from Utility_Functions import getFullPath
 
 try:
     from picamera import PiCamera
+    from picamera.array import PiRGBArray
 
 except ModuleNotFoundError:
     print("picamera can't be used ")
@@ -35,6 +36,53 @@ def takeSource(srcPath=getFullPath('source.jpg')):
 
     print('\tSource Image Captured!\n')
 
+
+#   shows a video ###currently broken af
+def showVid():
+    with PiCamera() as camera:
+        # camera.resolution = (640, 480)
+        camera.resolution = (800, 480)
+
+        camera.framerate = 32
+        # rawCapture = PiRGBArray(camera, size=(640, 480))
+        rawCapture = PiRGBArray(camera, size=(800, 480))
+
+        windowName = "Live Feed"
+        cv2.namedWindow(windowName, cv2.WINDOW_NORMAL)
+
+        # terminate = False
+        param = []
+
+        #   set window size, move window
+        cv2.resizeWindow(windowName, SCREEN_DIMS['width'], SCREEN_DIMS['height'])
+
+        #   load in the crop objs
+        cropObjs = coordList()
+
+        for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+            # grab the raw NumPy array representing the image, then initialize the timestamp
+            # and occupied/unoccupied text
+            image = frame.array
+
+            #   draw the rectangles on the image
+            for obj in cropObjs.myList[1:]:
+                cv2.rectangle(image, obj.topL, obj.botR, (0, 255, 0), 3)
+
+            # show the frame
+            cv2.imshow(windowName, image)
+
+            cv2.setMouseCallback(windowName, closeEvent, param)
+            cv2.waitKey(1) & 0xFF
+
+            # clear the stream in preparation for the next frame
+            rawCapture.truncate(0)
+            # if the `q` key was pressed, break from the loop
+
+            if param:
+                break
+
+    cv2.destroyWindow(windowName)
+    print("Outside of loop\n\n")
 
 #   shows the source image with the bounding areas for cropping
 def showImage(cropObjs=coordList(), imgPath=getFullPath('source.jpg')):
@@ -65,8 +113,9 @@ def showImage(cropObjs=coordList(), imgPath=getFullPath('source.jpg')):
 
 #   Use this event listener if you want to close after one click only
 def closeEvent(event, x, y, flags, param):
-    print("\tClosing Image")
-    cv2.destroyAllWindows()
+    if event == cv2.EVENT_LBUTTONUP:
+        print("Closing...")
+        param.append(True)
 
 
 #   displays current image with cropping regions,

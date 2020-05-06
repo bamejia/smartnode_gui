@@ -165,7 +165,7 @@ class CropSetup(tk.Frame):
             ),
 
             'show': lambda: (
-                ocrBtns.cropSetup_remove()
+                ocrBtns.cropSetup_show()
             ),
 
             'back': lambda: (

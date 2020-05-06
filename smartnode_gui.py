@@ -1,6 +1,7 @@
 import tkinter as tk  # python 3
 from tkinter import font  as tkfont  # python 3
 
+import Utility_Functions as utility
 import audio_gui
 import finger_gui
 import general_button_label as gbl
@@ -170,11 +171,18 @@ class MainMenu(tk.Frame):
         label.pack(side="top", fill="x", pady=8)
 
         ocr_btn_func = lambda: (
-                                controller.set_return_frame("MainMenu"),
-                                controller.show_frame("OCRRuntime"))
+            controller.set_return_frame("MainMenu"),
+            controller.show_frame("OCRRuntime"))
+
         audio_btn_func = lambda: (
-                                  controller.set_return_frame("MainMenu"),
-                                  controller.show_frame("AudioRuntime"))
+            controller.set_return_frame("MainMenu"),
+            controller.show_frame("AudioRuntime"))
+
+        reset_btn_func = lambda: (
+            utility.wipeAll('json'),
+            utility.wipeAll('jpg'),
+            utility.wipeAll('wav'))
+
         settings_btn_func = lambda: (
                                 controller.show_frame("Settings"))
         quit_btn_func = lambda: (
@@ -183,11 +191,15 @@ class MainMenu(tk.Frame):
         self.start_stop_ocr_btn = gbl.GButton(self, "OCR", ocr_btn_func)
         start_stop_audio_btn = gbl.GButton(self, "Audio", audio_btn_func)
         settings_btn = gbl.GButton(self, "Settings", settings_btn_func)
+
+        reset_btn = gbl.GButton(self, "Clear Files", reset_btn_func)
+
         quit_btn = gbl.GButton(self, "Quit", quit_btn_func)
 
         self.start_stop_ocr_btn.pack(pady=gv.BUTTON_SPACE)
         start_stop_audio_btn.pack(pady=gv.BUTTON_SPACE)
         settings_btn.pack(pady=gv.BUTTON_SPACE)
+        reset_btn.pack(pady=gv.BUTTON_SPACE)
         quit_btn.pack(pady=gv.BUTTON_SPACE)
 
         self.count = 0
