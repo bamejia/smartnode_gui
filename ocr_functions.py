@@ -1,6 +1,5 @@
 #   All OCR-related functions go in here -> image captuer / cropping files are in image_functions
 import json
-import os
 
 import cv2
 import pytesseract
@@ -52,30 +51,6 @@ def doOCR_Single(options):
     text = pytesseract.image_to_string(image, config=config, output_type='dict')
 
     return text['text']
-
-
-#   attempts to display the image at the provided path
-def showImage(imgPath=settings.getFullPath('source.jpg')):
-    print("print displaying image... Warning, this may crash all your shit...")
-
-    def closeWin(event, x, y, flags, param):
-        print("\tClosing Image")
-        cv2.destroyAllWindows()
-
-    if (not os.path.exists(imgPath)):
-        print("No Source Image, Fool! Run takeSource!")
-        return
-
-    else:
-        image = cv2.imread(imgPath)
-        windowName = "Source Image"
-
-        cv2.namedWindow(windowName, cv2.WINDOW_AUTOSIZE)
-        cv2.resizeWindow(windowName, defaults.SCREEN_DIMS['width'], defaults.SCREEN_DIMS['height'])
-        cv2.setMouseCallback(windowName, closeWin)
-
-        cv2.imshow(windowName, image)
-        cv2.waitKey(0)
 
 
 #   prints the contents of ocrData['dataset']
