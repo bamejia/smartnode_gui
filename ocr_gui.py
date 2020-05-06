@@ -4,7 +4,7 @@ import Settings_Functions as settings
 import global_variables as gv
 import image_functions as image
 import ocr_functions as ocr
-from ocr_gui_btns import *
+import ocr_gui_btns as ocrBtns
 
 UPDATE_RATE = 500
 
@@ -157,15 +157,15 @@ class CropSetup(tk.Frame):
 
         btn_funcs = {
             'add': lambda: (
-                cropSetup_add(),
+                ocrBtns.cropSetup_add(),
             ),
 
             'remove': lambda: (
-                cropSetup_remove(),
+                ocrBtns.cropSetup_remove(),
             ),
 
             'show': lambda: (
-                cropSetup_remove()
+                ocrBtns.cropSetup_remove()
             ),
 
             'back': lambda: (

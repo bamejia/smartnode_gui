@@ -70,11 +70,12 @@ def closeEvent(event, x, y, flags, param):
 
 
 #   displays current image with cropping regions,
+#   if no image exists takes one
 #   allows user to add an additional one by tapping the screen
 def addCrop(cropObjs=coordList, imgPath=getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
-        print("No Source Image, Fool! Run takeSource!")
-        return
+        print("No Source Image, Running TakeSource")
+        takeSource()
 
     else:
         #   load image from path, create a named window of the correct size

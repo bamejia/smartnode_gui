@@ -18,7 +18,7 @@ def cropSetup_add():
     tempList = coordList()
     newName = 'crop' + str(len(tempList.myList))
 
-    ocrData = settings.loadSettings('ocrData.json')
+    ocrData = settings.loadSettings('OCRData.json')
     ocr.addEntry_OCRData(ocrData, newName)
 
 
@@ -33,7 +33,7 @@ def cropSetup_remove():
         myList.saveSet()
 
         print("removing last entry from Settings file")
-        ocrData = settings.loadSettings('ocrData.json')
+        ocrData = settings.loadSettings('OCRData.json')
         ocr.removeLast_OCRData(ocrData)
 
         return True
