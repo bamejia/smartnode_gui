@@ -97,7 +97,11 @@ def removeLast_OCRData(ocrData):
 #   returns modified version
 def addEntry_OCRData(ocrData, newName):
     #   copy dataset from ocrData file
-    dataset = json.loads(ocrData['dataset'])
+
+    if isinstance(ocrData['dataset'], dict):
+        dataset = ocrData['dataset']
+    else:
+        dataset = json.loads(ocrData['dataset'])
 
     #   default data object from DEFAULTS
     defObj = defaults.OCR_DATA_ENTRY
