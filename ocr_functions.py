@@ -39,7 +39,6 @@ def doOCR_Single(options):
     lang = options[2]
 
     print(f"Performing OCR on file: {file}")
-    print("\t**IMPLEMENTED BUT NOT INTEGRATED -> David's Code")
 
     # Define configuration parameters
     configStr = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/" -l lang --oem 1 --dpi 72 --psm {} -l {}'
@@ -52,7 +51,6 @@ def doOCR_Single(options):
     text = pytesseract.image_to_string(image, config=config, output_type='dict')
 
     return text['text']
-
 
 
 #   attempts to display the image at the provided path
