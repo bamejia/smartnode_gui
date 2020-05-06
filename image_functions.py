@@ -12,10 +12,10 @@ from Utility_Functions import getFullPath
 
 
 try:
-    import pycamera
+    from picamera import PiCamera
 
 except ModuleNotFoundError:
-    print("pycamera can't be used ")
+    print("picamera can't be used ")
 
 
 #   takes the source picture
@@ -23,7 +23,7 @@ def takeSource(srcPath=getFullPath('source.jpg')):
     print(f"Capturing Source Image, saving to \n\t'{srcPath}'")
 
     try:
-        with picamera.PiCamera() as camera:
+        with PiCamera() as camera:
             camera.capture(srcPath)
             camera.stop_preview()
             camera.close()
@@ -72,7 +72,7 @@ def closeEvent(event, x, y, flags, param):
 #   displays current image with cropping regions,
 #   if no image exists takes one
 #   allows user to add an additional one by tapping the screen
-def addCrop(cropObjs=coordList, imgPath=getFullPath('source.jpg')):
+def addCrop(cropObjs=coordList(), imgPath=getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Running TakeSource")
         takeSource()
@@ -104,7 +104,8 @@ def addCrop(cropObjs=coordList, imgPath=getFullPath('source.jpg')):
 #   first and second click append coords to param and draw to image
 #   third click saves new coord obj and closes window
 def clickHandler(event, x, y, flags, param):
-    if event == cv2.EVENT_LBUTTONDOWN:
+    # if event == cv2.EVENT_LBUTTONDOWN:
+    if event == cv2.EVENT_LBUTTONUP:
         image = param[0]
         windowName = param[1]
 

@@ -1,4 +1,5 @@
 #   All OCR-related functions go in here -> image captuer / cropping files are in image_functions
+import json
 import os
 
 import cv2
@@ -79,7 +80,7 @@ def showImage(imgPath=settings.getFullPath('source.jpg')):
 
 #   prints the contents of ocrData['dataset']
 def printDataSet(ocrData):
-    dataset = ocrData['dataset']
+    dataset = json.loads(ocrData['dataset'])
     print("\nContents of OCRData")
     #   each obj in dataset has entries like name, file, and ocr settings/output
     for obj in dataset:
@@ -96,7 +97,7 @@ def printDataSet(ocrData):
 #   returns modified version
 def removeLast_OCRData(ocrData):
     #   copy dataset from ocrData file
-    dataset = ocrData['dataset']
+    dataset = json.loads(ocrData['dataset'])
     print(f"entries in dataset: {len(dataset)}")
 
     #   remove last entry
@@ -121,7 +122,7 @@ def removeLast_OCRData(ocrData):
 #   returns modified version
 def addEntry_OCRData(ocrData, newName):
     #   copy dataset from ocrData file
-    dataset = ocrData['dataset']
+    dataset = json.loads(ocrData['dataset'])
 
     #   default data object from DEFAULTS
     defObj = defaults.OCR_DATA_ENTRY
