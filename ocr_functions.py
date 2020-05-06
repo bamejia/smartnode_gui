@@ -2,6 +2,7 @@
 import os
 
 import cv2
+import pytesseract
 
 import DEFAULTS as defaults
 import Settings_Functions as settings
@@ -16,7 +17,7 @@ def doOCR_All(ocrData):
     #   iterate through list
     for obj in objects:
         options = getOCROptions(ocrData, obj)
-        newText = doOCR_Single(options=options)
+        newText = doOCR_Single(options)
         setOCRText(ocrData, obj, newText)
 
     #   write these values to file once completed
@@ -25,19 +26,33 @@ def doOCR_All(ocrData):
 
 
 #   actual OCR function -> accepts options, returns a string
-def doOCR_Single(options=None):
-    #   copy from options if it was provided as an array(from getOptions function)
 
+#   default lang is 'eng' -> normal english characters
+#   call this function with 'ssd' for lang to use 7-segment library
+#   PSM 7 is the single line page segmentation mode -> this one works best for clock displays
+#   PSM 8 is the single word page segmentation mode
+def doOCR_Single(options):
+    #   This function is almost a direct duplicate of the one by David Matimu located at:
+    #   https: // github.com / Davidmatimu / Firebase / blob / master / ocr.py
     file = options[0]
-    PSM = options[1]
+    psm = options[1]
     lang = options[2]
 
     print(f"Performing OCR on file: {file}")
     print("\t**IMPLEMENTED BUT NOT INTEGRATED -> David's Code")
 
-    print(f"\tpath: {file}, PSM: {PSM}, lang: {lang}")
+    # Define configuration parameters
+    configStr = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/" -l lang --oem 1 --dpi 72 --psm {} -l {}'
+    config = (configStr.format(psm, lang))
 
-    return file + '_empty'
+    # Read image from Disk
+    image = cv2.imread(file)
+
+    print(f"Processing image with PSM {psm} using language {lang}")
+    text = pytesseract.image_to_string(image, config=config, output_type='dict')
+
+    return text['text']
+
 
 
 #   attempts to display the image at the provided path
