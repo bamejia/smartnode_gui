@@ -99,7 +99,7 @@ class OCRStatus(tk.Frame):
             controller.show_frame("OCRRuntime"))
 
         back_button = gbl.GButton(self, text="Go back",
-                                command=back_btn_func)
+                                  command=back_btn_func)
 
         back_button.pack(pady=gv.BUTTON_SPACE)
 
@@ -189,7 +189,6 @@ class CropSetup(tk.Frame):
         for btn in btn_objs:
             btn_objs[btn].configure(command=btn_funcs[btn])
             btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
-
 
     def update(self):
         pass
