@@ -6,13 +6,14 @@ from scipy.io import wavfile
 from scipy.io.wavfile import write
 
 import Settings_Functions as settings
+import Utility_Functions as utility
 
 
 #   this function records an audio file to of the specified length
 #   and saves it to the specified path
 
 #   WARNING WAITS FOR SPECIFIED TIME
-def recordAudio(path=settings.getFullPath('reference.wav'), recTime=.5):
+def recordAudio(path=utility.getFullPath('reference.wav'), recTime=.5):
     sampleRate = 44100  # Sample rate
     try:
         myrecording = sd.rec(int(recTime * sampleRate), samplerate=sampleRate, channels=1)
@@ -59,7 +60,7 @@ def recordRef():
 
     #   record new reference wav file
     mySet = settings.loadSettings('audioSettings.json')
-    path = settings.getFullPath(mySet['refPath'])
+    path = utility.getFullPath(mySet['refPath'])
     recordAudio(path, 1)
 
     #   get new reference fundamental
@@ -76,8 +77,8 @@ def recordRef():
 #   plays the reference audio file using a bash script
 def playReference():
     print(f'Playing Reference...')
-    filePath = settings.getFullPath('reference.wav')
+    filePath = utility.getFullPath('reference.wav')
     if os.path.exists(filePath):
-        settings.runBashScript('playSound.sh', filePath)
+        utility.runBashScript('playSound.sh', filePath)
     else:
         print("No file to play you fool! Record one first!")

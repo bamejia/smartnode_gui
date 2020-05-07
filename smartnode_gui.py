@@ -1,7 +1,7 @@
 import tkinter as tk  # python 3
 from tkinter import font  as tkfont  # python 3
 
-import Utility_Functions as utility
+import Settings_Functions as settings
 import audio_gui
 import finger_gui
 import general_button_label as gbl
@@ -179,9 +179,8 @@ class MainMenu(tk.Frame):
             controller.show_frame("AudioRuntime"))
 
         reset_btn_func = lambda: (
-            utility.wipeAll('json'),
-            utility.wipeAll('jpg'),
-            utility.wipeAll('wav'))
+            settings.fullReset()
+        )
 
         settings_btn_func = lambda: (
                                 controller.show_frame("Settings"))
