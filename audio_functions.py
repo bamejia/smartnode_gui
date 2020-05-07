@@ -1,15 +1,18 @@
-from scipy.io import wavfile
+import os
+
 import sounddevice as sd
-from scipy.io.wavfile import write
 from scipy.fftpack import fft, fftfreq
-from Settings_Functions import *
+from scipy.io import wavfile
+from scipy.io.wavfile import write
+
+import Settings_Functions as settings
 
 
 #   this function records an audio file to of the specified length
 #   and saves it to the specified path
 
 #   WARNING WAITS FOR SPECIFIED TIME
-def recordAudio(path=getFullPath('reference.wav'), recTime=.5):
+def recordAudio(path=settings.getFullPath('reference.wav'), recTime=.5):
     sampleRate = 44100  # Sample rate
     try:
         myrecording = sd.rec(int(recTime * sampleRate), samplerate=sampleRate, channels=1)
@@ -55,8 +58,8 @@ def recordRef():
     print(f'Recording Reference')
 
     #   record new reference wav file
-    settings = loadSettings('audioSettings.json')
-    path = getFullPath(settings['refPath'])
+    mySet = settings.loadSettings('audioSettings.json')
+    path = settings.getFullPath(mySet['refPath'])
     recordAudio(path, 1)
 
     #   get new reference fundamental
@@ -64,17 +67,17 @@ def recordRef():
     print(f"New Fundamental: {newRef}")
 
     # save the fundamental to file
-    changeSetting(settings, 'reference', newRef)
+    settings.changeSetting(mySet, 'reference', newRef)
 
     # set setup flag in main settings to true
-    changeSetting(loadSettings('mainSettings.json'), 'Audio_Setup', True)
+    settings.changeSetting(mySet.loadSettings('mainSettings.json'), 'Audio_Setup', True)
 
 
 #   plays the reference audio file using a bash script
 def playReference():
     print(f'Playing Reference...')
-    filePath = getFullPath('reference.wav')
-    if (os.path.exists(filePath)):
-        runBashScript('playSound.sh', filePath)
+    filePath = settings.getFullPath('reference.wav')
+    if os.path.exists(filePath):
+        settings.runBashScript('playSound.sh', filePath)
     else:
         print("No file to play you fool! Record one first!")
