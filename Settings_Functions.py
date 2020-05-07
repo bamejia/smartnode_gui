@@ -1,5 +1,10 @@
-from DEFAULTS import *
-from Utility_Functions import *
+import datetime
+import json
+import os
+
+import DEFAULTS as defaults
+import Utility_Functions as util
+
 
 #   This set of function handles saving / loading settings
 
@@ -13,7 +18,7 @@ def check_LoopMode(mySet):
 
     #   returns true if enough time has passed
     if mySet['loopMode'] == 'timed':
-        return checkTime(mySet['loopEnd'])
+        return util.checkTime(mySet['loopEnd'])
 
     else:
         return False
@@ -24,7 +29,7 @@ def changeSetting(obj, key, value):
 
     #   every settings object has an attribute called self
     #   which is the local path to where it is saved
-    path = getFullPath(obj['self'])
+    path = util.getFullPath(obj['self'])
     obj[key] = value
 
     #   save to file
@@ -36,7 +41,7 @@ def changeSetting(obj, key, value):
 
 #   returns a settings object from a filename
 def loadSettings(fileName):
-    filePath = getFullPath(fileName)
+    filePath = util.getFullPath(fileName)
 
     #   check if file is missing and / or empty
     missing = not os.path.exists(filePath)
@@ -71,7 +76,7 @@ def genSettings(name, path, save=True):
 
     #   gets default object saved in DEFAULTS
     try:
-        defSetting = LIST_ALL[name]
+        defSetting = defaults.LIST_ALL[name]
     except(NameError, KeyError) as error:
         print(f"No settings default for {name}...")
         exit('Terminating in genSettings: cannot find default object')
@@ -86,7 +91,7 @@ def genSettings(name, path, save=True):
 #   resets the key in object to its default value
 def resetDefault(obj, key):
     name = obj['self']
-    path = getFullPath(name)
+    path = util.getFullPath(name)
 
     print(f"resetting default for {name} at path {path}")
     tempObj = genSettings(name, path, False)
@@ -97,11 +102,23 @@ def resetDefault(obj, key):
 
     return obj
 
+
+#   loads every settings file -> we should run this in the main gui controller to kill off some bugs
+def loadAllSettings():
+    allSettings = defaults.LIST_ALL
+    for setting in allSettings:
+        loadAllSettings(setting)
+
+
+#   wipes deletes all settings files, saved pictures and audio clips; reloads all settings
+def fullReset():
+
+
 #   sets the end time attribute of the provided settings object
 #   based upon the provided offset(hours)
 #   returns the modified settings object
 def setEndtime(obj, offset):
-    endObj = datetime.now().replace(microsecond=0) + timedelta(hours=offset)
-    endStr = getTimeStr(endObj)
+    endObj = datetime.datetime.now().replace(microsecond=0) + datetime.timedelta(hours=offset)
+    endStr = util.getTimeStr(endObj)
 
     return changeSetting(obj, 'loopEnd', endStr)

@@ -1,4 +1,6 @@
 # functions used by buttons in frams from ocr_gui.py
+import json
+
 import Settings_Functions as settings
 import image_functions as image
 import ocr_functions as ocr
@@ -25,15 +27,20 @@ def cropSetup_add():
 #   removes coord object and ocrData entry (setup flag modified here)
 #   returns true on success
 def cropSetup_remove():
-    mySet = settings.loadSettings('OCRSettings.json')
-    if len(mySet['cropImgs']) >= 1:
+    ocrData = settings.loadSettings('OCRData.json')
+
+    if isinstance(ocrData['dataset'], str):
+        dataset = json.loads(ocrData['dataset'])
+    else:
+        dataset = ocrData['dataset']
+
+    if len(dataset) >= 1:
         print("removing last entry from coordList")
         myList = coordList()
         myList.popLast()
         myList.saveSet()
 
         print("removing last entry from Settings file")
-        ocrData = settings.loadSettings('OCRData.json')
         ocr.removeLast_OCRData(ocrData)
 
         return True

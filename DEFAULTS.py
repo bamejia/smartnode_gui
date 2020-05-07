@@ -76,3 +76,14 @@ OCR_DATA_ENTRY = {
     'lang': 'ssd',
     'text': 'null'
 }
+
+#   default coordObj
+COORD_OBJ = {
+    'name': 'null',
+    'botR': [2, 2],
+    'topL': [1, 1]
+}
+
+#   Files that must never be deleted
+
+FORBIDDEN = ['kittens.jpg', 'smartnode_key.json']

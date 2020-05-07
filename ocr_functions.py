@@ -72,7 +72,10 @@ def printDataSet(ocrData):
 #   returns modified version
 def removeLast_OCRData(ocrData):
     #   copy dataset from ocrData file
-    dataset = json.loads(ocrData['dataset'])
+    if isinstance(ocrData['dataset'], str):
+        dataset = json.loads(ocrData['dataset'])
+    else:
+        dataset = ocrData['dataset']
     print(f"entries in dataset: {len(dataset)}")
 
     #   remove last entry

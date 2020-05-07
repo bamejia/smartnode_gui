@@ -113,7 +113,11 @@ class OCRSettings(tk.Frame):
 
         btn_funcs = {
             'setup': lambda: (
-                # ,
+                #   make sure all the settings for OCR are loaded
+                settings.loadSettings('OCRSettings.json'),
+                settings.loadSettings('OCRData.json'),
+                settings.loadSettings('coordFile.json'),
+
                 controller.frames["CropSetup"].update(),
                 controller.show_frame("CropSetup")
             ),
