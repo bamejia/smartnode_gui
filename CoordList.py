@@ -25,12 +25,12 @@ class coordList():
         missing = not (os.path.exists(self.filePath))
         #   if it exists check if empty -> if empty treat like doesn't exist
         if not missing:
-            print("coordFile not missing")
+            # print("coordFile not missing")
             missing = os.stat(self.filePath).st_size <= 2
 
         #   create default file if missing (or empty)
         if missing:
-            print("creating new file with default entry")
+            print("Generating 'coordFile.json' in CoordList constructor")
             # use open() to create a file, add default obj to file, add autosaves
             with open(self.filePath, "w+") as myFile:
                 myFile.close()
