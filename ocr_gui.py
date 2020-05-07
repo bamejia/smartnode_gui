@@ -1,11 +1,11 @@
 import tkinter as tk
 
 import Settings_Functions as settings
+import general_button_label as gbl
 import global_variables as gv
 import image_functions as image
 import ocr_functions as ocr
 import ocr_gui_btns as ocrBtns
-import general_button_label as gbl
 
 UPDATE_RATE = 500
 
@@ -180,10 +180,10 @@ class CropSetup(tk.Frame):
         }
 
         btn_objs = {
-            'add': tk.Button(self, text="Add Crop Area"),
-            'remove': tk.Button(self, text="Remove Last"),
-            'show': tk.Button(self, text="Show Current"),
-            'back': tk.Button(self, text="Go back"),
+            'add': gbl.GButton(self, "Add Crop Area"),
+            'remove': gbl.GButton(self, "Remove Last"),
+            'show': gbl.GButton(self, "Show Current"),
+            'back': gbl.GButton(self, "Go back"),
         }
 
         for btn in btn_objs:
@@ -212,7 +212,7 @@ class CropSetup2(tk.Frame):
             controller.show_frame("CropSetup")
         )
 
-        back_btn = tk.Button(self, text="Go back", command=back_btn_func)
+        back_btn = gbl.GButton(self, "Go back", command=back_btn_func)
 
         back_btn.pack()
 
@@ -230,5 +230,5 @@ class OCRModeSetup(tk.Frame):
             controller.show_frame("OCRSettings")
         )
 
-        back_btn = tk.Button(self, text="Go back", command=back_btn_func)
+        back_btn = gbl.GButton(self, "Go back", command=back_btn_func)
         back_btn.pack()
