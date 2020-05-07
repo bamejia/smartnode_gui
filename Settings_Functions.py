@@ -4,6 +4,7 @@ import os
 
 import DEFAULTS as defaults
 import Utility_Functions as util
+from CoordList import coordList
 
 
 #   This set of function handles saving / loading settings
@@ -110,8 +111,7 @@ def loadAllSettings():
     for setting in allSettings:
         loadSettings(setting)
 
-    #   generate coordFile with default temp
-
+    coordList()
 
 
 #   wipes deletes all settings files, saved pictures and audio clips; reloads all settings

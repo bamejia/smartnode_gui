@@ -22,17 +22,21 @@ class coordList():
         self.filePath = os.path.join(directory, fileName)
 
         #   check if file doesn't exist
-        if not (os.path.exists(self.filePath)):
+        missing = not (os.path.exists(self.filePath))
+        #   if it exists check if empty -> if empty treat like doesn't exist
+        if not missing:
+            print("coordFile not missing")
+            missing = os.stat(self.filePath).st_size <= 2
+
+        #   create default file if missing (or empty)
+        if missing:
             print("creating new file with default entry")
-
-            # use open() to create a file
-            myFile = open(self.filePath, "w+")
-            myFile.close()
-
-            #   add a blank coordObject to the list, auto-saved by add()
+            # use open() to create a file, add default obj to file, add autosaves
+            with open(self.filePath, "w+") as myFile:
+                myFile.close()
             self.addObject()
 
-        print("loading")
+        # print("loading")
         self.loadSet()
 
     #   override the default iterator
@@ -88,16 +92,16 @@ class coordList():
     #   returns object with highest index greater than 1 and removes it from the list
     def popLast(self):
         index = len(self.myList) - 1
-        entry = None
-
         if index >= 1:
             entry = self.myList[index]
             self.removeObj(entry)
+            return entry
 
         else:
             print("too few elements to pop")
+            return False
 
-        return entry
+    #
 
     #   attempts to return first entry in the list via specified value (index)
     def getObjIndex(self, index):
@@ -128,7 +132,13 @@ class coordList():
     #   return the last entry in the list
     def peekLast(self):
         index = len(self.myList) - 1
-        return self.getObjIndex(index)
+        if index >= 1:
+            entry = self.myList[index]
+            return entry
+
+        else:
+            print("CoordList is empty")
+            return False
 
     #   loads a data set from file
     def loadSet(self):

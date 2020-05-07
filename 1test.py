@@ -1,12 +1,12 @@
-import Settings_Functions as settings
-import ocr_functions as ocr
+import DEFAULTS as defaults
+from CoordList import coordList
+from CoordObj import coordObj
 
-ocrData = settings.loadSettings('OCRData.json')
+tempObj = defaults.COORD_OBJ
 
-# settings.resetDefault(ocrData, 'dataset')
-# ocr.addEntry_OCRData(ocrData, 'crop2')
+tempList = coordList()
 
-ocr.printDataSet(ocrData)
+tempList.addObject(coordObj('testObj', (123, 123), (456, 456)))
+tempList.popLast()
 
-ocrData = ocr.doOCR_All(ocrData)
-ocr.printDataSet(ocrData)
+tempList.printSet()

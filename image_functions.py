@@ -124,7 +124,11 @@ def closeEvent(event, x, y, flags, param):
 def addCrop(cropObjs=coordList(), imgPath=getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Running TakeSource")
+
+        #   takesource duplicates 'kittens.jpg' as the source image
         takeSource()
+
+        return
 
     else:
         #   load image from path, create a named window of the correct size
@@ -139,7 +143,7 @@ def addCrop(cropObjs=coordList(), imgPath=getFullPath('source.jpg')):
         param = [image, windowName, cropObjs]
 
         #   add mouse listener function,
-        cv2.setMouseCallback(windowName, clickHandler, param)
+        cv2.setMouseCallback(windowName, addCropHandler, param)
 
         #   add rectangles to the window
         for obj in cropObjs.myList[1:]:
@@ -152,14 +156,14 @@ def addCrop(cropObjs=coordList(), imgPath=getFullPath('source.jpg')):
 #   click handler for addCrop
 #   first and second click append coords to param and draw to image
 #   third click saves new coord obj and closes window
-def clickHandler(event, x, y, flags, param):
+def addCropHandler(event, x, y, flags, param):
     # if event == cv2.EVENT_LBUTTONDOWN:
     if event == cv2.EVENT_LBUTTONUP:
         image = param[0]
         windowName = param[1]
 
         #   adjust x/y for touchcreen inaccuracy
-        #   *always returns slightly down and to the right
+        #   *always returns slightly down and to the right->adjusted
         coord = (x - 5, y - 5)
 
         #   using number of parameters to make decisions
