@@ -55,7 +55,7 @@ class OCRRuntime(tk.Frame):
 
         for btn in btn_objs:
             btn_objs[btn].configure(command=btn_funcs[btn])
-            btn_objs[btn].pack()
+            btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
 
         self.count = 0
 
@@ -101,7 +101,7 @@ class OCRStatus(tk.Frame):
         back_button = gbl.GButton(self, text="Go back",
                                 command=back_btn_func)
 
-        back_button.pack()
+        back_button.pack(pady=gv.BUTTON_SPACE)
 
 
 class OCRSettings(tk.Frame):
@@ -149,7 +149,7 @@ class OCRSettings(tk.Frame):
 
         for btn in btn_objs:
             btn_objs[btn].configure(command=btn_funcs[btn])
-            btn_objs[btn].pack()
+            btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
 
 
 class CropSetup(tk.Frame):
@@ -188,7 +188,7 @@ class CropSetup(tk.Frame):
 
         for btn in btn_objs:
             btn_objs[btn].configure(command=btn_funcs[btn])
-            btn_objs[btn].pack()
+            btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
 
 
     def update(self):
@@ -214,7 +214,7 @@ class CropSetup2(tk.Frame):
 
         back_btn = gbl.GButton(self, "Go back", command=back_btn_func)
 
-        back_btn.pack()
+        back_btn.pack(pady=gv.BUTTON_SPACE)
 
 
 class OCRModeSetup(tk.Frame):
@@ -231,4 +231,4 @@ class OCRModeSetup(tk.Frame):
         )
 
         back_btn = gbl.GButton(self, "Go back", command=back_btn_func)
-        back_btn.pack()
+        back_btn.pack(pady=gv.BUTTON_SPACE)
