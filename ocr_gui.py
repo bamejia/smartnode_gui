@@ -5,6 +5,7 @@ import global_variables as gv
 import image_functions as image
 import ocr_functions as ocr
 import ocr_gui_btns as ocrBtns
+import general_button_label as gbl
 
 UPDATE_RATE = 500
 
@@ -46,10 +47,10 @@ class OCRRuntime(tk.Frame):
         }
 
         btn_objs = {
-            'toggle': tk.Button(self, text="Start/Stop"),
-            'mode': tk.Button(self, text="Mode: "),
-            'show': tk.Button(self, text="Show Status"),
-            'back': tk.Button(self, text="Go back")
+            'toggle': gbl.GButton(self, text="Start/Stop"),
+            'mode': gbl.GButton(self, text="Mode: "),
+            'show': gbl.GButton(self, text="Show Status"),
+            'back': gbl.GButton(self, text="Go back")
         }
 
         for btn in btn_objs:
@@ -90,14 +91,14 @@ class OCRStatus(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="OCR Status", font=controller.title_font)
+        label = gbl.GLabel(self, text="OCR Status", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         back_btn_func = lambda: (
             # ,
             controller.show_frame("OCRRuntime"))
 
-        back_button = tk.Button(self, text="Go back",
+        back_button = gbl.GButton(self, text="Go back",
                                 command=back_btn_func)
 
         back_button.pack()
@@ -108,7 +109,7 @@ class OCRSettings(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="OCR/Video Settings", font=controller.title_font)
+        label = gbl.GLabel(self, text="OCR/Video Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         btn_funcs = {
@@ -140,10 +141,10 @@ class OCRSettings(tk.Frame):
         }
 
         btn_objs = {
-            'setup': tk.Button(self, text="Cropping Setup"),
-            'mode': tk.Button(self, text="Loop Mode: "),
-            'test': tk.Button(self, text="Test Run"),
-            'back': tk.Button(self, text="Go back"),
+            'setup': gbl.GButton(self, text="Cropping Setup"),
+            'mode': gbl.GButton(self, text="Loop Mode: "),
+            'test': gbl.GButton(self, text="Test Run"),
+            'back': gbl.GButton(self, text="Go back"),
         }
 
         for btn in btn_objs:

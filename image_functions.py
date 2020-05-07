@@ -85,7 +85,7 @@ def showVid():
     print("Outside of loop\n\n")
 
 #   shows the source image with the bounding areas for cropping
-def showImage(cropObjs, imgPath=getFullPath('source.jpg')):
+def showImage(imgPath=getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Fool! Run takeSource!")
         return
@@ -102,6 +102,8 @@ def showImage(cropObjs, imgPath=getFullPath('source.jpg')):
 
         #   add mouse listener function
         cv2.setMouseCallback(windowName, closeEvent)
+
+        cropObjs = coordList()
 
         #   add rectangles to the window
         for obj in cropObjs.myList[1:]:
