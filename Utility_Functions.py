@@ -1,8 +1,9 @@
-import subprocess
-import os
-from datetime import datetime, timedelta
 import json
-import sys
+import os
+import subprocess
+from datetime import datetime
+
+import DEFAULTS as defaults
 
 
 #   returns the absolute path to the local path provided
@@ -32,21 +33,25 @@ def runBashScript(scriptName, args=()):
 def wipeAll(fileType):
     allowable = ('.wav', '.json', '.png', '.jpg')
 
-    #   you must never delete the kittens
-    forbidden = (os.path.join(os.path.dirname(__file__), 'kittens.jpg'))
+    #   files that can't be deleted
+    ignore = defaults.FORBIDDEN
+    for file in ignore:
+        ignore[file] = getFullPath(file)
 
     #   check if you are allowed to remove this type of file
     #   break if input is empty
     if not (fileType):
         return
 
+    #   see if inserting a '.' fixes the issue
     if fileType.find('.') < 0:
         fileType = '.' + fileType
-        print(f"inserting '.', type is now {fileType}")
 
+    #   check if it is an allowed file type
     if not allowable.__contains__(fileType):
         print(f"You can't remove '{fileType}' files")
 
+    #   proceed if file type is allowed
     else:
 
         #   makes a list of all files in the root directory
@@ -60,7 +65,7 @@ def wipeAll(fileType):
             path_to_file = os.path.join(directory, file)
 
             #   remove file if not in list of forbidden files
-            if forbidden.find(path_to_file) < 0:
+            if ignore.find(path_to_file) < 0:
                 os.remove(path_to_file)
 
         print(f"\tAll {fileType} files Removed")
@@ -70,9 +75,13 @@ def wipeAll(fileType):
 #   attempts to remove a specific file if it exists and is of an allowable filetype
 def wipeOne(fileName):
     allowable = ('.wav', '.json', '.png', '.jpg')
-    forbidden = (os.path.join(os.path.dirname(__file__), 'kittens.jpg'))
 
-    print(forbidden)
+    #   files that can't be deleted
+    ignore = []
+    for file in defaults.FORBIDDEN:
+        ignore.append(getFullPath(file))
+
+    print(ignore)
 
     #   check if file is of an allowable type, exit if invalid
     valid = False
@@ -92,19 +101,20 @@ def wipeOne(fileName):
         fullPath = os.path.join(directory, fileName)
 
         #   check if removal of this file is explicitly forbidden
-        if forbidden.find(fullPath) > -1:
-            print("you aren't allowed to delete the kittens picture... jerk")
+        if ignore.__contains__(fullPath):
+            print(f"You aren't allowed to delete '{fileName}'")
             return
 
         #   exit if file not found
         if not os.path.exists(fullPath):
-            print("File not found!")
+
+            print(f"{fileName} not found!\nPath: {fullPath}")
             return
 
         #   remove the file if it is found
         else:
             os.remove(fullPath)
-            print("File Removed")
+            print(f"'{fileName}' was removed")
 
 
 #   datetime stuff

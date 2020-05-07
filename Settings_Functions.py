@@ -112,7 +112,7 @@ def loadAllSettings():
 
 #   wipes deletes all settings files, saved pictures and audio clips; reloads all settings
 def fullReset():
-
+    pass
 
 #   sets the end time attribute of the provided settings object
 #   based upon the provided offset(hours)
