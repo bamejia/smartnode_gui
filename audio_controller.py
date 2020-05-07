@@ -31,7 +31,7 @@ def updateLocal(mySet, detected):
     if (detected):
         print("Updating Local Stuff")
         print(f"\tSetting Audio Setting 'detected' to {detected}")
-        mySet = changeSetting(mySet, 'detected', detected)
+        mySet = settings.changeSetting(mySet, 'detected', detected)
 
         print("\t**NOT IMPLEMENTED-> UPDATE SCREEN")
         print()
@@ -64,7 +64,7 @@ def getEndConditions(mySet):
 
 
     #   checks for loop end due to loopMode mySet (in Utility Functions)
-    if check_LoopMode(mySet):
+    if settings.check_LoopMode(mySet):
         print("\tLoop Ended Due to Internal Trigger")
         print()
         return True
@@ -76,7 +76,7 @@ def getEndConditions(mySet):
 def init_Audio():
     print("In init_Audio: Checking Audio Initialization")
 
-    mainSet = loadSettings('mainSettings.json')
+    mainSet = settings.loadSettings('mainSettings.json')
     flag = mainSet['Audio_Setup']
     print(f"Main Settings Audio Setup Flag: {flag}")
 
@@ -103,7 +103,7 @@ def start():
 
     #   copy this
     print("Loading Audio Settings")
-    mySet = loadSettings('audioSettings.json')
+    mySet = settings.loadSettings('audioSettings.json')
 
     print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
 
@@ -138,7 +138,7 @@ def loopOnce(mySet):
 #   loads settings and prints a statement
 def pre_loop():
     print("Loading Audio Settings")
-    mySet = loadSettings('audioSettings.json')
+    mySet = settings.loadSettings('audioSettings.json')
     print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
     return mySet
 

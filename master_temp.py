@@ -1,12 +1,13 @@
 #   This is the main controller file. This is a temporary stand-in for what will be in the GUI
 
-import OCR_Controller
 import Audio_Controller
-from Settings_Functions import *
+import OCR_Controller
 from Audio_Functions import playReference, recordAudio
-from FireBase_Functions import setupFirebase
 from OCR_Functions import takeSource, showImage
-from guiTest import*
+from guiTest import *
+
+from Settings_Functions import *
+
 
 def Settings():
     print(f"\nSETTINGS ->\tThis function has access to settings json files")
