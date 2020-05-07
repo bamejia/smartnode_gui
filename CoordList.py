@@ -1,6 +1,7 @@
 import json
 import os
 
+import DEFAULTS as defaults
 from CoordObj import *
 
 
@@ -31,10 +32,13 @@ class coordList():
         #   create default file if missing (or empty)
         if missing:
             print("Generating 'coordFile.json' in CoordList constructor")
+            tempObj = defaults.COORD_OBJ
+
             # use open() to create a file, add default obj to file, add autosaves
             with open(self.filePath, "w+") as myFile:
-                myFile.close()
-            self.addObject()
+                myFile.write(json.dumps(list(tempObj)))
+
+            # self.addObject()
 
         # print("loading")
         self.loadSet()
