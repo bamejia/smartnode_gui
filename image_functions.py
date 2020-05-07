@@ -85,7 +85,7 @@ def showVid():
     print("Outside of loop\n\n")
 
 #   shows the source image with the bounding areas for cropping
-def showImage(cropObjs=coordList(), imgPath=getFullPath('source.jpg')):
+def showImage(cropObjs, imgPath=getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Fool! Run takeSource!")
         return
@@ -121,7 +121,7 @@ def closeEvent(event, x, y, flags, param):
 #   displays current image with cropping regions,
 #   if no image exists takes one
 #   allows user to add an additional one by tapping the screen
-def addCrop(cropObjs=coordList(), imgPath=getFullPath('source.jpg')):
+def addCrop(cropObjs, imgPath=getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Running TakeSource")
 
@@ -140,7 +140,7 @@ def addCrop(cropObjs=coordList(), imgPath=getFullPath('source.jpg')):
         cv2.resizeWindow(windowName, SCREEN_DIMS['width'], SCREEN_DIMS['height'])
 
         #   parameters to pass to the listener w/ important stuff added in
-        param = [image, windowName, cropObjs]
+        param = [image, windowName]  # , cropObjs]
 
         #   add mouse listener function,
         cv2.setMouseCallback(windowName, addCropHandler, param)
@@ -159,6 +159,8 @@ def addCrop(cropObjs=coordList(), imgPath=getFullPath('source.jpg')):
 def addCropHandler(event, x, y, flags, param):
     # if event == cv2.EVENT_LBUTTONDOWN:
     if event == cv2.EVENT_LBUTTONUP:
+        print(f"\nCLICK DETECTED! Len of Params: {len(param)}")
+
         image = param[0]
         windowName = param[1]
 
@@ -168,7 +170,8 @@ def addCropHandler(event, x, y, flags, param):
 
         #   using number of parameters to make decisions
         #   starts with two params, for the first two
-        if (len(param) < 5):
+        if len(param) < 4:
+            print(f"appending coord {coord}")
             #   add coords to list
             param.append(coord)
 
@@ -177,19 +180,24 @@ def addCropHandler(event, x, y, flags, param):
             cv2.imshow(windowName, image)
             cv2.waitKey(1)
 
-            # Draw the rectangle after the second click
-            if (len(param) == 5):
-                cv2.rectangle(image, param[3], param[4], (0, 255, 0), 6)
-                cv2.imshow(windowName, image)
-                cv2.waitKey(1)
-                param.append(0)
+        # Draw the rectangle after the second click
+        if len(param) == 4:
+            print("drawing rectangle")
+            cv2.rectangle(image, param[2], param[3], (0, 255, 0), 6)
+            cv2.imshow(windowName, image)
+            cv2.waitKey(1)
+            param.append(0)
 
         #   on third click add the object and close the window
-        else:
-            cropObjs = param[2]
+        elif len(param) == 5:
+            # param = [image, windowName]    , cropObjs]
+            print("saving coordObj")
+
+            #   create the list
+            cropObjs = coordList()
             #   create a new coord Obj and add to list
             name = "crop" + str(cropObjs.getSize())
-            cropObjs.addObject(coordObj(name, param[3], param[4]))
+            cropObjs.addObject(coordObj(name, param[2], param[3]))
 
             print("closing window ")
             cv2.destroyAllWindows()
@@ -197,7 +205,7 @@ def addCropHandler(event, x, y, flags, param):
 
 #   generates cropped images based on source image and crop objects
 #   returns a list of file paths for use with ocr
-def cropSource(cropObjs=coordList, imgPath=getFullPath('source.jpg')):
+def cropSource(cropObjs, imgPath=getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Fool! Run takeSource!")
         return

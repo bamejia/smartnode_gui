@@ -116,6 +116,8 @@ def loadAllSettings():
 
 #   wipes deletes all settings files, saved pictures and audio clips; reloads all settings
 def fullReset():
+    print("\n\n----------------Wiping Files & Settings----------------\n")
+
     #   delete all json, jpg, and wav files(except forbidden)
     util.wipeAll('.json', True)
     util.wipeAll('.jpg', True)
@@ -123,6 +125,8 @@ def fullReset():
 
     #   load all settings
     loadAllSettings()
+
+    print("\n----------------Done Loading Settings----------------\n\n")
 
 #   sets the end time attribute of the provided settings object
 #   based upon the provided offset(hours)

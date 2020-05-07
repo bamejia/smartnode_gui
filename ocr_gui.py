@@ -189,19 +189,10 @@ class CropSetup(tk.Frame):
             btn_objs[btn].configure(command=btn_funcs[btn])
             btn_objs[btn].pack()
 
-        # vvv what is this? vvv
-        '''
-        # self.image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
-        # self.image = Image.fromarray(self.image)
-        # self.image = ImageTk.PhotoImage(self.image)
-
-        # panelA = tk.Label(self, image=self.image)
-        # panelA.image = self.image
-        # panelA.pack(side="top", fill="x", pady=10)
-        '''
 
     def update(self):
-        print("CATS")
+        pass
+        # print("CATS")
         # self.image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
         # self.image = Image.fromarray(self.image)
         # self.image = ImageTk.PhotoImage(self.image)

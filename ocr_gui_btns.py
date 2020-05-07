@@ -12,12 +12,13 @@ from CoordList import coordList
 #   calls addCrop function in image functions
 #   modifies ocrData file (setup flag modified here)
 def cropSetup_add():
+    tempList = coordList()
+
     print("adding crop bounding box")
-    image.addCrop()
+    image.addCrop(tempList)
 
     print("adding ocrData entry")
     #   load use size of coordList to get name of next entry
-    tempList = coordList()
     newName = 'crop' + str(len(tempList.myList))
 
     ocrData = settings.loadSettings('OCRData.json')

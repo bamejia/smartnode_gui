@@ -80,8 +80,8 @@ OCR_DATA_ENTRY = {
 #   default coordObj
 COORD_OBJ = {
     'name': 'null',
-    'botR': [2, 2],
-    'topL': [1, 1]
+    'topL': (1, 1),
+    'botR': (2, 2)
 }
 
 #   Files that must never be deleted

@@ -27,7 +27,7 @@ class coordList():
         #   if it exists check if empty -> if empty treat like doesn't exist
         if not missing:
             # print("coordFile not missing")
-            missing = os.stat(self.filePath).st_size <= 2
+            missing = os.stat(self.filePath).st_size == 0
 
         #   create default file if missing (or empty)
         if missing:
@@ -36,11 +36,10 @@ class coordList():
 
             # use open() to create a file, add default obj to file, add autosaves
             with open(self.filePath, "w+") as myFile:
-                myFile.write(json.dumps(list(tempObj)))
+                # myFile.write(json.dumps(tempObj))
+                self.addObject(coordObj(tempObj['name'], tuple(tempObj['topL']), tuple(tempObj['botR'])))
 
-            # self.addObject()
-
-        # print("loading")
+        print("loading set from constructor")
         self.loadSet()
 
     #   override the default iterator
@@ -150,10 +149,18 @@ class coordList():
         with open(self.filePath, 'r') as myFile:
             temp_list = json.loads(myFile.read())
 
-            # temp = coordList()
+        #   flag to indicate one dummy entry was added
+        oneDummyLoaded = False
+        # temp = coordList()
         for entry in temp_list:
-            tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
-            self.myList.append(tempObj)
+            if entry['name'] == 'coord':
+                if not oneDummyLoaded:
+                    tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
+                    self.myList.append(tempObj)
+                    oneDummyLoaded = True
+            else:
+                tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
+                self.myList.append(tempObj)
 
     #   saves myList object to file
     def saveSet(self):
