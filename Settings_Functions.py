@@ -105,14 +105,24 @@ def resetDefault(obj, key):
 
 #   loads every settings file -> we should run this in the main gui controller to kill off some bugs
 def loadAllSettings():
+    #   load the standard settings.json
     allSettings = defaults.LIST_ALL
     for setting in allSettings:
-        loadAllSettings(setting)
+        loadSettings(setting)
+
+    #   generate coordFile with default temp
+
 
 
 #   wipes deletes all settings files, saved pictures and audio clips; reloads all settings
 def fullReset():
-    pass
+    #   delete all json, jpg, and wav files(except forbidden)
+    util.wipeOne('.json', True)
+    util.wipeOne('.jpg', True)
+    util.wipeOne('.wav', True)
+
+    #   load all settings
+    loadAllSettings()
 
 #   sets the end time attribute of the provided settings object
 #   based upon the provided offset(hours)

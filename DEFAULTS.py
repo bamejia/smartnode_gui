@@ -85,5 +85,4 @@ COORD_OBJ = {
 }
 
 #   Files that must never be deleted
-
-FORBIDDEN = ['kittens.jpg', 'smartnode_key.json']
+FORBIDDEN = ['kittens.jpg', 'smartnode_key.json', 'dependencies.txt']
