@@ -178,12 +178,12 @@ class MainMenu(tk.Frame):
             controller.set_return_frame("MainMenu"),
             controller.show_frame("AudioRuntime"))
 
+        settings_btn_func = lambda: (
+                                controller.show_frame("Settings"))
+
         reset_btn_func = lambda: (
             settings.fullReset()
         )
-
-        settings_btn_func = lambda: (
-                                controller.show_frame("Settings"))
         quit_btn_func = lambda: (
                                 controller.destroy())
 
@@ -191,7 +191,7 @@ class MainMenu(tk.Frame):
         start_stop_audio_btn = gbl.GButton(self, "Audio", audio_btn_func)
         settings_btn = gbl.GButton(self, "Settings", settings_btn_func)
 
-        reset_btn = gbl.GButton(self, "Clear Files", reset_btn_func)
+        reset_btn = gbl.GButton(self, "Reset Files", reset_btn_func)
 
         quit_btn = gbl.GButton(self, "Quit", quit_btn_func)
 

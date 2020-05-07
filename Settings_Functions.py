@@ -117,9 +117,9 @@ def loadAllSettings():
 #   wipes deletes all settings files, saved pictures and audio clips; reloads all settings
 def fullReset():
     #   delete all json, jpg, and wav files(except forbidden)
-    util.wipeOne('.json', True)
-    util.wipeOne('.jpg', True)
-    util.wipeOne('.wav', True)
+    util.wipeAll('.json', True)
+    util.wipeAll('.jpg', True)
+    util.wipeAll('.wav', True)
 
     #   load all settings
     loadAllSettings()
