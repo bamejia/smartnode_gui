@@ -71,7 +71,7 @@ def recordRef():
     settings.changeSetting(mySet, 'reference', newRef)
 
     # set setup flag in main settings to true
-    settings.changeSetting(mySet.loadSettings('mainSettings.json'), 'Audio_Setup', True)
+    settings.changeSetting(settings.loadSettings('mainSettings.json'), 'Audio_Setup', 'True')
 
 
 #   plays the reference audio file using a bash script
