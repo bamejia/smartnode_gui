@@ -7,6 +7,8 @@ import ocr_functions as ocr
 from CoordList import coordList
 import DEFAULTS as defaults
 
+import collections
+
 
 #   Functions for CropSetup Frame
 
@@ -62,4 +64,7 @@ def cropSetup_show():
 
 
 def next_mode(current_mode):
-    defaults.LOOP_TYPES[current_mode].ord
+    deque = collections.deque(defaults.OCR_LOOP_TYPES[current_mode])
+    index = deque.index(current_mode)
+    de.roteate(-1)
+    return de[index]
