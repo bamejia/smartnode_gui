@@ -134,7 +134,6 @@ def addCrop(cropObjs, imgPath=getFullPath('source.jpg')):
 
     else:
         #   load image from path, create a named window of the correct size
-
         image = cv2.imread(imgPath)
 
         windowName = "Source Image"
@@ -142,7 +141,7 @@ def addCrop(cropObjs, imgPath=getFullPath('source.jpg')):
         cv2.resizeWindow(windowName, SCREEN_DIMS['width'], SCREEN_DIMS['height'])
 
         #   parameters to pass to the listener w/ important stuff added in
-        param = [image, windowName]  # , cropObjs]
+        param = [image, windowName, cropObjs]
 
         #   add mouse listener function,
         cv2.setMouseCallback(windowName, addCropHandler, param)
@@ -154,25 +153,29 @@ def addCrop(cropObjs, imgPath=getFullPath('source.jpg')):
         cv2.imshow(windowName, image)
         cv2.waitKey(0)
 
+    return cropObjs
+
 
 #   click handler for addCrop
 #   first and second click append coords to param and draw to image
 #   third click saves new coord obj and closes window
 def addCropHandler(event, x, y, flags, param):
-    # if event == cv2.EVENT_LBUTTONDOWN:
     if event == cv2.EVENT_LBUTTONUP:
         print(f"\nCLICK DETECTED! Len of Params: {len(param)}")
 
         image = param[0]
         windowName = param[1]
+        cropObjs = param[2]
 
-        #   adjust x/y for touchcreen inaccuracy
+        #   adjust x/y for touchscreen inaccuracy
         #   *always returns slightly down and to the right->adjusted
         coord = (x - 5, y - 5)
 
+
         #   using number of parameters to make decisions
-        #   starts with two params, for the first two
-        if len(param) < 4:
+        #   number of params starts at 3
+        #       -> the next two events append x/y coords to list of params
+        if len(param) < 5:
             print(f"appending coord {coord}")
             #   add coords to list
             param.append(coord)
@@ -183,23 +186,27 @@ def addCropHandler(event, x, y, flags, param):
             cv2.waitKey(1)
 
         # Draw the rectangle after the second click
-        if len(param) == 4:
+        if len(param) == 5:
             print("drawing rectangle")
-            cv2.rectangle(image, param[2], param[3], (0, 255, 0), 6)
+            topL = param[3]
+            botR = param[4]
+            cv2.rectangle(image, topL, botR, (0, 255, 0), 6)
             cv2.imshow(windowName, image)
             cv2.waitKey(1)
+
+            #   append a zero to params just to require one more click before saving
             param.append(0)
 
         #   on third click add the object and close the window
-        elif len(param) == 5:
-            # param = [image, windowName]    , cropObjs]
+        elif len(param) == 6:
+            # param = [image, windowName], cropObjs]
             print("saving coordObj")
 
-            #   create the list
-            cropObjs = coordList()
-            #   create a new coord Obj and add to list
             name = "crop" + str(cropObjs.getSize())
-            cropObjs.addObject(coordObj(name, param[2], param[3]))
+            topL = param[3]
+            botR = param[4]
+
+            cropObjs.addObject(coordObj(name, topL, botR))
 
             print("closing window ")
             cv2.destroyAllWindows()

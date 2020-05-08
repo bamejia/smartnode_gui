@@ -145,21 +145,27 @@ class coordList():
     #   loads a data set from file
     def loadSet(self):
 
+        #   copy file contents to tempporary object
         with open(self.filePath, 'r') as myFile:
             temp_list = json.loads(myFile.read())
 
+        #   wipe current set
+        self.myList = []
+
         #   flag to indicate one dummy entry was added
-        oneDummyLoaded = False
-        # temp = coordList()
+        # oneDummyLoaded = False
         for entry in temp_list:
-            if entry['name'] == 'coord':
-                if not oneDummyLoaded:
-                    tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
-                    self.myList.append(tempObj)
-                    oneDummyLoaded = True
-            else:
-                tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
-                self.myList.append(tempObj)
+            tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
+            self.myList.append(tempObj)
+            #
+            # if entry['name'] == 'coord':
+            #     if not oneDummyLoaded:
+            #         tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
+            #         self.myList.append(tempObj)
+            #         oneDummyLoaded = True
+            # else:
+            #     tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
+            #     self.myList.append(tempObj)
 
     #   saves myList object to file
     def saveSet(self):
@@ -174,7 +180,7 @@ class coordList():
             tempList.append(entry.getAsDict())
 
         #   write the list of dicts to file as a json string w/ dumps
-        with open(self.filePath, 'w') as myFile:
+        with open(self.filePath, 'w+') as myFile:
             myFile.write(json.dumps(tempList))
 
     #   prints the contents of the set
