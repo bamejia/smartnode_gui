@@ -113,8 +113,8 @@ class AudioSettings(tk.Frame):
         back_btn_func = lambda: (
             controller.show_frame("Settings"))
 
-        btn1 = gbl.GButton(self, text="Record Sample",
-                         command=btn1_fnc)
+        btn1 = gbl.GButton(self, text="Reference Setup",
+                           command=btn1_fnc)
         btn2 = gbl.GButton(self, text="Run Mode: ",
                          command=btn2_fnc)
         btn3 = gbl.GButton(self, text="Test Run",
@@ -138,11 +138,13 @@ class SampleSetup(tk.Frame):
 
         record_func = lambda: (
             audio_controller.record(),
-            controller.show_frame("AudioSettings"))
+            # controller.show_frame("AudioSettings")
+        )
 
         playback_func = lambda: (
             audio.playReference(),
-            controller.show_frame("AudioSettings"))
+            # controller.show_frame("AudioSettings")
+        )
 
         back_func = lambda: (
             controller.show_frame("AudioSettings"))
