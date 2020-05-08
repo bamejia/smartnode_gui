@@ -173,21 +173,20 @@ class AudioModeSetup(tk.Frame):
         label = gbl.GLabel(self, text="Audio Mode Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        self.current_mode = settings.loadSettings("AudioSettings.json")['loopMode']
-        print(self.current_mode)
+        self.current_mode = settings.loadSettings('audioSettings.json')['loopMode']
 
         self.mode_label = gbl.DLabel(self, text=self.current_mode)
-        self.mode_label.pack()
+        self.mode_label.pack(pady=gv.BUTTON_SPACE)
 
         next_mode_func = lambda : (
             self.change_current_mode_display(audioBtns.next_mode(self.current_mode))
         )
         save_func = lambda : (
-            settings.changeSetting(loadSettings("AudioSettings.json"), 'loopMode', self.current_mode),
+            settings.changeSetting(loadSettings("audioSettings.json"), 'loopMode', self.current_mode),
             controller.show_frame("AudioSettings")
         )
         cancel_func = lambda: (
-            self.change_current_mode_display(settings.loadSettings("AudioSettings.json")['loopMode']),
+            self.change_current_mode_display(settings.loadSettings("audioSettings.json")['loopMode']),
             controller.show_frame("AudioSettings")
         )
 
