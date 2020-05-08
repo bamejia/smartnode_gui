@@ -65,7 +65,7 @@ LIST_ALL = {
 #   list of valid loop types
 LOOP_TYPES = ['infinite', 'single', 'timed', 'press']
 AUDIO_LOOP_TYPES = ['infinite', 'single', 'timed', 'press']
-ORC_LOOP_TYPES = ['infinite', 'single', 'timed', 'press']
+OCR_LOOP_TYPES = ['infinite', 'single', 'timed', 'press']
 
 #   touchscreen dimensions
 SCREEN_DIMS = {'width': 800, 'height': 480}
