@@ -243,6 +243,35 @@ class Settings(tk.Frame):
         back_button_btn.pack(pady=gv.BUTTON_SPACE)
 
 
+class PopUp(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
+        self.controller = controller
+
+        label = gbl.GLabel(self, "Settings", controller.title_font)
+        label.pack(side="top", fill="x", pady=8)
+
+        ocr_settings_func = lambda: (
+            controller.show_frame("OCRSettings"))
+        audio_settings_func = lambda: (
+            controller.show_frame("AudioSettings"))
+        finger_settings_func = lambda: (
+            controller.show_frame("FingerSettings"))
+        back_btn_func = lambda: (
+            controller.show_frame("MainMenu"))
+
+        ocr_settings_btn = gbl.GButton(self, "OCR Settings", ocr_settings_func)
+        audio_settings_btn = gbl.GButton(self, "Audio Settings", audio_settings_func)
+        finger_settings_btn = gbl.GButton(self, "Finger Settings", finger_settings_func)
+        back_button_btn = gbl.GButton(self, "Go back", back_btn_func)
+
+        ocr_settings_btn.pack(pady=gv.BUTTON_SPACE)
+        audio_settings_btn.pack(pady=gv.BUTTON_SPACE)
+        finger_settings_btn.pack(pady=gv.BUTTON_SPACE)
+        back_button_btn.pack(pady=gv.BUTTON_SPACE)
+
+
 if __name__ == "__main__":
     app = SmartnodeGUI()
     app.mainloop()

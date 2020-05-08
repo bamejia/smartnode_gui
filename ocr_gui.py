@@ -217,11 +217,34 @@ class OCRModeSetup(tk.Frame):
         self.controller = controller
         label = gbl.GLabel(self, text="OCR Mode Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
+        
+        self.current_mode = settings.loadSettings("OCRSettings.json")['loopMode']
+        print(self.current_mode)
+        
+        dlabel = gbl.DLabel(self, text=self.current_mode)
 
-        back_btn_func = lambda: (
-            # ,
-            controller.show_frame("OCRSettings")
-        )
+        btn_funcs = {
+            'next mode': lambda: (
+                ocrBtns.cropSetup_add(),
+            ),
 
-        back_btn = gbl.GButton(self, text="Go back", command=back_btn_func)
-        back_btn.pack(pady=gv.BUTTON_SPACE)
+            'save': lambda: (
+                ocrBtns.cropSetup_remove(),
+            ),
+
+            'cancel': lambda: (
+                controller.show_frame("OCRSettings")
+            )
+        }
+
+        btn_objs = {
+            'next mode': gbl.GButton(self, text="Next Mode"),
+            'save': gbl.GButton(self, text="Save"),
+            'cancel': gbl.GButton(self, text="Cancel"),
+        }
+
+        for btn in btn_objs:
+            btn_objs[btn].configure(command=btn_funcs[btn])
+            btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
+
+

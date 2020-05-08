@@ -19,3 +19,10 @@ class GLabel(tk.Label):
     def __init__(self, frame, text, font):
         tk.Label.__init__(self, frame, text=text, font=font, bg=gv.TITLE_COLOR, fg=gv.FONT_COLOR,
                          bd=gv.TITLE_DEPTH, relief=tk.RAISED, pady=gv.TITLE_PADY)
+
+
+class DLabel(tk.Label):
+    def __init__(self, frame, text):
+        tk.Label.__init__(self, frame, text=text, bg=gv.BUTTON_COLOR, fg=gv.FONT_COLOR, bd=gv.TITLE_DEPTH, 
+                          relief=tk.RAISED, height=gv.BUTTON_HEIGHT)
+        self.configure(font=tk.font.Font(size=26))

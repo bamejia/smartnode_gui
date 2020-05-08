@@ -5,6 +5,7 @@ import Settings_Functions as settings
 import image_functions as image
 import ocr_functions as ocr
 from CoordList import coordList
+import DEFAULTS as defaults
 
 
 #   Functions for CropSetup Frame
@@ -58,3 +59,7 @@ def cropSetup_show():
 
     #   currently broken but would be cool if we could kill it
     image.showVid()
+
+
+def next_mode(current_mode):
+    defaults.LOOP_TYPES[current_mode].ord
