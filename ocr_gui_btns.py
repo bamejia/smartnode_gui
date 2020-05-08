@@ -54,7 +54,7 @@ def cropSetup_remove():
 def cropSetup_show():
     print("displaying image with crop areas")
 
-    image.showImage()
+    # image.showImage()
 
     #   currently broken but would be cool if we could kill it
-    # image.showVid()
+    image.showVid()
