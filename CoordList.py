@@ -153,19 +153,9 @@ class coordList():
         self.myList = []
 
         #   flag to indicate one dummy entry was added
-        # oneDummyLoaded = False
         for entry in temp_list:
             tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
             self.myList.append(tempObj)
-            #
-            # if entry['name'] == 'coord':
-            #     if not oneDummyLoaded:
-            #         tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
-            #         self.myList.append(tempObj)
-            #         oneDummyLoaded = True
-            # else:
-            #     tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
-            #     self.myList.append(tempObj)
 
     #   saves myList object to file
     def saveSet(self):
