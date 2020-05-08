@@ -6,7 +6,6 @@ import audio_functions as audio
 import audio_gui_btns as audioBtns
 import general_button_label as gbl
 import global_variables as gv
-from Settings_Functions import loadSettings
 
 UPDATE_RATE = 500
 
@@ -31,13 +30,13 @@ class AudioRuntime(tk.Frame):
             controller.show_frame(controller.return_frame))
 
         btn1 = gbl.GButton(self, text="Start/Stop",
-                         command=btn1_fnc)
+                           command=btn1_fnc)
         btn2 = gbl.GButton(self, text="Mode: ",
-                         command=btn2_fnc)
+                           command=btn2_fnc)
         btn3 = gbl.GButton(self, text="Show Status",
-                         command=btn3_fnc)
+                           command=btn3_fnc)
         back_btn = gbl.GButton(self, text="Go back",
-                             command=back_btn_func)
+                               command=back_btn_func)
 
         btn1.pack(pady=gv.BUTTON_SPACE)
         btn2.pack(pady=gv.BUTTON_SPACE)
@@ -70,7 +69,7 @@ class AudioRuntime(tk.Frame):
             self.user_setup = audio_controller.init_Audio()
 
             if self.user_setup:
-                mySet = loadSettings('audioSettings.json')
+                mySet = settings.loadSettings('audioSettings.json')
                 print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
                 self.audio_updater(mySet)
 
@@ -91,12 +90,12 @@ class AudioStatus(tk.Frame):
             controller.show_frame("AudioRuntime"))
 
         back_button = gbl.GButton(self, text="Go back",
-                                command=back_btn_func)
+                                  command=back_btn_func)
 
         back_button.pack(pady=gv.BUTTON_SPACE)
 
 
-
+#   done
 class AudioSettings(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -120,9 +119,9 @@ class AudioSettings(tk.Frame):
         btn2 = gbl.GButton(self, text="Run Mode",
                            command=btn2_fnc)
         btn3 = gbl.GButton(self, text="Test Run",
-                         command=btn3_fnc)
+                           command=btn3_fnc)
         back_btn = gbl.GButton(self, text="Go back",
-                             command=back_btn_func)
+                               command=back_btn_func)
 
         btn1.pack(pady=gv.BUTTON_SPACE)
         btn2.pack(pady=gv.BUTTON_SPACE)
@@ -130,6 +129,7 @@ class AudioSettings(tk.Frame):
         back_btn.pack(pady=gv.BUTTON_SPACE)
 
 
+#   totally Done
 class SampleSetup(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -139,8 +139,7 @@ class SampleSetup(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         record_func = lambda: (
-            audio_controller.record(),
-            # controller.show_frame("AudioSettings")
+            audio.record(),
         )
 
         playback_func = lambda: (
@@ -158,7 +157,7 @@ class SampleSetup(tk.Frame):
                                    command=playback_func)
 
         back_btn = gbl.GButton(self, text="Go back",
-                             command=back_func)
+                               command=back_func)
 
         record_btn.pack(pady=gv.BUTTON_SPACE)
         playback_btn.pack(pady=gv.BUTTON_SPACE)
@@ -178,11 +177,11 @@ class AudioModeSetup(tk.Frame):
         self.mode_label = gbl.DLabel(self, text=self.current_mode)
         self.mode_label.pack(pady=gv.BUTTON_SPACE)
 
-        next_mode_func = lambda : (
+        next_mode_func = lambda: (
             self.change_current_mode_display(audioBtns.next_mode(self.current_mode))
         )
-        save_func = lambda : (
-            settings.changeSetting(loadSettings("audioSettings.json"), 'loopMode', self.current_mode),
+        save_func = lambda: (
+            settings.changeSetting(settings.loadSettings("audioSettings.json"), 'loopMode', self.current_mode),
             controller.show_frame("AudioSettings")
         )
         cancel_func = lambda: (
@@ -191,11 +190,11 @@ class AudioModeSetup(tk.Frame):
         )
 
         next_mode_btn = gbl.GButton(self, text="Next Mode",
-                                 command=next_mode_func)
+                                    command=next_mode_func)
         save_btn = gbl.GButton(self, text="Save",
-                                    command=save_func)
+                               command=save_func)
         cancel_btn = gbl.GButton(self, text="Cancel",
-                             command=cancel_func)
+                                 command=cancel_func)
 
         next_mode_btn.pack(pady=gv.BUTTON_SPACE)
         save_btn.pack(pady=gv.BUTTON_SPACE)
