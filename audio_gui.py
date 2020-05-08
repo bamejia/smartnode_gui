@@ -3,6 +3,7 @@ import tkinter as tk
 import audio_controller
 import global_variables as gv
 from Settings_Functions import loadSettings
+import general_button_label as gbl
 
 UPDATE_RATE = 500
 
@@ -12,7 +13,7 @@ class AudioRuntime(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="Audio Runtime", font=controller.title_font)
+        label = gbl.GLabel(self, text="Audio Runtime", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         self.will_update = False
@@ -26,13 +27,13 @@ class AudioRuntime(tk.Frame):
         back_btn_func = lambda: (
             controller.show_frame(controller.return_frame))
 
-        btn1 = tk.Button(self, text="Start/Stop",
+        btn1 = gbl.GButton(self, text="Start/Stop",
                          command=btn1_fnc)
-        btn2 = tk.Button(self, text="Mode: ",
+        btn2 = gbl.GButton(self, text="Mode: ",
                          command=btn2_fnc)
-        btn3 = tk.Button(self, text="Show Status",
+        btn3 = gbl.GButton(self, text="Show Status",
                          command=btn3_fnc)
-        back_btn = tk.Button(self, text="Go back",
+        back_btn = gbl.GButton(self, text="Go back",
                              command=back_btn_func)
 
         btn1.pack()
@@ -80,13 +81,13 @@ class AudioStatus(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="Audio Status", font=controller.title_font)
+        label = gbl.GLabel(self, text="Audio Status", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         back_btn_func = lambda: (
             controller.show_frame("AudioRuntime"))
 
-        back_button = tk.Button(self, text="Go back",
+        back_button = gbl.GButton(self, text="Go back",
                                 command=back_btn_func)
 
         back_button.pack()
@@ -98,7 +99,7 @@ class AudioSettings(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="Audio Settings", font=controller.title_font)
+        label = gbl.GLabel(self, text="Audio Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         btn1_fnc = lambda: (
@@ -111,13 +112,13 @@ class AudioSettings(tk.Frame):
         back_btn_func = lambda: (
             controller.show_frame("Settings"))
 
-        btn1 = tk.Button(self, text="Record Sample",
+        btn1 = gbl.GButton(self, text="Record Sample",
                          command=btn1_fnc)
-        btn2 = tk.Button(self, text="Run Mode: ",
+        btn2 = gbl.GButton(self, text="Run Mode: ",
                          command=btn2_fnc)
-        btn3 = tk.Button(self, text="Test Run",
+        btn3 = gbl.GButton(self, text="Test Run",
                          command=btn3_fnc)
-        back_btn = tk.Button(self, text="Go back",
+        back_btn = gbl.GButton(self, text="Go back",
                              command=back_btn_func)
 
         btn1.pack()
@@ -131,7 +132,7 @@ class SampleSetup(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="Sample Setup", font=controller.title_font)
+        label = gbl.GLabel(self, text="Sample Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         record_func = lambda: (
@@ -141,10 +142,10 @@ class SampleSetup(tk.Frame):
         back_func = lambda: (
             controller.show_frame("AudioSettings"))
 
-        record_btn = tk.Button(self, text="Record",
+        record_btn = gbl.GButton(self, text="Record",
                                command=record_func)
 
-        back_btn = tk.Button(self, text="Go back",
+        back_btn = gbl.GButton(self, text="Go back",
                              command=back_func)
 
         record_btn.pack()
@@ -156,13 +157,13 @@ class AudioModeSetup(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="Audio Mode Setup", font=controller.title_font)
+        label = gbl.GLabel(self, text="Audio Mode Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         back_btn_func = lambda: (
             controller.show_frame("AudioSettings"))
 
-        back_btn = tk.Button(self, text="Go back",
+        back_btn = gbl.GButton(self, text="Go back",
                              command=back_btn_func)
 
         back_btn.pack()

@@ -7,6 +7,7 @@ import ocr_functions as ocr
 import ocr_gui_btns as ocrBtns
 import general_button_label as gbl
 
+
 UPDATE_RATE = 500
 
 
@@ -157,7 +158,7 @@ class CropSetup(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="Crop Setup", font=controller.title_font)
+        label = gbl.GLabel(self, text="Crop Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         btn_funcs = {
@@ -180,10 +181,10 @@ class CropSetup(tk.Frame):
         }
 
         btn_objs = {
-            'add': tk.Button(self, text="Add Crop Area"),
-            'remove': tk.Button(self, text="Remove Last"),
-            'show': tk.Button(self, text="Show Current"),
-            'back': tk.Button(self, text="Go back"),
+            'add': gbl.GButton(self, text="Add Crop Area"),
+            'remove': gbl.GButton(self, text="Remove Last"),
+            'show': gbl.GButton(self, text="Show Current"),
+            'back': gbl.GButton(self, text="Go back"),
         }
 
         for btn in btn_objs:
@@ -191,20 +192,12 @@ class CropSetup(tk.Frame):
             btn_objs[btn].pack()
 
 
-    def update(self):
-        pass
-        # print("CATS")
-        # self.image = cv2.cvtColor(image_capture.capture_image(), cv2.COLOR_BGR2RGB)
-        # self.image = Image.fromarray(self.image)
-        # self.image = ImageTk.PhotoImage(self.image)
-
-
 class CropSetup2(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="Crop Setup 2", font=controller.title_font)
+        label = gbl.GLabel(self, text="Crop Setup 2", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         back_btn_func = lambda: (
@@ -212,7 +205,7 @@ class CropSetup2(tk.Frame):
             controller.show_frame("CropSetup")
         )
 
-        back_btn = tk.Button(self, text="Go back", command=back_btn_func)
+        back_btn = gbl.GButton(self, text="Go back", command=back_btn_func)
 
         back_btn.pack()
 
@@ -222,7 +215,7 @@ class OCRModeSetup(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="OCR Mode Setup", font=controller.title_font)
+        label = gbl.GLabel(self, text="OCR Mode Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         back_btn_func = lambda: (
@@ -230,5 +223,5 @@ class OCRModeSetup(tk.Frame):
             controller.show_frame("OCRSettings")
         )
 
-        back_btn = tk.Button(self, text="Go back", command=back_btn_func)
+        back_btn = gbl.GButton(self, text="Go back", command=back_btn_func)
         back_btn.pack()
