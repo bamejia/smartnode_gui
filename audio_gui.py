@@ -1,9 +1,11 @@
 import tkinter as tk
 
 import audio_controller
+import audio_gui_btns as audioBtns
 import global_variables as gv
 from Settings_Functions import loadSettings
 import general_button_label as gbl
+import Settings_Functions as settings
 
 UPDATE_RATE = 500
 
@@ -160,10 +162,35 @@ class AudioModeSetup(tk.Frame):
         label = gbl.GLabel(self, text="Audio Mode Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (
-            controller.show_frame("AudioSettings"))
+        self.current_mode = settings.loadSettings("AudioSettings.json")['loopMode']
+        print(self.current_mode)
 
-        back_btn = gbl.GButton(self, text="Go back",
-                             command=back_btn_func)
+        self.mode_label = gbl.DLabel(self, text=self.current_mode)
+        self.mode_label.pack()
 
-        back_btn.pack()
+        next_mode_func = lambda : (
+            self.change_current_mode_display(audioBtns.next_mode(self.current_mode))
+        )
+        save_func = lambda : (
+            settings.changeSetting(loadSettings("AudioSettings.json"), 'loopMode', self.current_mode),
+            controller.show_frame("AudioSettings")
+        )
+        cancel_func = lambda: (
+            self.change_current_mode_display(settings.loadSettings("AudioSettings.json")['loopMode']),
+            controller.show_frame("AudioSettings")
+        )
+
+        next_mode_btn = gbl.GButton(self, text="Next Mode",
+                                 command=next_mode_func)
+        save_btn = gbl.GButton(self, text="Save",
+                                    command=save_func)
+        cancel_btn = gbl.GButton(self, text="Cancel",
+                             command=cancel_func)
+
+        next_mode_btn.pack(pady=gv.BUTTON_SPACE)
+        save_btn.pack(pady=gv.BUTTON_SPACE)
+        cancel_btn.pack(pady=gv.BUTTON_SPACE)
+
+    def change_current_mode_display(self, display_text):
+        self.current_mode = display_text
+        self.mode_label.configure(text=display_text)
