@@ -1,9 +1,10 @@
 import tkinter as tk
 
 import audio_controller
+import audio_functions as audio
+import general_button_label as gbl
 import global_variables as gv
 from Settings_Functions import loadSettings
-import general_button_label as gbl
 
 UPDATE_RATE = 500
 
@@ -139,16 +140,24 @@ class SampleSetup(tk.Frame):
             audio_controller.record(),
             controller.show_frame("AudioSettings"))
 
+        playback_func = lambda: (
+            audio.playReference(),
+            controller.show_frame("AudioSettings"))
+
         back_func = lambda: (
             controller.show_frame("AudioSettings"))
 
-        record_btn = gbl.GButton(self, text="Record",
-                               command=record_func)
+        record_btn = gbl.GButton(self, text="Record Reference",
+                                 command=record_func)
+
+        playback_btn = gbl.GButton(self, text="Play Sample",
+                                   command=playback_func)
 
         back_btn = gbl.GButton(self, text="Go back",
                              command=back_func)
 
         record_btn.pack()
+        playback_btn.pack()
         back_btn.pack()
 
 
