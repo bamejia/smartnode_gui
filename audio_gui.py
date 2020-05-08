@@ -39,10 +39,10 @@ class AudioRuntime(tk.Frame):
         back_btn = gbl.GButton(self, text="Go back",
                              command=back_btn_func)
 
-        btn1.pack()
-        btn2.pack()
-        btn3.pack()
-        back_btn.pack()
+        btn1.pack(pady=gv.BUTTON_SPACE)
+        btn2.pack(pady=gv.BUTTON_SPACE)
+        btn3.pack(pady=gv.BUTTON_SPACE)
+        back_btn.pack(pady=gv.BUTTON_SPACE)
 
     #   will_update
     def audio_updater(self, mySet):
@@ -93,7 +93,7 @@ class AudioStatus(tk.Frame):
         back_button = gbl.GButton(self, text="Go back",
                                 command=back_btn_func)
 
-        back_button.pack()
+        back_button.pack(pady=gv.BUTTON_SPACE)
 
 
 
@@ -117,17 +117,17 @@ class AudioSettings(tk.Frame):
 
         btn1 = gbl.GButton(self, text="Reference Setup",
                            command=btn1_fnc)
-        btn2 = gbl.GButton(self, text="Run Mode: ",
-                         command=btn2_fnc)
+        btn2 = gbl.GButton(self, text="Run Mode",
+                           command=btn2_fnc)
         btn3 = gbl.GButton(self, text="Test Run",
                          command=btn3_fnc)
         back_btn = gbl.GButton(self, text="Go back",
                              command=back_btn_func)
 
-        btn1.pack()
-        btn2.pack()
-        btn3.pack()
-        back_btn.pack()
+        btn1.pack(pady=gv.BUTTON_SPACE)
+        btn2.pack(pady=gv.BUTTON_SPACE)
+        btn3.pack(pady=gv.BUTTON_SPACE)
+        back_btn.pack(pady=gv.BUTTON_SPACE)
 
 
 class SampleSetup(tk.Frame):
@@ -160,9 +160,9 @@ class SampleSetup(tk.Frame):
         back_btn = gbl.GButton(self, text="Go back",
                              command=back_func)
 
-        record_btn.pack()
-        playback_btn.pack()
-        back_btn.pack()
+        record_btn.pack(pady=gv.BUTTON_SPACE)
+        playback_btn.pack(pady=gv.BUTTON_SPACE)
+        back_btn.pack(pady=gv.BUTTON_SPACE)
 
 
 class AudioModeSetup(tk.Frame):
