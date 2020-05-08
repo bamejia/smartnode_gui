@@ -1,13 +1,12 @@
 # functions used by buttons in frams from ocr_gui.py
+import collections
 import json
 
+import DEFAULTS as defaults
 import Settings_Functions as settings
 import image_functions as image
 import ocr_functions as ocr
 from CoordList import coordList
-import DEFAULTS as defaults
-
-import collections
 
 
 #   Functions for CropSetup Frame
@@ -64,7 +63,7 @@ def cropSetup_show():
 
 
 def next_mode(current_mode):
-    deque = collections.deque(defaults.OCR_LOOP_TYPES[current_mode])
-    index = deque.index(current_mode)
-    de.roteate(-1)
-    return de[index]
+    myDeque = collections.deque(defaults.OCR_LOOP_TYPES[current_mode])
+    index = myDeque.index(current_mode)
+    myDeque.rotate(-1)
+    return myDeque[index]

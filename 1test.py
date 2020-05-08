@@ -3,4 +3,12 @@
 # with open(path, 'w') as myFile:
 #     myFile.write(json.dumps(list(tempObj)))
 
-print("in test1\n\n\n\n")
+from collections import deque
+
+import DEFAULTS as defaults
+
+test = defaults.LOOP_TYPES
+options = deque()
+
+for a in test:
+    options.appendleft(a)
