@@ -6,8 +6,6 @@ import global_variables as gv
 import image_functions as image
 import ocr_functions as ocr
 import ocr_gui_btns as ocrBtns
-import general_button_label as gbl
-
 
 UPDATE_RATE = 500
 
@@ -73,17 +71,37 @@ class OCRRuntime(tk.Frame):
             self.button_off = False
             return
 
-    def ocr_run_once(self):
-        print("TEST LOOP: " + str(self.count))
-        # mySet = settings.loadSettings('OCRSettings.json')
-        ocrData = settings.loadSettings('OCRData.json')
-        image.takeSource()
-        image.cropSource()
-        ocrData = ocr.doOCR_All(ocrData)
-        self.count += 1
+        #   this is the function that handles the individual steps for a single ocr sampling run
+        def ocr_run_once(self):
+            print("OCR_RUNTIME LOOP: " + str(self.count))
+            # mySet = settings.loadSettings('OCRSettings.json')
 
-        loop_again = False
-        return loop_again
+            #   load ocrSettings / ocr output file, OCRData.json
+            ocrData = settings.loadSettings('OCRData.json')
+
+            #   capture / crop source image
+            image.takeSource()
+            image.cropSource(debug=True)
+
+            #   perform ocr on all cropped images
+            ocrData = ocr.do_OCR_all(ocrData, debug=True)
+
+            #   temporary printout of data captured during this run
+            #   this information needs to be passed to display, firebase
+            #   dataset is a dict saved in ocrData.json
+            #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
+
+            print("\nOCR data Captured:")
+            dataSet = ocrData['dataset']
+
+            #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
+            for entry in dataSet:
+                print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
+
+            #   loop control variables
+            self.count += 1
+            loop_again = False
+            return loop_again
 
     # Starts the loop to call OCR called by button
     def ocr_on_off(self):
