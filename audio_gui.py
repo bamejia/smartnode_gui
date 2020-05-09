@@ -7,6 +7,7 @@ from Settings_Functions import loadSettings
 import general_button_label as gbl
 import Settings_Functions as settings
 
+
 UPDATE_RATE = 500
 
 
@@ -163,7 +164,6 @@ class AudioModeSetup(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         self.current_mode = settings.loadSettings("AudioSettings.json")['loopMode']
-        print(self.current_mode)
 
         self.mode_label = gbl.DLabel(self, text=self.current_mode)
         self.mode_label.pack()

@@ -1,6 +1,7 @@
 import tkinter as tk  # python 3
 from tkinter import font  as tkfont  # python 3
 
+import example_firebase as ef
 import Settings_Functions as settings
 import audio_gui
 import finger_gui
@@ -33,7 +34,7 @@ class SmartnodeGUI(tk.Tk):
         window_y = round(gv.WINDOW_L * 2 / 5)
         geometry_dimensions = "%dx%d+%d+%d" % (window_width, window_length, window_x, window_y)
 
-        self.attributes('-fullscreen', True)  # 800x480
+        # self.attributes('-fullscreen', True)  # 800x480
         # self.attributes('-zoomed', True)
         # self.overrideredirect(True)  # gets rid of top minimizing, maximizing, and closing buttons bar
 
@@ -97,70 +98,15 @@ class SmartnodeGUI(tk.Tk):
     def set_return_frame(self, page_name):
         self.return_frame = page_name
 
-    '''
-    # def connect_to_firebase():
-    #
-    #     print("Initializing Firebase Connection...")
-    #     # Fetch the service account key JSON file contents
-    #
-    #     FILES_DIR = 'smartnode_key.json'
-    #
-    #     cred = credentials.Certificate(FILES_DIR)
-    #
-    #     print("Credentials Found. ")
-    #
-    #     # Initialize the app with a service account, granting admin privileges
-    #     response = firebase_admin.initialize_app(cred, {'databaseURL': 'https://smartnode-ed0a9.firebaseio.com/%27%7D)'})
-    #
-    # def firebase_setup(self):
-    #
-    #     connect_to_firebase()
-    #
-    #     recent_commands = {"recent_commands": ""}
-    #
-    #     recent_command = {
-    #         '12:24': {
-    #             'command': 'Light_ON',
-    #             'time': '12:24'
-    #         },
-    #
-    #         '12:25': {
-    #             'command': 'Light_OFF',
-    #             'time': '12:25'
-    #         }
-    #     }
-    #
-    #     def show(command):
-    #         print(command)
-    #
-    #     # points to the parent node in firebase directory
-    #     command = db.reference('/recent_commands')
-    #
-    #     # The Dictionary get() method returns the value of the item with the specified key.
-    #     commands = command.get()
-    #
-    #     print(commands)
-    #
-    #     for c in commands:
-    #         show(commands[c]['command'])
-    #
-    #     # erase commands
-    #     # result = db.reference('/').update(recent_commands)
-    #
-    # # from pi_configs import FILES_DIR  # root directory of project
-    #
-    # def firebase_updater(self):
-    #     pass
-    #
-    # def firebase_commands(self, command):
-    #     if command == "OCR_ON_OFF":
-    #
-    #             self.frames["OCRRuntime"].ocr_on_off()
-    #     elif command == "AUDIO_ON_OFF":
-    #         pass
-    #     elif command == "FINGER_PRESS":
-    #         pass
-    '''
+    def firebase_commands(self, command):
+        if command == "OCR_ON_OFF":
+            pass
+            self.frames["OCRRuntime"].ocr_on_off()
+        elif command == "light_OFF":
+            self.frames['AudioRuntime'].audio_on_off()
+        elif command == "FINGER_PRESS":
+            pass
+
 
 class MainMenu(tk.Frame):
 
@@ -274,4 +220,6 @@ class PopUp(tk.Frame):
 
 if __name__ == "__main__":
     app = SmartnodeGUI()
+    ef.run(app.firebase_commands)
     app.mainloop()
+    ef.close()
