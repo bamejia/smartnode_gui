@@ -92,11 +92,12 @@ class OCRRuntime(tk.Frame):
         #   dataset is a dict saved in ocrData.json
         #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
 
-        print("\nOCR DATA Captured...")
+        print("\nOCR data Captured:")
         dataSet = ocrData['dataset']
 
+        #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
         for entry in dataSet:
-            print(f"\t{entry['name']}: '{entry['text']}'")
+            print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
 
         #   loop control variables
         self.count += 1

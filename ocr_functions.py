@@ -22,13 +22,14 @@ def do_OCR_all(ocrData, debug=False):
     for obj in objects:
         options = getOCROptions(ocrData, obj)  # load the specific ocr options for this image
         newText = do_OCR_single(options, debug)  # perform ocr on the image, returns text
-        setOCRText(ocrData, obj, newText)  # save the text to the ocrData.json entry for this image
+        setOCRText(ocrData, obj, newText, debug)  # save the text to the ocrData.json entry for this image
 
     #   write these values to file once completed
-    saveOCRData(ocrData)
+    saveOCRData(ocrData, debug)
 
     if debug:
-        print("Done do_OCR_all\n")
+        print("Done do_OCR_all -> returning to ocr_gui")
+
     return ocrData
 
 
@@ -46,8 +47,8 @@ def do_OCR_single(options, debug=False):
     lang = options[2]
 
     if debug:
-        print(f"\tIn do_OCR_single \n-> Image Path: {file}")
-        print(f"PSM: {psm}, lang: {lang}")
+        print(f"\tIn do_OCR_single -> Image Path: \n\t\t{file}")
+        print(f"\t\tPSM: {psm}, lang: {lang}")
 
     # Define configuration parameters
     configStr = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/"  -l {} --oem 1 --dpi 72 --psm {}'
@@ -77,7 +78,9 @@ def getOCROptions(ocrData, name):
 
 #   changes text field of the provided entry in OCRData
 #   DOES NOT SAVE (can also be used to access text)
-def setOCRText(ocrData, name, newText=""):
+def setOCRText(ocrData, name, newText="", debug=False):
+    if debug:
+        print(f"\tIn setOCRText -> Setting text of {name} to {newText}")
     #   modify ocrData object with newText if it is provided and return modified version
     if newText:
         ocrData['dataset'][name]['text'] = newText
@@ -86,8 +89,11 @@ def setOCRText(ocrData, name, newText=""):
         return ocrData['dataset'][name]['text']
 
 
+#   called by do_OCR_all
 #   saves ocrData to file after sample run has been completed
-def saveOCRData(ocrData):
+def saveOCRData(ocrData, debug=False):
+    if (debug):
+        print("\tIn saveOCRData -> Saving")
     settings.changeSetting(ocrData, 'dataset', ocrData['dataset'])
 
 
