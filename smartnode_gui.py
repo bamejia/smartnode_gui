@@ -1,7 +1,7 @@
 import tkinter as tk  # python 3
 from tkinter import font  as tkfont  # python 3
 
-import example_firebase as ef
+import firebase_listener
 import Settings_Functions as settings
 import audio_gui
 import finger_gui
@@ -224,7 +224,7 @@ class PopUp(tk.Frame):
 
 if __name__ == "__main__":
     app = SmartnodeGUI()
-    ef.run(app.firebase_commands)
+    firebase_listener.run(app.firebase_commands)
     app.addFirebaseDatabase(ef.db)
     app.mainloop()
-    ef.close()
+    firebase_listener.close()
