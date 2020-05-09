@@ -31,24 +31,20 @@ class AudioRuntime(tk.Frame):
 
         btn1_fnc = lambda: (
             self.audio_on_off())
-        btn2_fnc = lambda: ()
-        btn3_fnc = lambda: (
+        btn2_fnc = lambda: (
             controller.show_frame("AudioStatus"))
         back_btn_func = lambda: (
             controller.show_frame(controller.return_frame))
 
         btn1 = gbl.GButton(self, text="Start/Stop",
                            command=btn1_fnc)
-        # btn2 = gbl.GButton(self, text="Mode: ",
-        #                    command=btn2_fnc)
-        btn3 = gbl.GButton(self, text="Show Status",
-                           command=btn3_fnc)
+        btn2 = gbl.GButton(self, text="Show Status",
+                           command=btn2_fnc)
         back_btn = gbl.GButton(self, text="Go back",
                                command=back_btn_func)
 
         btn1.pack(pady=gv.BUTTON_SPACE)
-        # btn2.pack(pady=gv.BUTTON_SPACE)
-        btn3.pack(pady=gv.BUTTON_SPACE)
+        btn2.pack(pady=gv.BUTTON_SPACE)
         back_btn.pack(pady=gv.BUTTON_SPACE)
 
     def audio_detector(self, mySet, data):

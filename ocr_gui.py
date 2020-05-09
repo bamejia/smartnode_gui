@@ -26,16 +26,16 @@ class OCRRuntime(tk.Frame):
         self.button_off = False  # even if will_update loop is set to true, a botton off will always stop the loop
         self.user_setup = False
 
+        mySet = settings.loadSettings('ocrSettings.json')
+        self.mode_display_label = gbl.DLabel(self, text='Run mode: ' + mySet['loopMode'])
+        self.mode_display_label.pack(pady=gv.BUTTON_SPACE)
+
         # List functions called in order on button press
 
         btn_funcs = {
             'toggle': lambda: (
                 # ,
                 self.ocr_on_off()
-            ),
-
-            'mode': lambda: (
-                #
             ),
 
             'show': lambda: (
@@ -51,7 +51,6 @@ class OCRRuntime(tk.Frame):
 
         btn_objs = {
             'toggle': gbl.GButton(self, text="Start/Stop"),
-            'mode': gbl.GButton(self, text="Mode: "),
             'show': gbl.GButton(self, text="Show Status"),
             'back': gbl.GButton(self, text="Go back")
         }
@@ -226,17 +225,18 @@ class OCRModeSetup(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
         
         self.current_mode = settings.loadSettings("OCRSettings.json")['loopMode']
-        print(self.current_mode)
-        
-        dlabel = gbl.DLabel(self, text=self.current_mode)
+
+        self.mode_label = gbl.DLabel(self, text=self.current_mode)
+        self.mode_label.pack(pady=gv.BUTTON_SPACE)
 
         btn_funcs = {
             'next mode': lambda: (
-                ocrBtns.cropSetup_add(),
+                self.change_current_mode_display(ocrBtns.next_mode(self.current_mode))
             ),
 
             'save': lambda: (
-                ocrBtns.cropSetup_remove(),
+                settings.changeSetting(settings.loadSettings("ocrSettings.json"), 'loopMode', self.current_mode),
+                controller.show_frame("OCRSettings")
             ),
 
             'cancel': lambda: (
@@ -253,5 +253,10 @@ class OCRModeSetup(tk.Frame):
         for btn in btn_objs:
             btn_objs[btn].configure(command=btn_funcs[btn])
             btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
+
+    def change_current_mode_display(self, display_text):
+        self.current_mode = display_text
+        self.mode_label.configure(text=display_text)
+        self.controller.frames['AudioRuntime'].change_mode_label(display_text)
 
 
