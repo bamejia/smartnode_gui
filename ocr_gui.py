@@ -26,7 +26,7 @@ class OCRRuntime(tk.Frame):
         self.button_off = False  # even if will_update loop is set to true, a botton off will always stop the loop
         self.user_setup = False
 
-        mySet = settings.loadSettings('ocrSettings.json')
+        mySet = settings.loadSettings('OCRSettings.json')
         self.mode_display_label = gbl.DLabel(self, text='Run mode: ' + mySet['loopMode'])
         self.mode_display_label.pack(pady=gv.BUTTON_SPACE)
 
@@ -238,7 +238,7 @@ class OCRModeSetup(tk.Frame):
             ),
 
             'save': lambda: (
-                settings.changeSetting(settings.loadSettings("ocrSettings.json"), 'loopMode', self.current_mode),
+                settings.changeSetting(settings.loadSettings("OCRSettings.json"), 'loopMode', self.current_mode),
                 controller.show_frame("OCRSettings")
             ),
 
