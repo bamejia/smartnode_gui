@@ -15,7 +15,6 @@ config = {
     "databaseURL": "https://smartnode-ed0a9.firebaseio.com/",
     "storageBucket": "smartnode-ed0a9.appspot.com",
     "serviceAccount": util.getFullPath('smartnode_key.json')
-    # /home/pi/smartkey.json
 }
 
 try:
