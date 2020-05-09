@@ -65,7 +65,9 @@ def recordRef():
     #   record new reference wav file
     mySet = settings.loadSettings('audioSettings.json')
     path = utility.getFullPath(mySet['refPath'])
+
     data = recordAudio(path, 1)
+    # sd.wait()
     writeAudioFile(*data)
 
     #   get new reference fundamental
