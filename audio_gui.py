@@ -140,7 +140,7 @@ class SampleSetup(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         record_func = lambda: (
-            audio.record(),
+            audio.recordRef(),
         )
 
         playback_func = lambda: (

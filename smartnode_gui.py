@@ -99,13 +99,15 @@ class SmartnodeGUI(tk.Tk):
         self.return_frame = page_name
 
     def firebase_commands(self, command):
-        if command == "OCR_ON_OFF":
-            pass
+        if command == "ocr_on_off":
+            print("App command: " + command)
+            return
             self.frames["OCRRuntime"].ocr_on_off()
-        elif command == "light_OFF":
+        elif command == "audio_on_off":
+            print("App command: " + command)
             self.frames['AudioRuntime'].audio_on_off()
-        elif command == "FINGER_PRESS":
-            pass
+        elif command == "press":
+            print("App command: " + command)
 
 
 class MainMenu(tk.Frame):
