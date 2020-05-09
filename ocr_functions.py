@@ -46,12 +46,11 @@ def do_OCR_single(options, debug=False):
     lang = options[2]
 
     if debug:
-        print(f"\n\n\nIN DO OCR SINGLE\n\n")
-        print(f"Image Path: {file}")
+        print(f"In do_OCR_single -> Image Path: {file}")
 
     # Define configuration parameters
-    configStr = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/" -l lang --oem 1 --dpi 72 --psm {} -l {}'
-    config = (configStr.format(psm, lang))
+    configStr = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/"  -l {} --oem 1 --dpi 72 --psm {}'
+    config = (configStr.format(lang, psm))
 
     # Read image from Disk
     img = cv2.imread(file)
@@ -60,9 +59,15 @@ def do_OCR_single(options, debug=False):
         print(f"\tType of img: {type(img)}")
         print(f"Processing image with PSM {psm} using language {lang}")
 
-    text = pytesseract.image_to_string(img, config=config, output_type='dict')
+    #   pull text from image w/ tesseract
+    output = {}
+    try:
+        text = pytesseract.image_to_string(img, config=config, output_type='dict')
+    except pytesseract.TesseractError:
+        print("Tesseract Error!!!")
+        output['text'] = 'tesseractError'
 
-    return text['text']
+    return output['text']
 
 
 #   loads set of options from ocrData object
