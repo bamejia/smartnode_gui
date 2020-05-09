@@ -49,11 +49,12 @@ pip3 install pyaudio
 
 
 #   stuff needed for firebase
-pip3 firebase
-pip3 python_jwt
+pip3 install firebase
+pip3 install python_jwt
 pip3 install gcloud
 pip3 install sseclient
 pip3 install firebase_admin
+pip3 install pyrebase
 
 
 #   Settings to change and important info

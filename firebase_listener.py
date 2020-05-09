@@ -1,6 +1,8 @@
-import pyrebase
-from time import sleep
 import sys
+
+import pyrebase
+
+import Utility_Functions as util
 
 my_stream = None
 command_list = ""
@@ -11,7 +13,7 @@ config = {
     "authDomain": "smartnode-ed0a9.firebaseapp.com",
     "databaseURL": "https://smartnode-ed0a9.firebaseio.com/",
     "storageBucket": "smartnode-ed0a9.appspot.com",
-    "serviceAccount": "C:/Users/bamxm/PycharmProjects/piGUI/py/smartnode_key.json"
+    "serviceAccount": util.getFullPath('smartnode_key.json')
     # /home/pi/smartkey.json
 }
 

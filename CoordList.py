@@ -26,7 +26,7 @@ class coordList():
         missing = not (os.path.exists(self.filePath))
         #   if it exists check if empty -> if empty treat like doesn't exist
         if not missing:
-            print("coordFile not missing")
+            # print("coordFile not missing")
             missing = os.stat(self.filePath).st_size == 0
         #   create default file if missing (or empty)
         if missing:
@@ -38,7 +38,7 @@ class coordList():
                 # myFile.write(json.dumps(tempObj))
                 self.addObject(coordObj(tempObj['name'], tuple(tempObj['topL']), tuple(tempObj['botR'])))
 
-        print("loading set from constructor")
+        # print("loading set from constructor")
         self.loadSet()
 
     #   override the default iterator
