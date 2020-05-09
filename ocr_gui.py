@@ -22,7 +22,8 @@ class OCRRuntime(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         # flag for looping OCR
-        self.will_update = False
+        self.will_update = False  # changed by both button input and internal conditions
+        self.button_off = False  # even if will_update loop is set to true, a botton off will always stop the loop
         self.user_setup = False
 
         # List functions called in order on button press
@@ -63,13 +64,14 @@ class OCRRuntime(tk.Frame):
 
     def ocr_updater(self):
         # This is the ocr loop by recursion
-        if self.will_update:
+        if self.will_update and not self.button_off:
 
-            self.ocr_run_once()
+            self.will_update = self.ocr_run_once()
             # return values of external functions can change will_update flag or user_setup
             # self.will_update = False
             self.after(UPDATE_RATE, self.ocr_updater)
         else:
+            self.button_off = False
             return
 
     def ocr_run_once(self):
@@ -80,12 +82,15 @@ class OCRRuntime(tk.Frame):
         image.cropSource()
         ocrData = ocr.doOCR_All(ocrData)
         self.count += 1
+        return False
 
     # Starts the loop to call OCR called by button
     def ocr_on_off(self):
         self.will_update = not self.will_update
         if (self.will_update):
             self.ocr_updater()
+        else:
+            self.button_off = True
 
 
 class OCRStatus(tk.Frame):
