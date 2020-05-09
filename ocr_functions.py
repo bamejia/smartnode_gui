@@ -46,8 +46,8 @@ def do_OCR_single(options, debug=False):
     lang = options[2]
 
     if debug:
-        print(f"In do_OCR_single -> Image Path: {file}")
-        print(f"Processing image with PSM {psm} using language {lang}")
+        print(f"\tIn do_OCR_single \n-> Image Path: {file}")
+        print(f"PSM: {psm}, lang: {lang}")
 
     # Define configuration parameters
     configStr = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/"  -l {} --oem 1 --dpi 72 --psm {}'

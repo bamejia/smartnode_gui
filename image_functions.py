@@ -67,8 +67,7 @@ def cropSource(src_path='source.jpg', debug=False):
             if debug:
                 print("Cropping Source Image")
                 print(f"\tname: {name}, topL: {topL}, botR: {botR}")
-                print(f"\tx: {topL[0]} -> {botR[0]}")
-                print(f"\ty: {topL[1]} -> {botR[1]}")
+                print(f"\tx: {topL[0]} -> {botR[0]} // y: {topL[1]} -> {botR[1]}")
 
             #   crop the image: y: bot-> top,   x: L->R
             crop_img = src_img[topL[1]:botR[1], topL[0]:botR[0]]
