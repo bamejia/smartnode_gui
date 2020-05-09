@@ -46,12 +46,10 @@ def stream_handler(message):
         command_list = message['data']
         if command_list == "":
             return
-    # print("DB: " + str(command_list))
 
     for command in command_list:
         firebase_commands_func(command_list[command]['command'])
-        print("Command: " + command_list[command]['command'])
-
+        # print("Command: " + command_list[command]['command'])
 
     recent_commands = {"recent_commands" : ""}
     db.update(recent_commands)
@@ -79,11 +77,7 @@ def run(firebase_func):
     global my_stream
 
     firebase_commands_func = firebase_func
-    print(type(firebase_commands_func))
-
     command_list = db.child("recent_commands").get().val()
-    # # print(command_list)
-    #
     my_stream = db.child("recent_commands").stream(stream_handler)
 
 def close():

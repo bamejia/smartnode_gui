@@ -28,13 +28,15 @@ class SmartnodeGUI(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
+        self.firebase_databse = None
+
         window_width = round(gv.WINDOW_W / 1)
         window_length = round(gv.WINDOW_L / 1)
         window_x = round(gv.WINDOW_W * 3 / 5)
         window_y = round(gv.WINDOW_L * 2 / 5)
         geometry_dimensions = "%dx%d+%d+%d" % (window_width, window_length, window_x, window_y)
 
-        # self.attributes('-fullscreen', True)  # 800x480
+        self.attributes('-fullscreen', True)  # 800x480
         # self.attributes('-zoomed', True)
         # self.overrideredirect(True)  # gets rid of top minimizing, maximizing, and closing buttons bar
 
@@ -95,9 +97,6 @@ class SmartnodeGUI(tk.Tk):
         frame = self.frames[page_name]
         frame.tkraise()
 
-    def set_return_frame(self, page_name):
-        self.return_frame = page_name
-
     def firebase_commands(self, command):
         if command == "ocr_on_off":
             print("App command: " + command)
@@ -108,6 +107,9 @@ class SmartnodeGUI(tk.Tk):
             self.frames['AudioRuntime'].audio_on_off()
         elif command == "press":
             print("App command: " + command)
+
+    def addFirebaseDatabase(self, db):
+        self.firebase_databse = db
 
 
 class MainMenu(tk.Frame):
@@ -223,5 +225,6 @@ class PopUp(tk.Frame):
 if __name__ == "__main__":
     app = SmartnodeGUI()
     ef.run(app.firebase_commands)
+    app.addFirebaseDatabase(ef.db)
     app.mainloop()
     ef.close()
