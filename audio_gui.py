@@ -21,7 +21,8 @@ class AudioRuntime(tk.Frame):
         label = gbl.GLabel(self, text="Audio Runtime", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        self.will_update = False
+        self.will_update = False  # changed by both button input and internal conditions
+        self.button_OFF = False  # even if will_update loop is set to true, a botton off will always stop the loop
         self.user_setup = False
 
         mySet = settings.loadSettings('audioSettings.json')
@@ -66,12 +67,13 @@ class AudioRuntime(tk.Frame):
     #   will_update
     def audio_updater(self, mySet):
 
-        if self.will_update:
+        if self.will_update and not self.button_OFF:
             #   checks
             data = audio.recordAudio(mySet['smplPath'])
             self.after(int(data[3]*1000), self.audio_detector, mySet, data)
         else:
             print("\n\nSample Loop Completed!")
+            self.button_OFF = False
             return
 
     # Starts the loop to call OCR called by button
@@ -87,6 +89,7 @@ class AudioRuntime(tk.Frame):
 
             if self.user_setup:
                 mySet = settings.loadSettings('audioSettings.json')
+                mySet = settings.changeSetting(mySet, 'detected', False)
                 print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
                 fb_message = {'audio_detected': "not detected"}
                 fbFuncs.postFirebase(mySet['fb_url'], fb_message, self.controller.firebase_database)
@@ -95,6 +98,8 @@ class AudioRuntime(tk.Frame):
             else:  # otherwise will switch to sample setup frame for recording
                 print("\tAudio Not Set Up! -> Running recordRef\n")
                 self.controller.show_frame("SampleSetup")
+        else:
+            self.button_OFF = True
 
     def change_mode_label(self, new_mode):
         self.mode_display_label.configure(text='Run mode: ' + new_mode)

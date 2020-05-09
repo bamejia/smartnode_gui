@@ -59,14 +59,16 @@ def init_Audio():
 def loop(mySet, db):
     print("In Loop Once...")
     # getData(mySet['smplPath'])
+    print(mySet['smplPath'], mySet['reference'])
     detected = processData(mySet['smplPath'], mySet['reference'])
-
-    print("Running Updates")
-    mySet = settings.changeSetting(mySet, 'detected', detected)
 
     if detected:
         tz_NY = pytz.timezone('America/New_York')
         time_detected = datetime.now(tz_NY).strftime('%Y_%m_%d__%H_%M_%S__%f')[:-3]
+
+        print("Running Updates")
+        mySet = settings.changeSetting(mySet, 'detected', time_detected)
+
         fb_message = {'audio_detected': time_detected}
 
         postFirebase(mySet['fb_url'], fb_message, db)
