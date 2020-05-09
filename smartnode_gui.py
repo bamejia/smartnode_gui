@@ -8,6 +8,7 @@ import finger_gui
 import general_button_label as gbl
 import global_variables as gv
 import ocr_gui
+import finger_functions as finger
 
 # from firebase import firebase
 # from firecreds import connect_to_firebase
@@ -29,6 +30,7 @@ class SmartnodeGUI(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         self.firebase_database = None
+        self.finger_press = True
 
         window_width = round(gv.WINDOW_W / 1)
         window_length = round(gv.WINDOW_L / 1)
@@ -110,9 +112,20 @@ class SmartnodeGUI(tk.Tk):
             self.frames['AudioRuntime'].audio_on_off()
         elif command == "press":
             print("App command: " + command)
+            if self.finger_press:
+                self.finger_press = False
+                delay, repeats, interval = 700, 0, 700
+                finger.finger_looper(self.after, self.set_finger_press, delay, repeats, interval)
+            else:
+                print("Cannot press finger that fast")
+
 
     def addFirebaseDatabase(self, db):
         self.firebase_database = db
+
+
+    def set_finger_press(self, val):
+        self.finger_press = val
 
 
 class MainMenu(tk.Frame):
@@ -227,7 +240,11 @@ class PopUp(tk.Frame):
 
 if __name__ == "__main__":
     app = SmartnodeGUI()
+
     firebase_listener.run(app.firebase_command_handler)
     app.addFirebaseDatabase(firebase_listener.db)
+
     app.mainloop()
+
+    finger.cleanup()
     firebase_listener.close()
