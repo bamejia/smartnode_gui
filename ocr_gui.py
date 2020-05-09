@@ -93,6 +93,9 @@ class OCRRuntime(tk.Frame):
         else:
             self.button_off = True
 
+    def change_mode_label(self, new_mode):
+        self.mode_display_label.configure(text='Run mode: ' + new_mode)
+
 
 class OCRStatus(tk.Frame):
 
@@ -257,6 +260,6 @@ class OCRModeSetup(tk.Frame):
     def change_current_mode_display(self, display_text):
         self.current_mode = display_text
         self.mode_label.configure(text=display_text)
-        self.controller.frames['AudioRuntime'].change_mode_label(display_text)
+        self.controller.frames['OCRRuntime'].change_mode_label(display_text)
 
 
