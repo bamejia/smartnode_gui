@@ -1,4 +1,3 @@
-
 import pyrebase
 from time import sleep
 
@@ -17,23 +16,6 @@ config = {
 firebase = pyrebase.initialize_app(config)
 
 db = firebase.database()
-
-def printcontents(message):
-  print("\n\n--------NEw MESSAGE--------")
-  data = message['data']
-  target = list(data.keys()).pop()
-  command = data[target]
-
-  print(f"target: {target}, command: {command}")
-  print("--------END MESSAGE--------\n\n\n")
-
-def handleCommands(target, command):
-  print(f"I am handling the command {command} for target {target}\n")
-  global superFlag
-  if target == 'FINGER' and command == 'DEMO_FINGER':
-    superFlag = True
-  else:
-    pass
 
 def stream_handler(message):
     global command_list
@@ -54,22 +36,6 @@ def stream_handler(message):
     recent_commands = {"recent_commands" : ""}
     db.update(recent_commands)
 
-
-#   # extracting key / value pair from firebase message
-#   data = message['data']
-#   target = list(data.keys()).pop()
-#   command = data[target]
-
-#   # if message is NOT blank
-#   if command:
-#     db.child("command").update({target: ""})
-
-#     # call the smart fucntion that knows how to do... stuff?
-#     handleCommands(target, command)
-
-#   # if handler is called due to updating itself (w/ blank command)-> ignore
-#   else:
-#     pass
 
 def run(firebase_func):
     global command_list
