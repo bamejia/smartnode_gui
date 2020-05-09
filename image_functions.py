@@ -83,15 +83,10 @@ def cropSource(src_path='source.jpg', debug=False):
 #   if no image exists takes one
 #   allows user to add an additional one by tapping the screen
 def addCrop(cropObjs, imgPath='source.jpg'):
-    util.getFullPath(imgPath)
+    imgPath = util.getFullPath(imgPath)
 
-    if not os.path.exists(imgPath):
-        print("No source image, Running takeSource")
-
-        #   WARNING-> takeSource will duplicate 'kittens' image if the camera isn't connected
-        takeSource()
-
-        # return
+    #   take a new source image
+    takeSource(debug=True)
 
     #   load image from path, create a named window of the correct size
     image = cv2.imread(imgPath)
@@ -127,9 +122,10 @@ def addCropHandler(event, x, y, flags, param):
         windowName = param[1]
         cropObjs = param[2]
 
-        #   adjust x/y for touchscreen inaccuracy
-        #   *always returns slightly down and to the right->adjusted
-        coord = (x - 5, y - 5)
+        # #   adjust x/y for touchscreen inaccuracy
+        # #   *always returns slightly down and to the right->adjusted
+        # coord = (x - 5, y - 5)
+        coord = (x, y)
 
         #   using number of parameters to make decisions
         #   number of params starts at 3
