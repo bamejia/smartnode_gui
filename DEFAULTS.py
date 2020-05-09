@@ -33,6 +33,22 @@ OCR_DATA = {
     }
 }
 
+#   default OCR_DATA['dataset'] entry
+OCR_DATA_ENTRY = {
+    'name': 'crop1',
+    'file': 'crop1.jpg',
+    'psm': '7',
+    'lang': 'ssd',
+    'text': 'null'
+}
+
+#   default coordObj values -> used in CoordList / CoordObj
+COORD_OBJ = {
+    'name': 'null',
+    'topL': (1, 1),
+    'botR': (2, 2)
+}
+
 AUDIO_OBJ = {
     'self': 'audioSettings.json',
     'fb_url': '/pi_test_status/audio_status/audio_data/',
@@ -70,21 +86,6 @@ OCR_LOOP_TYPES = ['infinite', 'single', 'timed', 'press']
 #   touchscreen dimensions
 SCREEN_DIMS = {'width': 800, 'height': 480}
 
-#   default OCR_DATA['dataset'] entry
-OCR_DATA_ENTRY = {
-    'name': 'crop1',
-    'file': 'crop1.jpg',
-    'psm': '7',
-    'lang': 'ssd',
-    'text': 'null'
-}
-
-#   default coordObj
-COORD_OBJ = {
-    'name': 'null',
-    'topL': (1, 1),
-    'botR': (2, 2)
-}
 
 #   Files that must never be deleted
 FORBIDDEN = ['kittens.jpg', 'smartnode_key.json', 'dependencies.txt']

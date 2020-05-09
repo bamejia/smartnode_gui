@@ -3,25 +3,30 @@ import shutil
 
 import cv2
 
+import Utility_Functions as util
 from CoordList import coordList
 from CoordObj import coordObj
 from DEFAULTS import SCREEN_DIMS
-from Utility_Functions import getFullPath
 
 # import picamera
 
-
+#   try-catch for picamera import
+#       -> this is needed if this file is loaded on a non-raspberry pi system
 try:
     from picamera import PiCamera
     from picamera.array import PiRGBArray
 
 except ModuleNotFoundError:
-    print("picamera can't be used ")
+    print("PiCamera Not Detected When Loadig image_functions.py")
+    print("\t-> image / video capture may not work correctly!")
 
+
+#   Functions used in OCR sampling Runs
 
 #   takes the source picture
-def takeSource(srcPath=getFullPath('source.jpg')):
-    print(f"Capturing Source Image, saving to \n\t'{srcPath}'")
+def takeSource(srcPath=util.getFullPath('source.jpg'), debug=False):
+    if debug:
+        print(f"Capturing Source Image, saving to \n\t'{srcPath}'")
 
     try:
         with PiCamera() as camera:
@@ -31,10 +36,45 @@ def takeSource(srcPath=getFullPath('source.jpg')):
 
     except NameError:
         print('**Cannot Use Camera On This System')
-        print('->\tDuplicating Default \'kittens.jpg\' as \'source.jpg\'')
-        shutil.copy(getFullPath('kittens.jpg'), srcPath)
+        print("->\tDuplicating Default 'kittens.jpg' as 'source.jpg'")
+        shutil.copy(util.getFullPath('kittens.jpg'), srcPath)
 
-    print('\tSource Image Captured!\n')
+    if debug:
+        print('\tSource Image Captured!\n')
+
+
+#   generates cropped images based on source image and crop objects
+#   returns a list of file paths for use with ocr
+def cropSource(src_path='source.jpg', debug=False):
+    if not os.path.exists(src_path):
+        print("No Source Image, Fool! Run takeSource!")
+        return
+
+    else:
+        #   load image from path
+        src_img = cv2.imread(util.getFullPath(src_path))
+
+        #   load the coordList
+        cropObjs = coordList()
+
+        #   iterate through cropped objects, skipping the first(default) object
+        for obj in cropObjs.myList[1:]:
+            name = obj.name + '.jpg'
+            topL = obj.topL
+            botR = obj.botR
+
+            if debug:
+                print("Cropping Source Image")
+                print(f"\tname: {name}, topL: {topL}, botR: {botR}")
+                print(f"\tx: {topL[0]} -> {botR[0]}")
+                print(f"\ty: {topL[1]} -> {botR[1]}")
+
+            #   crop the image: y: bot-> top,   x: L->R
+            crop_img = src_img[topL[1]:botR[1], topL[0]:botR[0]]
+            cv2.imwrite(util.getFullPath(name), crop_img)
+
+
+#   Functions used by Cropping Setup
 
 
 #   shows a video ###currently broken af
@@ -84,8 +124,9 @@ def showVid():
     cv2.destroyWindow(windowName)
     print("Outside of loop\n\n")
 
+
 #   shows the source image with the bounding areas for cropping
-def showImage(imgPath=getFullPath('source.jpg')):
+def showImage(imgPath=util.getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Fool! Run takeSource!")
         return
@@ -123,35 +164,34 @@ def closeEvent(event, x, y, flags, param):
 #   displays current image with cropping regions,
 #   if no image exists takes one
 #   allows user to add an additional one by tapping the screen
-def addCrop(cropObjs, imgPath=getFullPath('source.jpg')):
+def addCrop(cropObjs, imgPath=util.getFullPath('source.jpg')):
     if not os.path.exists(imgPath):
         print("No Source Image, Running TakeSource")
 
-        #   takesource duplicates 'kittens.jpg' as the source image
+        #   WARNING-> takeSource will duplicate 'kittens' image if the camera isn't connected
         takeSource()
 
-        return
+        # return
 
-    else:
-        #   load image from path, create a named window of the correct size
-        image = cv2.imread(imgPath)
+    #   load image from path, create a named window of the correct size
+    image = cv2.imread(imgPath)
 
-        windowName = "Source Image"
-        cv2.namedWindow(windowName, cv2.WINDOW_NORMAL)
-        cv2.resizeWindow(windowName, SCREEN_DIMS['width'], SCREEN_DIMS['height'])
+    windowName = "Source Image"
+    cv2.namedWindow(windowName, cv2.WINDOW_NORMAL)
+    cv2.resizeWindow(windowName, SCREEN_DIMS['width'], SCREEN_DIMS['height'])
 
-        #   parameters to pass to the listener w/ important stuff added in
-        param = [image, windowName, cropObjs]
+    #   parameters to pass to the listener w/ important stuff added in
+    param = [image, windowName, cropObjs]
 
-        #   add mouse listener function,
-        cv2.setMouseCallback(windowName, addCropHandler, param)
+    #   add mouse listener function,
+    cv2.setMouseCallback(windowName, addCropHandler, param)
 
-        #   add rectangles to the window
-        for obj in cropObjs.myList[1:]:
-            cv2.rectangle(image, obj.topL, obj.botR, (0, 255, 0), 6)
+    #   add rectangles to the window
+    for obj in cropObjs.myList[1:]:
+        cv2.rectangle(image, obj.topL, obj.botR, (0, 255, 0), 6)
 
-        cv2.imshow(windowName, image)
-        cv2.waitKey(0)
+    cv2.imshow(windowName, image)
+    cv2.waitKey(0)
 
     return cropObjs
 
@@ -170,7 +210,6 @@ def addCropHandler(event, x, y, flags, param):
         #   adjust x/y for touchscreen inaccuracy
         #   *always returns slightly down and to the right->adjusted
         coord = (x - 5, y - 5)
-
 
         #   using number of parameters to make decisions
         #   number of params starts at 3
@@ -210,31 +249,3 @@ def addCropHandler(event, x, y, flags, param):
 
             print("closing window ")
             cv2.destroyAllWindows()
-
-
-#   generates cropped images based on source image and crop objects
-#   returns a list of file paths for use with ocr
-def cropSource(cropObjs, imgPath=getFullPath('source.jpg')):
-    if not os.path.exists(imgPath):
-        print("No Source Image, Fool! Run takeSource!")
-        return
-
-    else:
-        #   load image from path
-        image = cv2.imread(imgPath)
-
-        #   iterate through cropped objects, skipping the first(default) object
-        for obj in cropObjs.myList[1:]:
-            name = obj.name + '.jpg'
-
-            print(name)
-
-            topL = obj.topL
-            botR = obj.botR
-            print(name, topL, botR)
-            print('x:', topL[0], '->', botR[0])
-            print('y:', topL[1], '->', botR[1])
-
-            #   crop the image: y: bot-> top,   x: L->R
-            crop_img = image[topL[1]:botR[1], topL[0]:botR[0]]
-            cv2.imwrite(getFullPath(name), crop_img)

@@ -6,8 +6,6 @@ import global_variables as gv
 import image_functions as image
 import ocr_functions as ocr
 import ocr_gui_btns as ocrBtns
-import general_button_label as gbl
-
 
 UPDATE_RATE = 500
 
@@ -74,15 +72,34 @@ class OCRRuntime(tk.Frame):
             self.button_off = False
             return
 
+    #   this is the function that handles the individual steps for a single ocr sampling run
     def ocr_run_once(self):
-        print("TEST LOOP: " + str(self.count))
+        print("OCR_RUNTIME LOOP: " + str(self.count))
         # mySet = settings.loadSettings('OCRSettings.json')
-        ocrData = settings.loadSettings('OCRData.json')
-        image.takeSource()
-        image.cropSource()
-        ocrData = ocr.doOCR_All(ocrData)
-        self.count += 1
 
+        #   load ocrSettings / ocr output file, OCRData.json
+        ocrData = settings.loadSettings('OCRData.json')
+
+        #   capture / crop source image
+        image.takeSource()
+        image.cropSource(debug=True)
+
+        #   perform ocr on all cropped images
+        ocrData = ocr.do_OCR_all(ocrData, debug=True)
+
+        #   temporary printout of data captured during this run
+        #   this information needs to be passed to display, firebase
+        #   dataset is a dict saved in ocrData.json
+        #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
+
+        print("\nOCR DATA Captured...")
+        dataSet = ocrData['dataset']
+
+        for entry in dataSet:
+            print(f"\t{entry['name']}: '{entry['text']}'")
+
+        #   loop control variables
+        self.count += 1
         loop_again = False
         return loop_again
 
@@ -199,6 +216,7 @@ class CropSetup(tk.Frame):
             btn_objs[btn].configure(command=btn_funcs[btn])
             btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
 
+
 class CropSetup2(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -224,10 +242,10 @@ class OCRModeSetup(tk.Frame):
         self.controller = controller
         label = gbl.GLabel(self, text="OCR Mode Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-        
+
         self.current_mode = settings.loadSettings("OCRSettings.json")['loopMode']
         print(self.current_mode)
-        
+
         dlabel = gbl.DLabel(self, text=self.current_mode)
 
         btn_funcs = {
@@ -253,5 +271,3 @@ class OCRModeSetup(tk.Frame):
         for btn in btn_objs:
             btn_objs[btn].configure(command=btn_funcs[btn])
             btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
-
-
