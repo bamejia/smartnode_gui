@@ -6,11 +6,12 @@ command_list = ""
 firebase_commands_func = None
 
 config = {
-  "apiKey": "AIzaSyApYhula2ltA-5CeHm4l333G9z1Pjz7sOM",
-  "authDomain": "smartnode-ed0a9.firebaseapp.com",
-  "databaseURL": "https://smartnode-ed0a9.firebaseio.com/",
-  "storageBucket": "smartnode-ed0a9.appspot.com",
-  "serviceAccount": "C:/Users/bamxm/PycharmProjects/piGUI/py/smartnode_key.json"
+    "apiKey": "AIzaSyApYhula2ltA-5CeHm4l333G9z1Pjz7sOM",
+    "authDomain": "smartnode-ed0a9.firebaseapp.com",
+    "databaseURL": "https://smartnode-ed0a9.firebaseio.com/",
+    "storageBucket": "smartnode-ed0a9.appspot.com",
+    "serviceAccount": "C:/Users/bamxm/PycharmProjects/piGUI/py/smartnode_key.json"
+    # /home/pi/smartkey.json
 }
 
 firebase = pyrebase.initialize_app(config)

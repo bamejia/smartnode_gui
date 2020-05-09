@@ -17,10 +17,14 @@ def recordAudio(path=utility.getFullPath('reference.wav'), recTime=.5):
     sampleRate = 44100  # Sample rate
     try:
         myrecording = sd.rec(int(recTime * sampleRate), samplerate=sampleRate, channels=1)
-        sd.wait()  # Wait until recording is finished
+        # sd.wait()  # Wait until recording is finished
     except sd.PortAudioError:
         print(f"No audio device connected. myrecording set to empty")
         myrecording = []
+    return path, sampleRate, myrecording, recTime
+
+def writeAudioFile(path, sampleRate, myrecording, recTime):
+    sd.wait()
     write(path, sampleRate, myrecording)  # Save as WAV file
 
 
@@ -61,7 +65,9 @@ def recordRef():
     #   record new reference wav file
     mySet = settings.loadSettings('audioSettings.json')
     path = utility.getFullPath(mySet['refPath'])
-    recordAudio(path, 1)
+    data = recordAudio(path, 1)
+    sd.wait()
+    writeAudioFile(*data)
 
     #   get new reference fundamental
     newRef = getFund(path)

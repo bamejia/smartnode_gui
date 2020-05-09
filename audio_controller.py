@@ -1,23 +1,25 @@
 # from PiResponses import respond, check_LoopMode
 from FireBase_Functions import postFirebase
-from audio_functions import *
-
+import audio_functions as audio
+import Settings_Functions as settings
+from datetime import datetime
+import pytz
 
 #   record new sample
 def getData(samplePath):
     print("\tRecording Sample")
-    recordAudio(samplePath)
+    audio.recordAudio(samplePath)
 
 
 #   called during loop
 #   get fundamental from sample, compare with reference, return result
 def processData(samplePath, reference):
     print("\tgetting Fundamental from sample")
-    newFund = float(getFund(samplePath))
+    newFund = float(audio.getFund(samplePath))
     reference = float(reference)
 
     # print("\tcomparing with reference fundamental")
-    detected = compareFreqs(newFund, reference)
+    detected = audio.compareFreqs(newFund, reference)
 
     print(f"\tDone Comparison -> reference detected: {detected}")
     print()
@@ -54,22 +56,25 @@ def init_Audio():
 
 #   single sampling run ->
 #   mySet = Audio settings, loaded in start
-def loop(mySet):
+def loop(mySet, db):
     print("In Loop Once...")
-    getData(mySet['smplPath'])
+    # getData(mySet['smplPath'])
     detected = processData(mySet['smplPath'], mySet['reference'])
 
     print("Running Updates")
     mySet = settings.changeSetting(mySet, 'detected', detected)
 
     if detected:
-        fb_message = {'audioDetected': detected}
+        tz_NY = pytz.timezone('America/New_York')
+        time_detected = datetime.now(tz_NY).strftime('%Y_%m_%d__%H_%M_%S__%f')[:-3]
+        fb_message = {'audio_detected': time_detected}
 
-        postFirebase(mySet['fb_url'], fb_message)
+        postFirebase(mySet['fb_url'], fb_message, db)
+        detected = time_detected
 
     endLoop = getEndConditions(mySet)
     print(f"Loop ended = {endLoop} -> Returning: {not endLoop}")
 
     print("\n>-------Loop COMPLETE-------<\n")
 
-    return not endLoop
+    return (not endLoop), detected

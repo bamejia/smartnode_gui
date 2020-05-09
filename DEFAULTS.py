@@ -14,7 +14,7 @@ MAIN_OBJ = {
 #   default ocr process settings
 OCR_OBJ = {
     'self': 'OCRSettings.json',
-    'fb_url': 'filler_audio_url',
+    'fb_url': '/pi_test_status/ocr_status/ocr_data/',
     'loopMode': 'single',
     'loopEnd': '',
     'srcImg': 'source.jpg',
@@ -35,7 +35,7 @@ OCR_DATA = {
 
 AUDIO_OBJ = {
     'self': 'audioSettings.json',
-    'fb_url': 'filler_audio_url',
+    'fb_url': '/pi_test_status/audio_status/audio_data/',
     'loopMode': 'single',
     'loopEnd': '',
     'refPath': 'reference.wav',

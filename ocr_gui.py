@@ -18,7 +18,7 @@ class OCRRuntime(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = tk.Label(self, text="OCR Runtime", font=controller.title_font)
+        label = gbl.GLabel(self, text="OCR Runtime", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         # flag for looping OCR
