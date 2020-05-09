@@ -22,7 +22,7 @@ class AudioRuntime(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         self.will_update = False  # changed by both button input and internal conditions
-        self.button_OFF = False  # even if will_update loop is set to true, a botton off will always stop the loop
+        self.button_off = False  # even if will_update loop is set to true, a botton off will always stop the loop
         self.user_setup = False
 
         mySet = settings.loadSettings('audioSettings.json')
@@ -67,13 +67,13 @@ class AudioRuntime(tk.Frame):
     #   will_update
     def audio_updater(self, mySet):
 
-        if self.will_update and not self.button_OFF:
+        if self.will_update and not self.button_off:
             #   checks
             data = audio.recordAudio(mySet['smplPath'])
             self.after(int(data[3]*1000), self.audio_detector, mySet, data)
         else:
             print("\n\nSample Loop Completed!")
-            self.button_OFF = False
+            self.button_off = False
             return
 
     # Starts the loop to call OCR called by button
@@ -99,7 +99,7 @@ class AudioRuntime(tk.Frame):
                 print("\tAudio Not Set Up! -> Running recordRef\n")
                 self.controller.show_frame("SampleSetup")
         else:
-            self.button_OFF = True
+            self.button_off = True
 
     def change_mode_label(self, new_mode):
         self.mode_display_label.configure(text='Run mode: ' + new_mode)
