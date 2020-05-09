@@ -1,8 +1,9 @@
-import subprocess
-import os
-from datetime import datetime, timedelta
 import json
-import sys
+import os
+import subprocess
+from datetime import datetime
+
+import DEFAULTS as defaults
 
 
 #   returns the absolute path to the local path provided
@@ -14,6 +15,7 @@ def getFullPath(fileName):
     filePath = os.path.join(directory, fileName)
 
     return filePath
+
 
 #   This is the least secure code I think i have ever written
 #   attempts to run the bash script based on the name provided
@@ -29,26 +31,26 @@ def runBashScript(scriptName, args=()):
 
 
 #   removes all files in root directory of the specified type(if allowable)
-def wipeAll(fileType):
+def wipeAll(fileType, debug=False):
+    print(f"Attempting to wipe all files of type '{fileType}'")
     allowable = ('.wav', '.json', '.png', '.jpg')
 
-    #   you must never delete the kittens
-    forbidden = (os.path.join(os.path.dirname(__file__), 'kittens.jpg'))
+    #   files that can't be deleted
+    ignore = []
+    for file in defaults.FORBIDDEN:
+        ignore.append(getFullPath(file))
 
-    #   check if you are allowed to remove this type of file
-    #   break if input is empty
+    #   make sure filetype was provided, entered correctly and allowable
     if not (fileType):
         return
-
     if fileType.find('.') < 0:
         fileType = '.' + fileType
-        print(f"inserting '.', type is now {fileType}")
-
     if not allowable.__contains__(fileType):
-        print(f"You can't remove '{fileType}' files")
+        if debug: print(f"You can't remove '{fileType}' files")
 
+
+    #   proceed if file type is allowed
     else:
-
         #   makes a list of all files in the root directory
         directory = os.path.dirname(__file__)
         allFiles = os.listdir(directory)
@@ -57,22 +59,28 @@ def wipeAll(fileType):
         allType = [f for f in allFiles if f.endswith(fileType)]
 
         for file in allType:
-            path_to_file = os.path.join(directory, file)
+            #   get full path to current file
+            fullPath = os.path.join(directory, file)
 
-            #   remove file if not in list of forbidden files
-            if forbidden.find(path_to_file) < 0:
-                os.remove(path_to_file)
+            #   double check that file is ok to delete
+            if ignore.__contains__(fullPath):
+                if debug: print(f"\tskipped: {file}")
 
-        print(f"\tAll {fileType} files Removed")
-        print()
+            else:
+                if debug: print(f"\tremoving: '{file}'")
+                os.remove(fullPath)
+
+        if debug: print(f"All '{fileType}' Files Removed\n")
 
 
 #   attempts to remove a specific file if it exists and is of an allowable filetype
-def wipeOne(fileName):
+def wipeOne(fileName, debug=False):
     allowable = ('.wav', '.json', '.png', '.jpg')
-    forbidden = (os.path.join(os.path.dirname(__file__), 'kittens.jpg'))
 
-    print(forbidden)
+    #   files that can't be deleted
+    ignore = []
+    for file in defaults.FORBIDDEN:
+        ignore.append(getFullPath(file))
 
     #   check if file is of an allowable type, exit if invalid
     valid = False
@@ -82,29 +90,30 @@ def wipeOne(fileName):
             break
 
     if not valid:
-        print(f"{fileName} has invalid file type")
+        if debug: print(f"{fileName} has invalid file type")
         return
 
     #   check if file exists
     else:
-        #   get ablsolute path to file
+        #   get absolute path to file
         directory = os.path.dirname(__file__)
         fullPath = os.path.join(directory, fileName)
 
         #   check if removal of this file is explicitly forbidden
-        if forbidden.find(fullPath) > -1:
-            print("you aren't allowed to delete the kittens picture... jerk")
+        if ignore.__contains__(fullPath):
+            if debug: print(f"You aren't allowed to delete '{fileName}'")
             return
 
         #   exit if file not found
         if not os.path.exists(fullPath):
-            print("File not found!")
+
+            if debug: print(f"{fileName} not found!\nPath: {fullPath}")
             return
 
         #   remove the file if it is found
         else:
             os.remove(fullPath)
-            print("File Removed")
+            if debug: print(f"'{fileName}' was removed")
 
 
 #   datetime stuff

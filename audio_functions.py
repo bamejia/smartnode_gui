@@ -1,22 +1,30 @@
-from scipy.io import wavfile
+import os
+
 import sounddevice as sd
-from scipy.io.wavfile import write
 from scipy.fftpack import fft, fftfreq
-from Settings_Functions import *
+from scipy.io import wavfile
+from scipy.io.wavfile import write
+
+import Settings_Functions as settings
+import Utility_Functions as utility
 
 
 #   this function records an audio file to of the specified length
 #   and saves it to the specified path
 
 #   WARNING WAITS FOR SPECIFIED TIME
-def recordAudio(path=getFullPath('reference.wav'), recTime=.5):
+def recordAudio(path=utility.getFullPath('reference.wav'), recTime=.5):
     sampleRate = 44100  # Sample rate
     try:
         myrecording = sd.rec(int(recTime * sampleRate), samplerate=sampleRate, channels=1)
-        sd.wait()  # Wait until recording is finished
+        # sd.wait()  # Wait until recording is finished
     except sd.PortAudioError:
         print(f"No audio device connected. myrecording set to empty")
         myrecording = []
+    return path, sampleRate, myrecording, recTime
+
+def writeAudioFile(path, sampleRate, myrecording, recTime):
+    sd.wait()
     write(path, sampleRate, myrecording)  # Save as WAV file
 
 
@@ -55,26 +63,29 @@ def recordRef():
     print(f'Recording Reference')
 
     #   record new reference wav file
-    settings = loadSettings('audioSettings.json')
-    path = getFullPath(settings['refPath'])
-    recordAudio(path, 1)
+    mySet = settings.loadSettings('audioSettings.json')
+    path = utility.getFullPath(mySet['refPath'])
+
+    data = recordAudio(path, 1)
+    # sd.wait()
+    writeAudioFile(*data)
 
     #   get new reference fundamental
     newRef = getFund(path)
     print(f"New Fundamental: {newRef}")
 
     # save the fundamental to file
-    changeSetting(settings, 'reference', newRef)
+    settings.changeSetting(mySet, 'reference', newRef)
 
     # set setup flag in main settings to true
-    changeSetting(loadSettings('mainSettings.json'), 'Audio_Setup', True)
+    settings.changeSetting(settings.loadSettings('mainSettings.json'), 'Audio_Setup', 'True')
 
 
 #   plays the reference audio file using a bash script
 def playReference():
     print(f'Playing Reference...')
-    filePath = getFullPath('reference.wav')
-    if (os.path.exists(filePath)):
-        runBashScript('playSound.sh', filePath)
+    filePath = utility.getFullPath('reference.wav')
+    if os.path.exists(filePath):
+        utility.runBashScript('playSound.sh', filePath)
     else:
         print("No file to play you fool! Record one first!")

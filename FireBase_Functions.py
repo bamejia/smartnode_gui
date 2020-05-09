@@ -28,14 +28,17 @@ def checkCommands():
     return message
 
 #   post provided message to the provided url on firebase
-def postFirebase(dest_url, message):
+def postFirebase(dest_url, message, db):
     #   check if firebase is connected
-    fireBaseSettings = loadSettings('firebaseSettings.json')
-    connected = fireBaseSettings['connected'] == 'True'
+    # fireBaseSettings = loadSettings('firebaseSettings.json')
+    # connected = fireBaseSettings['connected'] == 'True'
+    print(dest_url, message)
 
-    if(connected):
-        print(f"\tPosting message: {message} to {dest_url}")
-        print(f"\t**THIS FUNCTION NOT YET IMPLEMENTED")
+    db.child(dest_url).update(message)
 
-    else:
-        print("Firebase is not connected!")
+    # if(connected):
+    #     print(f"\tPosting message: {message} to {dest_url}")
+    #     print(f"\t**THIS FUNCTION NOT YET IMPLEMENTED")
+    #
+    # else:
+    #     print("Firebase is not connected!")

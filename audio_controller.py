@@ -1,73 +1,39 @@
 # from PiResponses import respond, check_LoopMode
 from FireBase_Functions import postFirebase
-from audio_functions import *
-
+import audio_functions as audio
+import Settings_Functions as settings
+from datetime import datetime
+import pytz
 
 #   record new sample
 def getData(samplePath):
     print("\tRecording Sample")
-    recordAudio(samplePath)
+    audio.recordAudio(samplePath)
 
 
 #   called during loop
 #   get fundamental from sample, compare with reference, return result
 def processData(samplePath, reference):
     print("\tgetting Fundamental from sample")
-    newFund = float(getFund(samplePath))
+    newFund = float(audio.getFund(samplePath))
     reference = float(reference)
 
-    #print("\tcomparing with reference fundamental")
-    detected = compareFreqs(newFund, reference)
+    # print("\tcomparing with reference fundamental")
+    detected = audio.compareFreqs(newFund, reference)
 
     print(f"\tDone Comparison -> reference detected: {detected}")
     print()
     return detected
 
 
-#   called during loop - > updates local values
-#   any function calls that need to happen depending loop data should happen here
-def updateLocal(mySet, detected):
-    #   update local values if audio signal was detected
-    #if(detected):
-    if(True):
-        print("Updating Local Stuff")
-        print(f"\tSetting Audio Setting 'detected' to {detected}")
-        mySet = changeSetting(mySet, 'detected', detected)
-
-        print("\t**NOT IMPLEMENTED-> UPDATE SCREEN")
-        print()
-    else:
-        print(f"\tLocal Update Skipped Because detected: {detected}")
-
-    return mySet
-
-
-#   called during loop -> Push results to Firebase
-def updateServer(fb_url, detected):
-    print(f"Updating Server")
-    # if(detected):
-    if (True):
-        fb_message = {'audioDetected': detected}
-
-        postFirebase(fb_url, fb_message)
-
-        print("\tFirebase Update Complete")
-        print()
-
-    else:
-        print(f"\tFirebase Update Skipped Because detected: {detected}")
-
 #   checks internal end conditions for the sampling loop
 def getEndConditions(mySet):
     print("Checking OCR End Conditions")
 
-
     #   loop mode -> run once or run for time
 
-
-
     #   checks for loop end due to loopMode mySet (in Utility Functions)
-    if check_LoopMode(mySet):
+    if settings.check_LoopMode(mySet):
         print("\tLoop Ended Due to Internal Trigger")
         print()
         return True
@@ -75,11 +41,12 @@ def getEndConditions(mySet):
     print("\tLoop Continuing")
     return False
 
+
 #   checks that main mySet[Audio_Setup] flag is true
 def init_Audio():
     print("In init_Audio: Checking Audio Initialization")
 
-    mainSet = loadSettings('mainSettings.json')
+    mainSet = settings.loadSettings('mainSettings.json')
     flag = mainSet['Audio_Setup']
     print(f"Main Settings Audio Setup Flag: {flag}")
 
@@ -87,69 +54,29 @@ def init_Audio():
     return flag == "True"
 
 
-#   sub controller function -> runs everything needed for Audio runs
-def start():
-    print("Audio Start function")
-
-    #   THis just checks main menu flags for whether the record REF funcion has been called
-    setupSuccess = init_Audio()
-
-    #   take this auto call out -> switch to sample setup
-
-    if not setupSuccess:
-        print("\tAudio Not Set Up! -> Running recordRef\n")
-
-        #   map this function to the record button
-        recordRef()
-        print("\tdone\n")
-
-
-    #   copy this
-    print("Loading Audio Settings")
-    mySet = loadSettings('audioSettings.json')
-
-    print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
-
-    endFlag = False
-    while not endFlag:
-        print("\n--------Loop Starting--------\n")
-
-
-        #   run function that checks if loop should
-        endFlag = getEndConditions(mySet)
-
-        #   runs exatly one loop
-        loopOnce(mySet)
-
-    #   loop has terminated
-    print("\n\nSample Loop Completed!")
-
-
 #   single sampling run ->
 #   mySet = Audio settings, loaded in start
-def loopOnce(mySet):
+def loop(mySet, db):
     print("In Loop Once...")
-    getData(mySet['smplPath'])
+    # getData(mySet['smplPath'])
+    print(mySet['smplPath'], mySet['reference'])
     detected = processData(mySet['smplPath'], mySet['reference'])
 
-    print("Running Updates")
-    updateLocal(mySet, detected)
-    updateServer(mySet['fb_url'], detected)
+    if detected:
+        tz_NY = pytz.timezone('America/New_York')
+        time_detected = datetime.now(tz_NY).strftime('%Y_%m_%d__%H_%M_%S__%f')[:-3]
+
+        print("Running Updates")
+        mySet = settings.changeSetting(mySet, 'detected', time_detected)
+
+        fb_message = {'audio_detected': time_detected}
+
+        postFirebase(mySet['fb_url'], fb_message, db)
+        detected = time_detected
+
+    endLoop = getEndConditions(mySet)
+    print(f"Loop ended = {endLoop} -> Returning: {not endLoop}")
+
     print("\n>-------Loop COMPLETE-------<\n")
 
-
-def pre_loop():
-    print("Loading Audio Settings")
-    mySet = loadSettings('audioSettings.json')
-    print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
-    return mySet
-
-
-def loop(mySet):
-    loopOnce(mySet)
-    return getEndConditions(mySet)
-
-def record():
-    print("RECORDING")
-    recordRef()
-    print("\tdone\n")
+    return (not endLoop), detected

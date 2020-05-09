@@ -1,6 +1,7 @@
 import json
 import os
 
+import DEFAULTS as defaults
 from CoordObj import *
 
 
@@ -22,17 +23,22 @@ class coordList():
         self.filePath = os.path.join(directory, fileName)
 
         #   check if file doesn't exist
-        if not (os.path.exists(self.filePath)):
-            print("creating new file with default entry")
+        missing = not (os.path.exists(self.filePath))
+        #   if it exists check if empty -> if empty treat like doesn't exist
+        if not missing:
+            # print("coordFile not missing")
+            missing = os.stat(self.filePath).st_size == 0
+        #   create default file if missing (or empty)
+        if missing:
+            print("Generating 'coordFile.json' in CoordList constructor")
+            tempObj = defaults.COORD_OBJ
 
-            # use open() to create a file
-            myFile = open(self.filePath, "w+")
-            myFile.close()
+            # use open() to create a file, add default obj to file, add autosaves
+            with open(self.filePath, "w+") as myFile:
+                # myFile.write(json.dumps(tempObj))
+                self.addObject(coordObj(tempObj['name'], tuple(tempObj['topL']), tuple(tempObj['botR'])))
 
-            #   add a blank coordObject to the list, auto-saved by add()
-            self.addObject()
-
-        print("loading")
+        # print("loading set from constructor")
         self.loadSet()
 
     #   override the default iterator
@@ -88,16 +94,16 @@ class coordList():
     #   returns object with highest index greater than 1 and removes it from the list
     def popLast(self):
         index = len(self.myList) - 1
-        entry = None
-
         if index >= 1:
             entry = self.myList[index]
             self.removeObj(entry)
+            return entry
 
         else:
             print("too few elements to pop")
+            return False
 
-        return entry
+    #
 
     #   attempts to return first entry in the list via specified value (index)
     def getObjIndex(self, index):
@@ -128,15 +134,25 @@ class coordList():
     #   return the last entry in the list
     def peekLast(self):
         index = len(self.myList) - 1
-        return self.getObjIndex(index)
+        if index >= 1:
+            entry = self.myList[index]
+            return entry
+
+        else:
+            print("CoordList is empty")
+            return False
 
     #   loads a data set from file
     def loadSet(self):
 
+        #   copy file contents to tempporary object
         with open(self.filePath, 'r') as myFile:
             temp_list = json.loads(myFile.read())
 
-            # temp = coordList()
+        #   wipe current set
+        self.myList = []
+
+        #   flag to indicate one dummy entry was added
         for entry in temp_list:
             tempObj = coordObj(entry['name'], tuple(entry['topL']), tuple(entry['botR']))
             self.myList.append(tempObj)
@@ -154,7 +170,7 @@ class coordList():
             tempList.append(entry.getAsDict())
 
         #   write the list of dicts to file as a json string w/ dumps
-        with open(self.filePath, 'w') as myFile:
+        with open(self.filePath, 'w+') as myFile:
             myFile.write(json.dumps(tempList))
 
     #   prints the contents of the set

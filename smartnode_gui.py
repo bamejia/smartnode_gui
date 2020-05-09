@@ -1,18 +1,21 @@
 import tkinter as tk  # python 3
 from tkinter import font  as tkfont  # python 3
 
+import firebase_listener
+import Settings_Functions as settings
 import audio_gui
 import finger_gui
 import general_button_label as gbl
 import global_variables as gv
 import ocr_gui
+import finger_functions as finger
 
 # from firebase import firebase
 # from firecreds import connect_to_firebase
 # import os
 # import json
 # from firebase_admin import db
-#
+
 # import firebase_admin
 # from firebase_admin import credentials
 # from firebase_admin import db
@@ -26,15 +29,16 @@ class SmartnodeGUI(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
 
+        self.firebase_database = None
+        self.finger_press = True
+
         window_width = round(gv.WINDOW_W / 1)
         window_length = round(gv.WINDOW_L / 1)
         window_x = round(gv.WINDOW_W * 3 / 5)
         window_y = round(gv.WINDOW_L * 2 / 5)
         geometry_dimensions = "%dx%d+%d+%d" % (window_width, window_length, window_x, window_y)
 
-        self.geometry(geometry_dimensions)
-
-        self.attributes('-fullscreen', True)  #800x480
+        self.attributes('-fullscreen', True)  # 800x480
         # self.attributes('-zoomed', True)
         # self.overrideredirect(True)  # gets rid of top minimizing, maximizing, and closing buttons bar
 
@@ -98,68 +102,30 @@ class SmartnodeGUI(tk.Tk):
     def set_return_frame(self, page_name):
         self.return_frame = page_name
 
-    # def connect_to_firebase():
-    #
-    #     print("Initializing Firebase Connection...")
-    #     # Fetch the service account key JSON file contents
-    #
-    #     FILES_DIR = 'smartnode_key.json'
-    #
-    #     cred = credentials.Certificate(FILES_DIR)
-    #
-    #     print("Credentials Found. ")
-    #
-    #     # Initialize the app with a service account, granting admin privileges
-    #     response = firebase_admin.initialize_app(cred, {'databaseURL': 'https://smartnode-ed0a9.firebaseio.com/%27%7D)'})
-    #
-    # def firebase_setup(self):
-    #
-    #     connect_to_firebase()
-    #
-    #     recent_commands = {"recent_commands": ""}
-    #
-    #     recent_command = {
-    #         '12:24': {
-    #             'command': 'Light_ON',
-    #             'time': '12:24'
-    #         },
-    #
-    #         '12:25': {
-    #             'command': 'Light_OFF',
-    #             'time': '12:25'
-    #         }
-    #     }
-    #
-    #     def show(command):
-    #         print(command)
-    #
-    #     # points to the parent node in firebase directory
-    #     command = db.reference('/recent_commands')
-    #
-    #     # The Dictionary get() method returns the value of the item with the specified key.
-    #     commands = command.get()
-    #
-    #     print(commands)
-    #
-    #     for c in commands:
-    #         show(commands[c]['command'])
-    #
-    #     # erase commands
-    #     # result = db.reference('/').update(recent_commands)
-    #
-    # # from pi_configs import FILES_DIR  # root directory of project
-    #
-    # def firebase_updater(self):
-    #     pass
-    #
-    # def firebase_commands(self, command):
-    #     if command == "OCR_ON_OFF":
-    #
-    #             self.frames["OCRRuntime"].ocr_on_off()
-    #     elif command == "AUDIO_ON_OFF":
-    #         pass
-    #     elif command == "FINGER_PRESS":
-    #         pass
+    def firebase_command_handler(self, command):
+        if command == "ocr_on_off":
+            print("App command: " + command)
+            return
+            self.frames["OCRRuntime"].ocr_on_off()
+        elif command == "audio_on_off":
+            print("App command: " + command)
+            self.frames['AudioRuntime'].audio_on_off()
+        elif command == "press":
+            print("App command: " + command)
+            if self.finger_press:
+                self.finger_press = False
+                delay, repeats, interval = 700, 0, 700
+                finger.finger_looper(self.after, self.set_finger_press, delay, repeats, interval)
+            else:
+                print("Cannot press finger that fast")
+
+
+    def addFirebaseDatabase(self, db):
+        self.firebase_database = db
+
+
+    def set_finger_press(self, val):
+        self.finger_press = val
 
 
 class MainMenu(tk.Frame):
@@ -171,24 +137,34 @@ class MainMenu(tk.Frame):
         label.pack(side="top", fill="x", pady=8)
 
         ocr_btn_func = lambda: (
-                                controller.set_return_frame("MainMenu"),
-                                controller.show_frame("OCRRuntime"))
+            controller.set_return_frame("MainMenu"),
+            controller.show_frame("OCRRuntime"))
+
         audio_btn_func = lambda: (
-                                  controller.set_return_frame("MainMenu"),
-                                  controller.show_frame("AudioRuntime"))
+            controller.set_return_frame("MainMenu"),
+            controller.show_frame("AudioRuntime"))
+
         settings_btn_func = lambda: (
                                 controller.show_frame("Settings"))
+
+        reset_btn_func = lambda: (
+            settings.fullReset()
+        )
         quit_btn_func = lambda: (
                                 controller.destroy())
 
         self.start_stop_ocr_btn = gbl.GButton(self, "OCR", ocr_btn_func)
         start_stop_audio_btn = gbl.GButton(self, "Audio", audio_btn_func)
         settings_btn = gbl.GButton(self, "Settings", settings_btn_func)
+
+        reset_btn = gbl.GButton(self, "Reset Files", reset_btn_func)
+
         quit_btn = gbl.GButton(self, "Quit", quit_btn_func)
 
         self.start_stop_ocr_btn.pack(pady=gv.BUTTON_SPACE)
         start_stop_audio_btn.pack(pady=gv.BUTTON_SPACE)
         settings_btn.pack(pady=gv.BUTTON_SPACE)
+        reset_btn.pack(pady=gv.BUTTON_SPACE)
         quit_btn.pack(pady=gv.BUTTON_SPACE)
 
         self.count = 0
@@ -233,6 +209,42 @@ class Settings(tk.Frame):
         back_button_btn.pack(pady=gv.BUTTON_SPACE)
 
 
+class PopUp(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
+        self.controller = controller
+
+        label = gbl.GLabel(self, "Settings", controller.title_font)
+        label.pack(side="top", fill="x", pady=8)
+
+        ocr_settings_func = lambda: (
+            controller.show_frame("OCRSettings"))
+        audio_settings_func = lambda: (
+            controller.show_frame("AudioSettings"))
+        finger_settings_func = lambda: (
+            controller.show_frame("FingerSettings"))
+        back_btn_func = lambda: (
+            controller.show_frame("MainMenu"))
+
+        ocr_settings_btn = gbl.GButton(self, "OCR Settings", ocr_settings_func)
+        audio_settings_btn = gbl.GButton(self, "Audio Settings", audio_settings_func)
+        finger_settings_btn = gbl.GButton(self, "Finger Settings", finger_settings_func)
+        back_button_btn = gbl.GButton(self, "Go back", back_btn_func)
+
+        ocr_settings_btn.pack(pady=gv.BUTTON_SPACE)
+        audio_settings_btn.pack(pady=gv.BUTTON_SPACE)
+        finger_settings_btn.pack(pady=gv.BUTTON_SPACE)
+        back_button_btn.pack(pady=gv.BUTTON_SPACE)
+
+
 if __name__ == "__main__":
     app = SmartnodeGUI()
+
+    firebase_listener.run(app.firebase_command_handler)
+    app.addFirebaseDatabase(firebase_listener.db)
+
     app.mainloop()
+
+    finger.cleanup()
+    firebase_listener.close()

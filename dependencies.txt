@@ -1,0 +1,85 @@
+#	This is basically a step-by step tutorial on how to install
+#	all the dependencies needed for the ocrBox project
+
+#Using Raspbian Buster image with touch drivers pre-configured:
+https://mega.nz/#!SDBlFIIJ!fhr6f7pE2TYlOhogX0c4snWbT96D0Cjhcm_6ytnfHcU
+#	username / password = pi / raspberry
+#   pw changed to ocr (later on)
+
+#Expand Filesystem
+sudo raspi-config --expand-rootfs
+
+#reboot
+sudo reboot now
+
+#Connect to Wifi if you haven’t already
+-> Click network icon at top of screen and select country (protip: use down arrow)
+-> join your wifi network
+
+#Update and upgrade linux, clean -> upgrade step takes a long time
+sudo apt update
+sudo apt -y full-upgrade
+#reboot
+sudo apt clean
+
+#Open CV (takes a while)
+sudo apt install -y python3-opencv
+
+#Check version		-	should be 3.2.0
+#*from python3 shell after importing cv2
+cv2.__version__
+
+
+#Tesseract
+sudo apt install -y tesseract-ocr
+sudo apt install -y libtesseract-dev
+pip3 install pytesseract
+
+#check tesseract version		-	should be 4.0.0
+tesseract --version
+
+
+#	stuff needed for audio
+pip3 install scipy
+pip3 install sounddevice
+
+sudo apt-get install -y libasound-dev
+sudo apt-get install -y portaudio19-dev
+pip3 install pyaudio
+
+
+#   stuff needed for firebase
+pip3 install firebase
+pip3 install python_jwt
+pip3 install gcloud
+pip3 install sseclient
+pip3 install firebase_admin
+pip3 install pyrebase
+
+
+#   Settings to change and important info
+
+#   set .sh files to execute on click // set single click execution
+-> File Manager (yellow folders) >> Edit >> preferences >> General
+-> Check boxes: Single Click, Don't Ask
+
+#   Hide Menu Bar:
+-> R. Click Panel > Panel Settings > Advanced > "Hide When not in use" > Pixels = 0
+
+#   Change Password (to ocr) ** removes annoying alert on boot
+-> terminal
+sudo raspi-config
+-> navigate to passwords, change it, reb0ot
+
+#  Touchscreen dimensions are 800 x 480 (just FYI)
+
+#   launcher script:
+-> in a file called [whatever].sh
+#!/bin/bash
+python3 [full/path/to/file.py]
+
+#   set any script as executable
+sudo chmod +x path_to_script.extension
+
+#   shutdown script
+**see louis's pic from 2nd to last week in Spring
