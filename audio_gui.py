@@ -7,7 +7,7 @@ import global_variables as gv
 UPDATE_RATE = 500
 
 
-class AudioRuntime(tk.Frame):
+class AudioMenu(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
