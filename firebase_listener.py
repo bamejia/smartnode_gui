@@ -20,6 +20,8 @@ try:
     db = firebase.database()
 except Exception as e:
     print(e)
+    print("CANNOT SETUP FIREBASE")
+    sys.exit()
 
 def stream_handler(message):
     global command_list
@@ -58,7 +60,4 @@ def run(firebase_func):
 
 def close():
     global my_stream
-    try:
-        my_stream.close()
-    except Exception as e:
-        print(e)
+    my_stream.close()
