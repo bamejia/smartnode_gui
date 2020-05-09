@@ -1,5 +1,6 @@
 import pyrebase
 from time import sleep
+import sys
 
 my_stream = None
 command_list = ""
@@ -14,9 +15,11 @@ config = {
     # /home/pi/smartkey.json
 }
 
-firebase = pyrebase.initialize_app(config)
-
-db = firebase.database()
+try:
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
+except Exception as e:
+    print(e)
 
 def stream_handler(message):
     global command_list
@@ -43,10 +46,19 @@ def run(firebase_func):
     global firebase_commands_func
     global my_stream
 
-    firebase_commands_func = firebase_func
-    command_list = db.child("recent_commands").get().val()
-    my_stream = db.child("recent_commands").stream(stream_handler)
+    try:
+        firebase_commands_func = firebase_func
+        command_list = db.child("recent_commands").get().val()
+        my_stream = db.child("recent_commands").stream(stream_handler)
+    except Exception as e:
+        print(e)
+        print("DID NOT CONNECT TO FIREBASE")
+        sys.exit()
+
 
 def close():
     global my_stream
-    my_stream.close()
+    try:
+        my_stream.close()
+    except Exception as e:
+        print(e)
