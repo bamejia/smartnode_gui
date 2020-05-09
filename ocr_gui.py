@@ -82,7 +82,9 @@ class OCRRuntime(tk.Frame):
         image.cropSource()
         ocrData = ocr.doOCR_All(ocrData)
         self.count += 1
-        return False
+
+        loop_again = False
+        return loop_again
 
     # Starts the loop to call OCR called by button
     def ocr_on_off(self):
