@@ -106,7 +106,7 @@ class OCRRuntime(tk.Frame):
     # Starts the loop to call OCR called by button
     def ocr_on_off(self):
         self.will_update = not self.will_update
-        if (self.will_update):
+        if self.will_update:
             self.ocr_updater()
         else:
             self.button_off = True
