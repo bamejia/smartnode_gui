@@ -161,12 +161,15 @@ def closeEvent(event, x, y, flags, param):
         param.append(True)
 
 
+#   adds an entry to cropFile.json
 #   displays current image with cropping regions,
 #   if no image exists takes one
 #   allows user to add an additional one by tapping the screen
-def addCrop(cropObjs, imgPath=util.getFullPath('source.jpg')):
+def addCrop(cropObjs, imgPath='source.jpg'):
+    util.getFullPath(imgPath)
+
     if not os.path.exists(imgPath):
-        print("No Source Image, Running TakeSource")
+        print("No source image, Running takeSource")
 
         #   WARNING-> takeSource will duplicate 'kittens' image if the camera isn't connected
         takeSource()

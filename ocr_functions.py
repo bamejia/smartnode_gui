@@ -132,6 +132,7 @@ def removeLast_OCRData(ocrData):
     return ocrData
 
 
+#   called by ocr_gui_btns.cropSetup_add
 #   adds an entry to OCRData -> needs ocrData object in order to save changes
 #   returns modified version
 def addEntry_OCRData(ocrData, newName):
