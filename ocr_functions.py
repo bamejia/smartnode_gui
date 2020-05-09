@@ -47,6 +47,7 @@ def do_OCR_single(options, debug=False):
 
     if debug:
         print(f"In do_OCR_single -> Image Path: {file}")
+        print(f"Processing image with PSM {psm} using language {lang}")
 
     # Define configuration parameters
     configStr = '--tessdata-dir "/usr/share/tesseract-ocr/4.00/tessdata/"  -l {} --oem 1 --dpi 72 --psm {}'
@@ -55,14 +56,10 @@ def do_OCR_single(options, debug=False):
     # Read image from Disk
     img = cv2.imread(file)
 
-    if debug:
-        print(f"\tType of img: {type(img)}")
-        print(f"Processing image with PSM {psm} using language {lang}")
-
     #   pull text from image w/ tesseract
     output = {}
     try:
-        text = pytesseract.image_to_string(img, config=config, output_type='dict')
+        output = pytesseract.image_to_string(img, config=config, output_type='dict')
     except pytesseract.TesseractError:
         print("Tesseract Error!!!")
         output['text'] = 'tesseractError'
