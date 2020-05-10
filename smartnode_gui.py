@@ -96,7 +96,6 @@ class SmartnodeGUI(tk.Tk):
     def firebase_command_handler(self, command):
         if command == "ocr_on_off":
             print("App command: " + command)
-            return
             self.frames["OCRMenu"].ocr_on_off()
         elif command == "audio_on_off":
             print("App command: " + command)
