@@ -90,7 +90,6 @@ class OCRMenu(tk.Frame):
 
     #   this is the function that handles the individual steps for a single ocr sampling run
     def ocr_run_once(self):
-        return True
         print("OCR_RUNTIME LOOP: " + str(self.count))
         # mySet = settings.loadSettings('OCRSettings.json')
 
@@ -146,7 +145,7 @@ class OCRMenu(tk.Frame):
         fb_message = {'running': "True"}
         fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, self.controller.firebase_database)
 
-        self.controller.frames['OCRStatus'].update_status('Not Detected')
+        self.controller.frames['OCRStatus'].update_status('No Data')
         return mySet
 
 
