@@ -7,8 +7,8 @@ default_delay = 300
 
 
 GPIO.setmode(GPIO.BOARD)  # Set GPIO usage
-GPIO.setup(32, GPIO.OUT)  # Set up pin 32 for GPIO usage
-pwm = GPIO.PWM(32, 50)  # Set up pwm on pin 32
+GPIO.setup(default.FINGER_GPIO, GPIO.OUT)  # Set up pin 32 for GPIO usage
+pwm = GPIO.PWM(default.FINGER_GPIO, 50)  # Set up pwm on pin 32
 
 
 #####    Moves finger to starting, retracted position with value of 1
@@ -54,7 +54,7 @@ def pressPos(next_func, data):
 
 def pin_off(next_func, data):
     print("in pin_pff")
-    GPIO.output(32, False)
+    GPIO.output(default.FINGER_GPIO, False)
     pwm.ChangeDutyCycle(0)
     if next_func == "start_pos":
         data[0](data[2] - default_delay, startPos, 'check_loop', data)
