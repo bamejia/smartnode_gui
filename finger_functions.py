@@ -1,12 +1,14 @@
 import RPi.GPIO as GPIO
+from time import sleep
+import DEFAULTS as default
+
 
 default_delay = 300
 
-GPIO.setwarnings(False)
 
 GPIO.setmode(GPIO.BOARD)  # Set GPIO usage
-GPIO.setup(32, GPIO.OUT)  # Set up pin 32 for GPIO usage
-pwm = GPIO.PWM(32, 50)  # Set up pwm on pin 32
+GPIO.setup(default.FINGER_GPIO, GPIO.OUT)  # Set up pin 32 for GPIO usage
+pwm = GPIO.PWM(default.FINGER_GPIO, 50)  # Set up pwm on pin 32
 
 
 #####    Moves finger to starting, retracted position with value of 1
@@ -17,7 +19,7 @@ def startPos(next_func, data):
     # pwm = GPIO.PWM(32, 50)  # Set up pwm on pin 32
     pwm.start(0)  # Set initial pwm of 0
     GPIO.setwarnings(False)  # Disable GPIO warnings
-    GPIO.output(32, True)
+    GPIO.output(default.FINGER_GPIO, True)
     pwm.ChangeDutyCycle(2.055)
 
     data[0](default_delay, pin_off, next_func, data)
@@ -38,7 +40,7 @@ def pressPos(next_func, data):
     # pwm = GPIO.PWM(32, 50)  # Set up pwm on pin 32
     pwm.start(0)  # Set initial pwm of 0
     GPIO.setwarnings(False)  # Disable GPIO warnings
-    GPIO.output(32, True)
+    GPIO.output(default.FINGER_GPIO, True)
     pwm.ChangeDutyCycle(4.777)
 
     data[0](default_delay, pin_off, next_func, data)
@@ -52,7 +54,7 @@ def pressPos(next_func, data):
 
 def pin_off(next_func, data):
     print("in pin_pff")
-    GPIO.output(32, False)
+    GPIO.output(default.FINGER_GPIO, False)
     pwm.ChangeDutyCycle(0)
     if next_func == "start_pos":
         data[0](data[2] - default_delay, startPos, 'check_loop', data)
