@@ -1,13 +1,12 @@
 import tkinter as tk
 
+import FireBase_Functions as fbFuncs
 import Settings_Functions as settings
 import general_button_label as gbl
 import global_variables as gv
 import image_functions as image
 import ocr_functions as ocr
 import ocr_gui_btns as ocrBtns
-import FireBase_Functions as fbFuncs
-
 
 UPDATE_RATE = 500
 
@@ -90,40 +89,36 @@ class OCRMenu(tk.Frame):
             return
 
     #   this is the function that handles the individual steps for a single ocr sampling run
-    # def ocr_run_once(self):
-    #     print("OCR_RUNTIME LOOP: " + str(self.count))
-    #     # mySet = settings.loadSettings('OCRSettings.json')
-    #
-    #     #   load ocrSettings / ocr output file, OCRData.json
-    #     ocrData = settings.loadSettings('OCRData.json')
-    #
-    #     #   capture / crop source image
-    #     image.takeSource()
-    #     image.cropSource(debug=True)
-    #
-    #     #   perform ocr on all cropped images
-    #     ocrData = ocr.do_OCR_all(ocrData, debug=True)
-    #
-    #     #   temporary printout of data captured during this run
-    #     #   this information needs to be passed to display, firebase
-    #     #   dataset is a dict saved in ocrData.json
-    #     #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
-    #
-    #     print("\nOCR data Captured:")
-    #     dataSet = ocrData['dataset']
-    #
-    #     #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
-    #     for entry in dataSet:
-    #         print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
-    #
-    #     #   loop control variables
-    #     self.count += 1
-    #     loop_again = False
-    #     return loop_again
-
     def ocr_run_once(self):
+        print("OCR_RUNTIME LOOP: " + str(self.count))
+        mySet = settings.loadSettings('OCRSettings.json')
+
+        #   load ocrSettings / ocr output file, OCRData.json
         ocrData = settings.loadSettings('OCRData.json')
+
+        #   capture / crop source image
+        image.takeSource()
+        image.cropSource(debug=True)
+
+        #   perform ocr on all cropped images
+        ocrData = ocr.do_OCR_all(ocrData, debug=True)
+
+        #   temporary printout of data captured during this run
+        #   this information needs to be passed to display, firebase
+        #   dataset is a dict saved in ocrData.json
+        #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
+
+        print("\nOCR data Captured:")
         dataSet = ocrData['dataset']
+
+        #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
+        for entry in dataSet:
+            print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
+
+        #   loop control variables
+        endLoop = settings.check_LoopMode(mySet)
+        loop_again = not endLoop
+        return loop_again
 
 
     # Starts the loop to call OCR called by button
