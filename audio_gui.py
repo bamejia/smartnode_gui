@@ -18,7 +18,7 @@ class AudioMenu(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = gbl.GLabel(self, text="Audio Runtime", font=controller.title_font)
+        label = gbl.GLabel(self, text="Audio Menu", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         self.will_update = False  # changed by both button input and internal conditions

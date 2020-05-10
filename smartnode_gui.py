@@ -10,16 +10,6 @@ import global_variables as gv
 import ocr_gui
 import finger_functions as finger
 
-# from firebase import firebase
-# from firecreds import connect_to_firebase
-# import os
-# import json
-# from firebase_admin import db
-
-# import firebase_admin
-# from firebase_admin import credentials
-# from firebase_admin import db
-
 
 UPDATE_RATE = 1000
 
@@ -114,7 +104,7 @@ class SmartnodeGUI(tk.Tk):
             print("App command: " + command)
             if self.finger_press:
                 self.finger_press = False
-                delay, repeats, interval = 700, 0, 700
+                delay, repeats, interval = 500, 0, 500
                 finger.finger_looper(self.after, self.set_finger_press, delay, repeats, interval)
             else:
                 print("Cannot press finger that fast")
@@ -138,11 +128,11 @@ class MainMenu(tk.Frame):
 
         ocr_btn_func = lambda: (
             controller.set_return_frame("MainMenu"),
-            controller.show_frame("OCRRuntime"))
+            controller.show_frame("OCRMenu"))
 
         audio_btn_func = lambda: (
             controller.set_return_frame("MainMenu"),
-            controller.show_frame("AudioRuntime"))
+            controller.show_frame("AudioMenu"))
 
         settings_btn_func = lambda: (
                                 controller.show_frame("Settings"))

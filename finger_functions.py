@@ -70,6 +70,7 @@ def cleanup():
 
 
 # presses finger, holds it, and releases it according to input parameters
+# push_hold has a minimum of 300ms
 def finger_looper(*data):
     print("in finger_looper")
     repeats = data[3]
