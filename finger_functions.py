@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 from time import sleep
+import DEFAULTS as default
 
 
 default_delay = 300
@@ -18,7 +19,7 @@ def startPos(next_func, data):
     # pwm = GPIO.PWM(32, 50)  # Set up pwm on pin 32
     pwm.start(0)  # Set initial pwm of 0
     GPIO.setwarnings(False)  # Disable GPIO warnings
-    GPIO.output(32, True)
+    GPIO.output(default.FINGER_GPIO, True)
     pwm.ChangeDutyCycle(2.055)
 
     data[0](default_delay, pin_off, next_func, data)
@@ -39,7 +40,7 @@ def pressPos(next_func, data):
     # pwm = GPIO.PWM(32, 50)  # Set up pwm on pin 32
     pwm.start(0)  # Set initial pwm of 0
     GPIO.setwarnings(False)  # Disable GPIO warnings
-    GPIO.output(32, True)
+    GPIO.output(default.FINGER_GPIO, True)
     pwm.ChangeDutyCycle(4.777)
 
     data[0](default_delay, pin_off, next_func, data)

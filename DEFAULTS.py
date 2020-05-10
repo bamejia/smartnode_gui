@@ -93,3 +93,5 @@ SCREEN_DIMS = {'width': 800, 'height': 480}
 
 #   Files that must never be deleted
 FORBIDDEN = ['kittens.jpg', 'smartnode_key.json', 'dependencies.txt']
+
+FINGER_GPIO = 40
