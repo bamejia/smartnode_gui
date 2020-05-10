@@ -19,15 +19,17 @@ class AudioMenu(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="Audio Menu", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.grid(row=0, column=0, pady=10, columnspan=3, sticky='nsew')
 
         self.will_update = False  # changed by both button input and internal conditions
         self.button_off = False  # even if will_update loop is set to true, a botton off will always stop the loop
         self.user_setup = False
 
         mySet = settings.loadSettings('audioSettings.json')
+        self.running_display_label = gbl.DLabel(self, text='Running: ' + mySet['running'])
+        self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE)
         self.mode_display_label = gbl.DLabel(self, text='Run mode: ' + mySet['loopMode'])
-        self.mode_display_label.pack(pady=gv.BUTTON_SPACE)
+        self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE)
 
         btn1_fnc = lambda: (
             self.audio_on_off())
@@ -43,9 +45,15 @@ class AudioMenu(tk.Frame):
         back_btn = gbl.GButton(self, text="Go back",
                                command=back_btn_func)
 
-        btn1.pack(pady=gv.BUTTON_SPACE)
-        btn2.pack(pady=gv.BUTTON_SPACE)
-        back_btn.pack(pady=gv.BUTTON_SPACE)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(2, weight=1)
+
+        # btn1.pack(pady=gv.BUTTON_SPACE)
+        # btn2.pack(pady=gv.BUTTON_SPACE)
+        # back_btn.pack(pady=gv.BUTTON_SPACE)
+        btn1.grid(row=2, column=1, pady=gv.BUTTON_SPACE)
+        btn2.grid(row=3, column=1, pady=gv.BUTTON_SPACE)
+        back_btn.grid(row=4, column=1, pady=gv.BUTTON_SPACE)
 
     def audio_detector(self, mySet, data):
         audio.writeAudioFile(*data)
@@ -113,7 +121,7 @@ class AudioStatus(tk.Frame):
         self.label_status.pack(pady=gv.BUTTON_SPACE)
 
         back_btn_func = lambda: (
-            controller.show_frame("AudioRuntime"))
+            controller.show_frame("AudioMenu"))
 
         back_button = gbl.GButton(self, text="Go back",
                                   command=back_btn_func)
@@ -139,7 +147,7 @@ class AudioSettings(tk.Frame):
             controller.show_frame("AudioModeSetup"))
         btn3_fnc = lambda: (
             controller.set_return_frame("AudioSettings"),
-            controller.show_frame("AudioRuntime"))
+            controller.show_frame("AudioMenu"))
         back_btn_func = lambda: (
             controller.show_frame("Settings"))
 

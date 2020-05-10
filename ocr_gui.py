@@ -17,7 +17,8 @@ class OCRMenu(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="OCR Menu", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        # label.pack(side="top", fill="x", pady=10)
+        label.grid(row=0, column=0, pady=10, columnspan=3, sticky='nsew')
 
         # flag for looping OCR
         self.will_update = False  # changed by both button input and internal conditions
@@ -25,8 +26,12 @@ class OCRMenu(tk.Frame):
         self.user_setup = False
 
         mySet = settings.loadSettings('OCRSettings.json')
+        self.running_display_label = gbl.DLabel(self, text='Running: ' + mySet['running'])
+        # self.running_display_label.pack(side='left', pady=gv.BUTTON_SPACE)
+        self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE)
         self.mode_display_label = gbl.DLabel(self, text='Run mode: ' + mySet['loopMode'])
-        self.mode_display_label.pack(pady=gv.BUTTON_SPACE)
+        # self.mode_display_label.pack(side='left', pady=gv.BUTTON_SPACE)
+        self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE)
 
         # List functions called in order on button press
 
@@ -53,9 +58,15 @@ class OCRMenu(tk.Frame):
             'back': gbl.GButton(self, text="Go back")
         }
 
+        count = 2
         for btn in btn_objs:
             btn_objs[btn].configure(command=btn_funcs[btn])
-            btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
+            # btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
+            btn_objs[btn].grid(row=count, column=1, pady=gv.BUTTON_SPACE)
+            count += 1
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(2, weight=1)
 
         self.count = 0
 

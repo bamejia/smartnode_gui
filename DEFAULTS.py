@@ -15,6 +15,7 @@ MAIN_OBJ = {
 OCR_OBJ = {
     'self': 'OCRSettings.json',
     'fb_url': '/pi_test_status/ocr_status/ocr_data/',
+    'running': 'false',
     'loopMode': 'infinite',
     'loopEnd': '',
     'srcImg': 'source.jpg',
@@ -52,6 +53,7 @@ COORD_OBJ = {
 AUDIO_OBJ = {
     'self': 'audioSettings.json',
     'fb_url': '/pi_test_status/audio_status/audio_data/',
+    'running': 'false',
     'loopMode': 'infinite',
     'loopEnd': '',
     'refPath': 'reference.wav',
