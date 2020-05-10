@@ -8,6 +8,7 @@ import ocr_functions as ocr
 import ocr_gui_btns as ocrBtns
 import FireBase_Functions as fbFuncs
 
+
 UPDATE_RATE = 500
 
 

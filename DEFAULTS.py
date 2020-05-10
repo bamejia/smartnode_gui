@@ -60,7 +60,7 @@ AUDIO_OBJ = {
     'loopEnd': '',
     'refPath': 'reference.wav',
     'smplPath': 'sample.wav',
-    'detected': 'False',
+    'detected': 'Not Detected',
     'reference': 0,
 }
 

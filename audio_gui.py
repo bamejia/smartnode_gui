@@ -8,6 +8,7 @@ import general_button_label as gbl
 import global_variables as gv
 from datetime import datetime
 import FireBase_Functions as fbFuncs
+import Utility_Functions as util
 
 
 UPDATE_RATE = 600   # set flag for recording audio sample to see how small this can be made
@@ -62,6 +63,7 @@ class AudioMenu(tk.Frame):
 
         #  updates audio status if sound is detected
         if audio_detection:
+            audio_detection = util.reformatTime(audio_detection)
             self.controller.frames['AudioStatus'].update_status(audio_detection)
 
         # return values of external functions can change will_update flag or user_setup
@@ -82,7 +84,6 @@ class AudioMenu(tk.Frame):
             fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, self.controller.firebase_database)
             self.button_off = False
             self.will_update = False
-            return
 
     # Starts the loop to call OCR called by button
     def audio_on_off(self):
@@ -134,7 +135,8 @@ class AudioStatus(tk.Frame):
         label = gbl.GLabel(self, text="Audio Status", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        self.label_status = gbl.DLabel(self, text="Not Detected")
+        status_label_text = util.reformatTime(settings.loadSettings("audioSettings.json")['detected'])
+        self.label_status = gbl.DLabel(self, text="Time detected: %s" % status_label_text)
         self.label_status.pack(pady=gv.BUTTON_SPACE)
 
         back_btn_func = lambda: (
@@ -146,7 +148,7 @@ class AudioStatus(tk.Frame):
         back_button.pack(pady=gv.BUTTON_SPACE)
 
     def update_status(self, status_update):
-        self.label_status.configure(text=status_update)
+        self.label_status.configure(text="Time detected: %s" % status_update)
 
 
 #   done

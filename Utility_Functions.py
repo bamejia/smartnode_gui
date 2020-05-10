@@ -129,3 +129,10 @@ def checkTime(input):
     endTime = datetime.strptime(json.loads(input), '%Y-%m-%d %H:%M:%S')
     current = datetime.now().replace(microsecond=0)
     return current > endTime
+
+def reformatTime(input_time):
+    if input_time == 'Not Detected':
+        return input_time
+    else:
+        date = datetime.strptime(input_time, "%Y_%m_%d__%H_%M_%S__%f").strftime('%m-%d-%Y %H:%M:%S')
+        return date
