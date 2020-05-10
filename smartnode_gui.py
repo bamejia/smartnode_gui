@@ -97,10 +97,10 @@ class SmartnodeGUI(tk.Tk):
         if command == "ocr_on_off":
             print("App command: " + command)
             return
-            self.frames["OCRRuntime"].ocr_on_off()
+            self.frames["OCRMenu"].ocr_on_off()
         elif command == "audio_on_off":
             print("App command: " + command)
-            self.frames['AudioRuntime'].audio_on_off()
+            self.frames['AudioMenu'].audio_on_off()
         elif command == "press":
             print("App command: " + command)
             if self.finger_press:

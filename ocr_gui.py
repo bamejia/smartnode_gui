@@ -90,43 +90,53 @@ class OCRMenu(tk.Frame):
             return
 
     #   this is the function that handles the individual steps for a single ocr sampling run
+    # def ocr_run_once(self):
+    #     print("OCR_RUNTIME LOOP: " + str(self.count))
+    #     # mySet = settings.loadSettings('OCRSettings.json')
+    #
+    #     #   load ocrSettings / ocr output file, OCRData.json
+    #     ocrData = settings.loadSettings('OCRData.json')
+    #
+    #     #   capture / crop source image
+    #     image.takeSource()
+    #     image.cropSource(debug=True)
+    #
+    #     #   perform ocr on all cropped images
+    #     ocrData = ocr.do_OCR_all(ocrData, debug=True)
+    #
+    #     #   temporary printout of data captured during this run
+    #     #   this information needs to be passed to display, firebase
+    #     #   dataset is a dict saved in ocrData.json
+    #     #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
+    #
+    #     print("\nOCR data Captured:")
+    #     dataSet = ocrData['dataset']
+    #
+    #     #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
+    #     for entry in dataSet:
+    #         print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
+    #
+    #     #   loop control variables
+    #     self.count += 1
+    #     loop_again = False
+    #     return loop_again
+
     def ocr_run_once(self):
-        print("OCR_RUNTIME LOOP: " + str(self.count))
-        # mySet = settings.loadSettings('OCRSettings.json')
-
-        #   load ocrSettings / ocr output file, OCRData.json
         ocrData = settings.loadSettings('OCRData.json')
-
-        #   capture / crop source image
-        image.takeSource()
-        image.cropSource(debug=True)
-
-        #   perform ocr on all cropped images
-        ocrData = ocr.do_OCR_all(ocrData, debug=True)
-
-        #   temporary printout of data captured during this run
-        #   this information needs to be passed to display, firebase
-        #   dataset is a dict saved in ocrData.json
-        #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
-
-        print("\nOCR data Captured:")
         dataSet = ocrData['dataset']
 
-        #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
-        for entry in dataSet:
-            print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
-
-        #   loop control variables
-        self.count += 1
-        loop_again = False
-        return loop_again
 
     # Starts the loop to call OCR called by button
     def ocr_on_off(self):
         self.will_update = not self.will_update
         if self.will_update:
-            mySet = self.preloop_flag_assignments()
-            self.ocr_updater()
+            self.user_setup = settings.loadSettings("mainSettings.json")['OCR_Setup'] == 'True'
+            if self.user_setup:
+                mySet = self.preloop_flag_assignments()
+                self.ocr_updater()
+            else:
+                self.will_update = False
+                self.controller.show_frame("CropSetup")
         else:
             self.button_off = True
 
@@ -158,8 +168,8 @@ class OCRStatus(tk.Frame):
         label = gbl.GLabel(self, text="OCR Status", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        self.label_status = gbl.DLabel(self, text="No Data")
-        self.label_status.pack()
+        self.orc_data_labels = gbl.DLabel(self, text="No Data")
+        self.orc_data_labels.pack()
 
         back_btn_func = lambda: (
             # ,
@@ -171,7 +181,16 @@ class OCRStatus(tk.Frame):
         back_button.pack(pady=gv.BUTTON_SPACE)
 
     def update_status(self, status_update):
-        self.label_status.configure(text=status_update)
+        return
+        if type(status_update)  != dict:
+            if type(self.orc_data_labels) == dict:
+                for ocr_label in self.orc_data_labels:
+                    ocr_label.destroy()
+                self.orc_data_labels = gbl.DLabel(self, text="No Data")
+        else:
+            for ocr_obj in status_update:
+                pass
+            self.orc_data_labels.configure(text=status_update)
 
 
 class OCRSettings(tk.Frame):

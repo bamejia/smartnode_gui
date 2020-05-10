@@ -103,6 +103,7 @@ class AudioMenu(tk.Frame):
 
             else:  # otherwise will switch to sample setup frame for recording
                 print("\tAudio Not Set Up! -> Running recordRef\n")
+                self.will_update = False
                 self.controller.show_frame("SampleSetup")
         else:
             self.button_off = True
