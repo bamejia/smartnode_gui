@@ -6,6 +6,7 @@ import global_variables as gv
 import image_functions as image
 import ocr_functions as ocr
 import ocr_gui_btns as ocrBtns
+import FireBase_Functions as fbFuncs
 
 UPDATE_RATE = 500
 
@@ -28,10 +29,10 @@ class OCRMenu(tk.Frame):
         mySet = settings.loadSettings('OCRSettings.json')
         self.running_display_label = gbl.DLabel(self, text='Running: ' + mySet['running'])
         # self.running_display_label.pack(side='left', pady=gv.BUTTON_SPACE)
-        self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE)
+        self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='w')
         self.mode_display_label = gbl.DLabel(self, text='Run mode: ' + mySet['loopMode'])
         # self.mode_display_label.pack(side='left', pady=gv.BUTTON_SPACE)
-        self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE)
+        self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='e')
 
         # List functions called in order on button press
 
@@ -79,11 +80,17 @@ class OCRMenu(tk.Frame):
             # self.will_update = False
             self.after(UPDATE_RATE, self.ocr_updater)
         else:
+            mySet = settings.changeSetting(settings.loadSettings('OCRSettings.json'), 'running', 'False')
+            self.change_running_label('False')
+            fb_message = {'running': "False"}
+            fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, self.controller.firebase_database)
+            self.will_update = False
             self.button_off = False
             return
 
     #   this is the function that handles the individual steps for a single ocr sampling run
     def ocr_run_once(self):
+        return True
         print("OCR_RUNTIME LOOP: " + str(self.count))
         # mySet = settings.loadSettings('OCRSettings.json')
 
@@ -118,12 +125,29 @@ class OCRMenu(tk.Frame):
     def ocr_on_off(self):
         self.will_update = not self.will_update
         if self.will_update:
+            mySet = self.preloop_flag_assignments()
             self.ocr_updater()
         else:
             self.button_off = True
 
     def change_mode_label(self, new_mode):
         self.mode_display_label.configure(text='Run mode: ' + new_mode)
+
+    def change_running_label(self, running):
+        self.running_display_label.configure(text='Running: ' + running)
+
+    def preloop_flag_assignments(self):
+        self.change_running_label('True')
+        mySet = settings.loadSettings('OCRSettings.json')
+        mySet = settings.changeSetting(mySet, 'running', 'True')
+        # fb_message = {'audio_detected': "not detected"}
+        # fbFuncs.postFirebase(mySet['fb_data_url'], fb_message, self.controller.firebase_database)
+
+        fb_message = {'running': "True"}
+        fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, self.controller.firebase_database)
+
+        self.controller.frames['OCRStatus'].update_status('Not Detected')
+        return mySet
 
 
 class OCRStatus(tk.Frame):
@@ -134,6 +158,9 @@ class OCRStatus(tk.Frame):
         label = gbl.GLabel(self, text="OCR Status", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
+        self.label_status = gbl.DLabel(self, text="No Data")
+        self.label_status.pack()
+
         back_btn_func = lambda: (
             # ,
             controller.show_frame("OCRMenu"))
@@ -142,6 +169,9 @@ class OCRStatus(tk.Frame):
                                   command=back_btn_func)
 
         back_button.pack(pady=gv.BUTTON_SPACE)
+
+    def update_status(self, status_update):
+        self.label_status.configure(text=status_update)
 
 
 class OCRSettings(tk.Frame):
@@ -268,6 +298,8 @@ class OCRModeSetup(tk.Frame):
 
             'save': lambda: (
                 settings.changeSetting(settings.loadSettings("OCRSettings.json"), 'loopMode', self.current_mode),
+                fbFuncs.postFirebase(settings.loadSettings("OCRSettings.json")['fb_status_url'],
+                                     {'run_mode': self.current_mode}, controller.firebase_database),
                 controller.show_frame("OCRSettings")
             ),
 

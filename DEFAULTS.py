@@ -14,8 +14,9 @@ MAIN_OBJ = {
 #   default ocr process settings
 OCR_OBJ = {
     'self': 'OCRSettings.json',
-    'fb_url': '/pi_test_status/ocr_status/ocr_data/',
-    'running': 'false',
+    'fb_data_url': '/pi_test_status/ocr_status/ocr_data/',
+    'fb_status_url': '/pi_test_status/ocr_status/',
+    'running': 'False',
     'loopMode': 'infinite',
     'loopEnd': '',
     'srcImg': 'source.jpg',
@@ -52,8 +53,9 @@ COORD_OBJ = {
 
 AUDIO_OBJ = {
     'self': 'audioSettings.json',
-    'fb_url': '/pi_test_status/audio_status/audio_data/',
-    'running': 'false',
+    'fb_data_url': '/pi_test_status/audio_status/audio_data/',
+    'fb_status_url': '/pi_test_status/audio_status/',
+    'running': 'False',
     'loopMode': 'infinite',
     'loopEnd': '',
     'refPath': 'reference.wav',

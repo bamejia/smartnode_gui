@@ -71,7 +71,7 @@ def loop(mySet, db):
 
         fb_message = {'audio_detected': time_detected}
 
-        postFirebase(mySet['fb_url'], fb_message, db)
+        postFirebase(mySet['fb_data_url'], fb_message, db)
         detected = time_detected
 
     endLoop = getEndConditions(mySet)

@@ -2,6 +2,7 @@ import tkinter as tk  # python 3
 from tkinter import font  as tkfont  # python 3
 
 import firebase_listener
+import FireBase_Functions as fbFuncs
 import Settings_Functions as settings
 import audio_gui
 import finger_gui
@@ -28,7 +29,7 @@ class SmartnodeGUI(tk.Tk):
         window_y = round(gv.WINDOW_L * 2 / 5)
         geometry_dimensions = "%dx%d+%d+%d" % (window_width, window_length, window_x, window_y)
 
-        self.attributes('-fullscreen', True)  # 800x480
+        # self.attributes('-fullscreen', True)  # 800x480
         # self.attributes('-zoomed', True)
         # self.overrideredirect(True)  # gets rid of top minimizing, maximizing, and closing buttons bar
 
@@ -228,6 +229,15 @@ class PopUp(tk.Frame):
         back_button_btn.pack(pady=gv.BUTTON_SPACE)
 
 
+def reset_all_running_flags(app):
+    mySet = settings.changeSetting(settings.loadSettings('OCRSettings.json'), 'running', 'False')
+    fb_message = {'running': "False"}
+    fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, app.firebase_database)
+
+    mySet = settings.changeSetting(settings.loadSettings('audioSettings.json'), 'running', 'False')
+    fb_message = {'running': "False"}
+    fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, app.firebase_database)
+
 if __name__ == "__main__":
     app = SmartnodeGUI()
 
@@ -235,6 +245,8 @@ if __name__ == "__main__":
     app.addFirebaseDatabase(firebase_listener.db)
 
     app.mainloop()
+
+    reset_all_running_flags(app)
 
     finger.cleanup()
     firebase_listener.close()

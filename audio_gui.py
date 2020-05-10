@@ -10,7 +10,7 @@ from datetime import datetime
 import FireBase_Functions as fbFuncs
 
 
-UPDATE_RATE = 600
+UPDATE_RATE = 600   # set flag for recording audio sample to see how small this can be made
 
 
 class AudioMenu(tk.Frame):
@@ -27,9 +27,9 @@ class AudioMenu(tk.Frame):
 
         mySet = settings.loadSettings('audioSettings.json')
         self.running_display_label = gbl.DLabel(self, text='Running: ' + mySet['running'])
-        self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE)
+        self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='w')
         self.mode_display_label = gbl.DLabel(self, text='Run mode: ' + mySet['loopMode'])
-        self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE)
+        self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='e')
 
         btn1_fnc = lambda: (
             self.audio_on_off())
@@ -77,7 +77,11 @@ class AudioMenu(tk.Frame):
             self.after(int(data[3]*1000), self.audio_detector, mySet, data)
         else:
             print("\n\nSample Loop Completed!")
+            self.change_running_label('False')
+            fb_message = {'running': "False"}
+            fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, self.controller.firebase_database)
             self.button_off = False
+            self.will_update = False
             return
 
     # Starts the loop to call OCR called by button
@@ -92,11 +96,8 @@ class AudioMenu(tk.Frame):
             self.user_setup = audio_controller.init_Audio()
 
             if self.user_setup:
-                mySet = settings.loadSettings('audioSettings.json')
-                mySet = settings.changeSetting(mySet, 'detected', False)
+                mySet = self.preloop_flag_assignments()
                 print(f"Setup Complete -> Loop Mode: {mySet['loopMode']}")
-                fb_message = {'audio_detected': "not detected"}
-                fbFuncs.postFirebase(mySet['fb_url'], fb_message, self.controller.firebase_database)
                 self.audio_updater(mySet)
 
             else:  # otherwise will switch to sample setup frame for recording
@@ -107,6 +108,22 @@ class AudioMenu(tk.Frame):
 
     def change_mode_label(self, new_mode):
         self.mode_display_label.configure(text='Run mode: ' + new_mode)
+
+    def change_running_label(self, running):
+        self.running_display_label.configure(text='Running: ' + running)
+
+    def preloop_flag_assignments(self):
+        self.change_running_label('True')
+        mySet = settings.loadSettings('audioSettings.json')
+        mySet = settings.changeSetting(mySet, 'detected', 'Not Detected')
+        fb_message = {'audio_detected': "not detected"}
+        fbFuncs.postFirebase(mySet['fb_data_url'], fb_message, self.controller.firebase_database)
+
+        fb_message = {'running': "True"}
+        fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, self.controller.firebase_database)
+
+        self.controller.frames['AudioStatus'].update_status('Not Detected')
+        return mySet
 
 
 class AudioStatus(tk.Frame):
@@ -219,6 +236,8 @@ class AudioModeSetup(tk.Frame):
         )
         save_func = lambda: (
             settings.changeSetting(settings.loadSettings("audioSettings.json"), 'loopMode', self.current_mode),
+            fbFuncs.postFirebase(settings.loadSettings("audioSettings.json")['fb_status_url'],
+                                 {'run_mode': self.current_mode}, controller.firebase_database),
             controller.show_frame("AudioSettings")
         )
         cancel_func = lambda: (
@@ -240,4 +259,4 @@ class AudioModeSetup(tk.Frame):
     def change_current_mode_display(self, display_text):
         self.current_mode = display_text
         self.mode_label.configure(text=display_text)
-        self.controller.frames['AudioRuntime'].change_mode_label(display_text)
+        self.controller.frames['AudioMenu'].change_mode_label(display_text)
