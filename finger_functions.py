@@ -1,9 +1,8 @@
 import RPi.GPIO as GPIO
-from time import sleep
-
 
 default_delay = 300
 
+GPIO.setwarnings(False)
 
 GPIO.setmode(GPIO.BOARD)  # Set GPIO usage
 GPIO.setup(32, GPIO.OUT)  # Set up pin 32 for GPIO usage
