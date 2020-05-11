@@ -127,7 +127,7 @@ class MainMenu(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, "Main Menu", controller.title_font)
-        label.pack(side="top", fill="x", pady=8)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         ocr_btn_func = lambda: (
             controller.set_return_frame("MainMenu"),
@@ -209,7 +209,7 @@ class PopUp(tk.Frame):
         self.controller = controller
 
         label = gbl.GLabel(self, "Settings", controller.title_font)
-        label.pack(side="top", fill="x", pady=8)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         ocr_settings_func = lambda: (
             controller.show_frame("OCRSettings"))

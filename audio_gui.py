@@ -20,17 +20,23 @@ class AudioMenu(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="Audio Menu", font=controller.title_font)
-        label.grid(row=0, column=0, pady=10, columnspan=3, sticky='nsew')
+        label.grid(row=0, column=0, pady=gv.TITLE_PADY, columnspan=3, sticky='nsew')
 
         self.will_update = False  # changed by both button input and internal conditions
         self.button_off = False  # even if will_update loop is set to true, a botton off will always stop the loop
         self.user_setup = False
 
+        self.holder_label = tk.Label(self)
+        self.holder_label.grid(row=1, column=0, columnspan=3)
+        self.holder_label.configure(background=gv.BACKGROUND_COLOR)
+
         mySet = settings.loadSettings('audioSettings.json')
-        self.running_display_label = gbl.DLabel(self, text='Running: ' + mySet['running'])
-        self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='w')
-        self.mode_display_label = gbl.DLabel(self, text='Run mode: ' + mySet['loopMode'])
-        self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='e')
+        self.running_display_label = gbl.DLabel(self.holder_label, text='Running: ' + mySet['running'])
+        self.running_display_label.pack(side='left', pady=gv.BUTTON_SPACE * 2, padx=gv.BUTTON_SPACE * 2)
+        # self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='w')
+        self.mode_display_label = gbl.DLabel(self.holder_label, text='Run mode: ' + mySet['loopMode'])
+        self.mode_display_label.pack(side='left', pady=gv.BUTTON_SPACE, padx=gv.BUTTON_SPACE)
+        # self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='e')
 
         btn1_fnc = lambda: (
             self.audio_on_off())
@@ -134,7 +140,7 @@ class AudioStatus(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="Audio Status", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         status_label_text = util.reformatTime(settings.loadSettings("audioSettings.json")['detected'])
         self.label_status = gbl.DLabel(self, text="Time detected: %s" % status_label_text)
@@ -159,7 +165,7 @@ class AudioSettings(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="Audio Settings", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         btn1_fnc = lambda: (
             controller.show_frame("SampleSetup"))
@@ -193,7 +199,7 @@ class SampleSetup(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="Sample Setup", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         record_func = lambda: (
             audio.recordRef(),
@@ -227,7 +233,7 @@ class AudioModeSetup(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="Audio Mode Setup", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         self.current_mode = settings.loadSettings('audioSettings.json')['loopMode']
 

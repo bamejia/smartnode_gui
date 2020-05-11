@@ -58,7 +58,6 @@ def init_Audio():
 #   mySet = Audio settings, loaded in start
 def loop(mySet, db):
     print("In Loop Once...")
-    # getData(mySet['smplPath'])
     print(mySet['smplPath'], mySet['reference'])
     detected = processData(mySet['smplPath'], mySet['reference'])
 
@@ -67,11 +66,13 @@ def loop(mySet, db):
         time_detected = datetime.now(tz_NY).strftime('%Y_%m_%d__%H_%M_%S__%f')[:-3]
 
         print("Running Updates")
+        # updates JSON file with the date of when the sample match was found
         mySet = settings.changeSetting(mySet, 'detected', time_detected)
 
+        # posts same data to Firebase
         fb_message = {'audio_detected': time_detected}
-
         postFirebase(mySet['fb_data_url'], fb_message, db)
+
         detected = time_detected
 
     endLoop = getEndConditions(mySet)

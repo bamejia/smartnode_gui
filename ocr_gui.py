@@ -21,20 +21,24 @@ class OCRMenu(tk.Frame):
         self.controller = controller
         label = gbl.GLabel(self, text="OCR Menu", font=controller.title_font)
         # label.pack(side="top", fill="x", pady=10)
-        label.grid(row=0, column=0, pady=10, columnspan=3, sticky='nsew')
+        label.grid(row=0, column=0, pady=gv.TITLE_PADY, columnspan=3, sticky='nsew')
 
         # flag for looping OCR
         self.will_update = False  # changed by both button input and internal conditions
         self.button_off = False  # even if will_update loop is set to true, a botton off will always stop the loop
         self.user_setup = False
 
+        self.holder_label = tk.Label(self)
+        self.holder_label.grid(row=1, column=0, columnspan=3)
+        self.holder_label.configure(background=gv.BACKGROUND_COLOR)
+
         mySet = settings.loadSettings('OCRSettings.json')
-        self.running_display_label = gbl.DLabel(self, text='Running: ' + mySet['running'])
-        # self.running_display_label.pack(side='left', pady=gv.BUTTON_SPACE)
-        self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='w')
-        self.mode_display_label = gbl.DLabel(self, text='Run mode: ' + mySet['loopMode'])
-        # self.mode_display_label.pack(side='left', pady=gv.BUTTON_SPACE)
-        self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='e')
+        self.running_display_label = gbl.DLabel(self.holder_label, text='Running: ' + mySet['running'])
+        self.running_display_label.pack(side='left', pady=gv.BUTTON_SPACE*2, padx=gv.BUTTON_SPACE*2)
+        # self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='w')
+        self.mode_display_label = gbl.DLabel(self.holder_label, text='Run mode: ' + mySet['loopMode'])
+        self.mode_display_label.pack(side='left', pady=gv.BUTTON_SPACE, padx=gv.BUTTON_SPACE)
+        # self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='e')
 
         # List functions called in order on button press
 
@@ -186,7 +190,7 @@ class OCRStatus(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="OCR Status", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         self.no_data_label = gbl.DLabel(self, text="No Data")
         self.no_data_label.pack(pady=gv.BUTTON_SPACE)
@@ -260,7 +264,7 @@ class OCRSettings(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="OCR/Video Settings", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         btn_funcs = {
             'crop_setup': lambda: (
@@ -306,7 +310,7 @@ class CropSetup(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="Crop Setup", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         btn_funcs = {
             'add': lambda: (
@@ -349,7 +353,7 @@ class OCRSetup(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="OCR Setup", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         self.ocr_obj_names = {}
         self.chosen_obj_key = ""
@@ -439,7 +443,7 @@ class OCRCropConfig(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="OCR Crop Config", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         self.dataSet = None
         self.selected_obj = None
@@ -485,7 +489,7 @@ class CropSettingConfig(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="Crop Setting Config", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         self.dataSet = None
         self.selected_obj = None
@@ -541,7 +545,7 @@ class CropNameChange(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="Crop Name Changed", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         self.dataSet = None
         self.selected_obj = None
@@ -592,7 +596,7 @@ class OCRModeSetup(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="OCR Mode Setup", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
         
         self.current_mode = settings.loadSettings("OCRSettings.json")['loopMode']
 

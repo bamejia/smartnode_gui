@@ -11,7 +11,7 @@ class FingerSettings(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
         label = gbl.GLabel(self, text="Finger Settings", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         self.finger_press = True
 
