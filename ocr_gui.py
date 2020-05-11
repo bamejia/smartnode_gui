@@ -377,16 +377,22 @@ class OCRSetup(tk.Frame):
         self.update_obj_names()
 
     def choose_next_ocr_obj(self):
-        myDeque = collections.deque(self.ocr_obj_names)
-        index = myDeque.index(self.choosen_obj_label['text'])
-        myDeque.rotate(-1)
-        self.choosen_obj_label.configure(text=myDeque[index])
+        if self.choosen_obj_label['text'] == 'No Cropped Images':
+            return
+        else:
+            myDeque = collections.deque(self.ocr_obj_names)
+            index = myDeque.index(self.choosen_obj_label['text'])
+            myDeque.rotate(-1)
+            self.choosen_obj_label.configure(text=myDeque[index])
 
     def choose_prev_ocr_obj(self):
-        myDeque = collections.deque(self.ocr_obj_names)
-        index = myDeque.index(self.choosen_obj_label['text'])
-        myDeque.rotate(1)
-        self.choosen_obj_label.configure(text=myDeque[index])
+        if self.choosen_obj_label['text'] == 'No Cropped Images':
+            return
+        else:
+            myDeque = collections.deque(self.ocr_obj_names)
+            index = myDeque.index(self.choosen_obj_label['text'])
+            myDeque.rotate(1)
+            self.choosen_obj_label.configure(text=myDeque[index])
 
     # Not the most optimal way to do it for a very large lists, but works well for small lists
     # Basically remakes the whole list every time with the new ocr data objects
