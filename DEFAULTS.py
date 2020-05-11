@@ -22,15 +22,7 @@ OCR_OBJ = {
 
 OCR_DATA = {
     'self': 'OCRData.json',
-    'dataset': {
-        'crop1': {
-            'name': 'crop1',
-            'file': 'crop1.jpg',
-            'psm': '7',
-            'lang': 'eng',
-            'text': 'null'
-        }
-    }
+    'dataset': {}
 }
 
 #   7 // ssd -> clock display

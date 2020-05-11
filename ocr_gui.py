@@ -90,52 +90,57 @@ class OCRMenu(tk.Frame):
             return
 
     #   this is the function that handles the individual steps for a single ocr sampling run
+    # def ocr_run_once(self):
+    #     print("OCR_RUNTIME LOOP: " + str(self.count))
+    #     mySet = settings.loadSettings('OCRSettings.json')
+    #
+    #     #   load ocrSettings / ocr output file, OCRData.json
+    #     ocrData = settings.loadSettings('OCRData.json')
+    #
+    #     #   capture / crop source image
+    #     image.takeSource()
+    #     image.cropSource(debug=True)
+    #
+    #     #   perform ocr on all cropped images
+    #     ocrData = ocr.do_OCR_all(ocrData, debug=True)
+    #
+    #     #   temporary printout of data captured during this run
+    #     #   this information needs to be passed to display, firebase
+    #     #   dataset is a dict saved in ocrData.json
+    #     #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
+    #
+    #     print("\nOCR data Captured:")
+    #     dataSet = ocrData['dataset']
+    #     data = {'ocr_data' : ""}
+    #     mySet = settings.loadSettings("OCRSettings.json")
+    #     print("DATA SET: " + str(dataSet))
+    #     self.controller.frames['OCRStatus'].update_status(dataSet)
+    #     fbFuncs.postFirebase(mySet['fb_data_url'], data, self.controller.firebase_database)
+    #     return False
+    #     # print(dataSet)
+    #
+    #     #   blank dict to send to firebase
+    #     fbDict = {}
+    #
+    #     #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
+    #     for entry in dataSet:
+    #         print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
+    #         fbDict[dataSet[entry]['name']] = dataSet[entry]['text']
+    #
+    #     print(fbDict)
+    #     #   post name:text values firebase
+    #     fbFuncs.postFirebase(mySet['fb_data_url'], fbDict, self.controller.firebase_database)
+    #
+    #
+    #     #   loop control variables
+    #     endLoop = settings.check_LoopMode(mySet)
+    #     loop_again = not endLoop
+    #     return loop_again
+
     def ocr_run_once(self):
-        print("OCR_RUNTIME LOOP: " + str(self.count))
-        mySet = settings.loadSettings('OCRSettings.json')
-
-        #   load ocrSettings / ocr output file, OCRData.json
         ocrData = settings.loadSettings('OCRData.json')
-
-        #   capture / crop source image
-        image.takeSource()
-        image.cropSource(debug=True)
-
-        #   perform ocr on all cropped images
-        ocrData = ocr.do_OCR_all(ocrData, debug=True)
-
-        #   temporary printout of data captured during this run
-        #   this information needs to be passed to display, firebase
-        #   dataset is a dict saved in ocrData.json
-        #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
-
-        print("\nOCR data Captured:")
         dataSet = ocrData['dataset']
-        data = {'ocr_data' : ""}
-        mySet = settings.loadSettings("OCRSettings.json")
-        print("DATA SET: " + str(dataSet))
         self.controller.frames['OCRStatus'].update_status(dataSet)
-        fbFuncs.postFirebase(mySet['fb_data_url'], data, self.controller.firebase_database)
-        return False
-        # print(dataSet)
-
-        #   blank dict to send to firebase
-        fbDict = {}
-
-        #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
-        for entry in dataSet:
-            print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
-            fbDict[dataSet[entry]['name']] = dataSet[entry]['text']
-
-        print(fbDict)
-        #   post name:text values firebase
-        fbFuncs.postFirebase(mySet['fb_data_url'], fbDict, self.controller.firebase_database)
-
-
-        #   loop control variables
-        endLoop = settings.check_LoopMode(mySet)
-        loop_again = not endLoop
-        return loop_again
 
 
     # Starts the loop to call OCR called by button
@@ -194,6 +199,8 @@ class OCRStatus(tk.Frame):
                                   command=back_btn_func)
 
         self.back_button.pack(pady=gv.BUTTON_SPACE)
+
+        self.update_status(settings.loadSettings('OCRData.json')['dataset'])
 
     def update_status(self, status_update):
         if status_update == []:
@@ -334,22 +341,34 @@ class CropSetup(tk.Frame):
             btn_objs[btn].configure(command=btn_funcs[btn])
             btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
 
+
 class OCRSetup(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = gbl.GLabel(self, text="Crop Setup 2", font=controller.title_font)
+        label = gbl.GLabel(self, text="OCR Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         back_btn_func = lambda: (
-            # ,
-            controller.show_frame("CropSetup")
+            controller.show_frame("OCRSettings")
+        )
+        back_btn_func = lambda: (
+            controller.show_frame("OCRSettings")
+        )
+        back_btn_func = lambda: (
+            controller.show_frame("OCRSettings")
+        )
+        back_btn_func = lambda: (
+            controller.show_frame("OCRSettings")
         )
 
         back_btn = gbl.GButton(self, text="Go back", command=back_btn_func)
 
         back_btn.pack(pady=gv.BUTTON_SPACE)
+
+    def update_status(self, status_update):
+        self.label_status.configure(text="Time detected: %s" % status_update)
 
 
 class OCRModeSetup(tk.Frame):
