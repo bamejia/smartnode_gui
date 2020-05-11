@@ -9,6 +9,7 @@ import ocr_functions as ocr
 import ocr_gui_btns as ocrBtns
 import collections
 import DEFAULTS as defaults
+from tkinter import font as tkfont
 
 UPDATE_RATE = 500
 
@@ -28,17 +29,26 @@ class OCRMenu(tk.Frame):
         self.button_off = False  # even if will_update loop is set to true, a botton off will always stop the loop
         self.user_setup = False
 
-        self.holder_label = tk.Label(self)
-        self.holder_label.grid(row=1, column=0, columnspan=3)
-        self.holder_label.configure(background=gv.BACKGROUND_COLOR)
+        holder_frame = gbl.DFrame(self)
+        holder_frame.grid(row=1, column=0, columnspan=3, pady=gv.LABEL_PADY)
 
         mySet = settings.loadSettings('OCRSettings.json')
-        self.running_display_label = gbl.DLabel(self.holder_label, text='Running: ' + mySet['running'])
-        self.running_display_label.pack(side='left', pady=gv.BUTTON_SPACE*2, padx=gv.BUTTON_SPACE*2)
-        # self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='w')
-        self.mode_display_label = gbl.DLabel(self.holder_label, text='Run mode: ' + mySet['loopMode'])
-        self.mode_display_label.pack(side='left', pady=gv.BUTTON_SPACE, padx=gv.BUTTON_SPACE)
-        # self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='e')
+        self.running_display_label = tk.Label(holder_frame, text='Running: ' + mySet['running'])
+        self.running_display_label.configure(background=gv.LABEL_COLOR, font=tkfont.Font(size=26),
+                                             fg=gv.LABEL_FONT_COLOR, justify='left')
+        self.running_display_label.pack(side='left', pady=gv.LABEL_PADY, padx=gv.LABEL_PADX)
+        # self.running_display_label.grid(column=0, pady=gv.LABEL_PADY, padx=gv.LABEL_PADX)
+
+        x_padding_label = tk.Label(holder_frame)
+        x_padding_label.configure(background=gv.LABEL_COLOR)
+        x_padding_label.pack(side='left', padx=gv.LABEL_PADX*3)
+        # self.x_padding_label.grid(column=1, pady=gv.LABEL_PADY, padx=gv.LABEL_PADX)
+
+        self.mode_display_label = tk.Label(holder_frame, text='Run mode: ' + mySet['loopMode'])
+        self.mode_display_label.configure(background=gv.LABEL_COLOR, font=tkfont.Font(size=26),
+                                          fg=gv.LABEL_FONT_COLOR, justify='right')
+        # self.mode_display_label.grid(column=2, pady=gv.LABEL_PADY, padx=gv.LABEL_PADX)
+        self.mode_display_label.pack(side='left', pady=gv.LABEL_PADY, padx=gv.LABEL_PADX)
 
         # List functions called in order on button press
 
@@ -293,9 +303,9 @@ class OCRSettings(tk.Frame):
         }
 
         btn_objs = {
-            'crop_setup': gbl.GButton(self, text="Cropping Setup"),
-            'mode': gbl.GButton(self, text="Loop Mode: "),
+            'crop_setup': gbl.GButton(self, text="Crop Setup"),
             'ocr_setup': gbl.GButton(self, text="OCR Setup"),
+            'mode': gbl.GButton(self, text="Run Mode"),
             'back': gbl.GButton(self, text="Go back"),
         }
 
@@ -375,7 +385,7 @@ class OCRSetup(tk.Frame):
 
         next_btn = gbl.GButton(self, text="Next Crop", command=next_func)
         prev_btn = gbl.GButton(self, text="Prev Crop", command=prev_func)
-        confirm_btn = gbl.GButton(self, text="Confirm", command=confirm_func)
+        confirm_btn = gbl.GButton(self, text="Choose Crop", command=confirm_func)
         back_btn = gbl.GButton(self, text="Go back", command=back_btn_func)
 
         next_btn.pack(pady=gv.BUTTON_SPACE)

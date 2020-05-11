@@ -19,10 +19,17 @@ class GLabel(tk.Label):
     def __init__(self, frame, text, font):
         tk.Label.__init__(self, frame, text=text, font=font, bg=gv.TITLE_COLOR, fg=gv.BUTTON_FONT_COLOR,
                          bd=gv.TITLE_DEPTH, relief=tk.RAISED, pady=gv.TITLE_PADY)
+        self.configure(font=tk.font.Font(size=26), justify='center')
 
 
 class DLabel(tk.Label):
     def __init__(self, frame, text):
-        tk.Label.__init__(self, frame, text=text, bg=gv.LABEL_COLOR, fg=gv.LABEL_FONT_COLOR, bd=gv.TITLE_DEPTH,
+        tk.Label.__init__(self, frame, text=text, bg=gv.LABEL_COLOR, fg=gv.LABEL_FONT_COLOR, bd=gv.LABEL_DEPTH,
                           relief=tk.SUNKEN, height=gv.BUTTON_HEIGHT, pady=gv.LABEL_PADY, padx=gv.LABEL_PADX)
-        self.configure(font=tk.font.Font(size=26))
+        self.configure(font=tk.font.Font(size=26), justify='center')
+
+
+class DFrame(tk.Frame):
+    def __init__(self, frame):
+        tk.Frame.__init__(self, frame, bg=gv.LABEL_COLOR, bd=gv.LABEL_DEPTH,
+                          relief=tk.SUNKEN, height=gv.BUTTON_HEIGHT, pady=gv.LABEL_PADY, padx=gv.LABEL_PADX)

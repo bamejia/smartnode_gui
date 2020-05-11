@@ -9,6 +9,7 @@ import global_variables as gv
 from datetime import datetime
 import FireBase_Functions as fbFuncs
 import Utility_Functions as util
+from tkinter import font as tkfont
 
 
 UPDATE_RATE = 600   # set flag for recording audio sample to see how small this can be made
@@ -26,17 +27,23 @@ class AudioMenu(tk.Frame):
         self.button_off = False  # even if will_update loop is set to true, a botton off will always stop the loop
         self.user_setup = False
 
-        self.holder_label = tk.Label(self)
-        self.holder_label.grid(row=1, column=0, columnspan=3)
-        self.holder_label.configure(background=gv.BACKGROUND_COLOR)
+        holder_frame = gbl.DFrame(self)
+        holder_frame.grid(row=1, column=0, columnspan=3, pady=gv.LABEL_PADY)
 
         mySet = settings.loadSettings('audioSettings.json')
-        self.running_display_label = gbl.DLabel(self.holder_label, text='Running: ' + mySet['running'])
-        self.running_display_label.pack(side='left', pady=gv.BUTTON_SPACE * 2, padx=gv.BUTTON_SPACE * 2)
-        # self.running_display_label.grid(column=0, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='w')
-        self.mode_display_label = gbl.DLabel(self.holder_label, text='Run mode: ' + mySet['loopMode'])
-        self.mode_display_label.pack(side='left', pady=gv.BUTTON_SPACE, padx=gv.BUTTON_SPACE)
-        # self.mode_display_label.grid(column=1, row=1, columnspan=2, pady=gv.BUTTON_SPACE, sticky='e')
+        self.running_display_label = tk.Label(holder_frame, text='Running: ' + mySet['running'])
+        self.running_display_label.configure(background=gv.LABEL_COLOR, font=tkfont.Font(size=26),
+                                             fg=gv.LABEL_FONT_COLOR, justify='left')
+        self.running_display_label.pack(side='left', pady=gv.LABEL_PADY, padx=gv.LABEL_PADX)
+
+        x_padding_label = tk.Label(holder_frame)
+        x_padding_label.configure(background=gv.LABEL_COLOR)
+        x_padding_label.pack(side='left', padx=gv.LABEL_PADX * 3)
+
+        self.mode_display_label = tk.Label(holder_frame, text='Run mode: ' + mySet['loopMode'])
+        self.mode_display_label.configure(background=gv.LABEL_COLOR, font=tkfont.Font(size=26),
+                                          fg=gv.LABEL_FONT_COLOR, justify='right')
+        self.mode_display_label.pack(side='left', pady=gv.LABEL_PADY, padx=gv.LABEL_PADX)
 
         btn1_fnc = lambda: (
             self.audio_on_off())
@@ -171,9 +178,9 @@ class AudioSettings(tk.Frame):
             controller.show_frame("SampleSetup"))
         btn2_fnc = lambda: (
             controller.show_frame("AudioModeSetup"))
-        btn3_fnc = lambda: (
-            controller.set_return_frame("AudioSettings"),
-            controller.show_frame("AudioMenu"))
+        # btn3_fnc = lambda: (
+        #     controller.set_return_frame("AudioSettings"),
+        #     controller.show_frame("AudioMenu"))
         back_btn_func = lambda: (
             controller.show_frame("Settings"))
 
@@ -181,14 +188,14 @@ class AudioSettings(tk.Frame):
                            command=btn1_fnc)
         btn2 = gbl.GButton(self, text="Run Mode",
                            command=btn2_fnc)
-        btn3 = gbl.GButton(self, text="Test Run",
-                           command=btn3_fnc)
+        # btn3 = gbl.GButton(self, text="Test Run",
+        #                    command=btn3_fnc)
         back_btn = gbl.GButton(self, text="Go back",
                                command=back_btn_func)
 
         btn1.pack(pady=gv.BUTTON_SPACE)
         btn2.pack(pady=gv.BUTTON_SPACE)
-        btn3.pack(pady=gv.BUTTON_SPACE)
+        # btn3.pack(pady=gv.BUTTON_SPACE)
         back_btn.pack(pady=gv.BUTTON_SPACE)
 
 
