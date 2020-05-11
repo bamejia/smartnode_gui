@@ -7,8 +7,6 @@ MAIN_OBJ = {
     'FB_Enabled': 'True',
     'OCR_Setup': 'False',
     'Audio_Setup': 'False',
-    'OCR_Active': 'False',
-    'Audio_Active': 'False'
 }
 
 #   default ocr process settings
@@ -40,7 +38,7 @@ OCR_DATA_ENTRY = {
     'name': 'crop1',
     'file': 'crop1.jpg',
     'psm': '7',
-    'lang': 'eng',
+    'lang': 'ssd',
     'text': 'null'
 }
 
@@ -64,14 +62,6 @@ AUDIO_OBJ = {
     'reference': 0,
 }
 
-FB_OBJ = {
-    'self': 'firebaseSettings.json',
-    'connected': 'False',
-    'msg_from_fb': 'NOT_YET_IMPLEMENTED',
-    'msg_to_fb': '',
-    'msg_dest_url': ''
-}
-
 
 #   List of all settings objects -> used when generating missing files
 LIST_ALL = {
@@ -79,7 +69,6 @@ LIST_ALL = {
     'OCRSettings.json': OCR_OBJ,
     'OCRData.json': OCR_DATA,
     'audioSettings.json': AUDIO_OBJ,
-    'firebaseSettings.json': FB_OBJ,
 }
 
 #   list of valid loop types
