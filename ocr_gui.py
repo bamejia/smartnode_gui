@@ -125,11 +125,11 @@ class OCRMenu(tk.Frame):
     def ocr_run_once(self):
         ocrData = settings.loadSettings('OCRData.json')
         dataSet = ocrData['dataset']
+        data = {'ocr_data' : ""}
+        mySet = settings.loadSettings("OCRSettings.json")
         print("DATA SET: " + str(dataSet))
         self.controller.frames['OCRStatus'].update_status(dataSet)
-        # mySet = settings.loadSettings('OCRSettings.json')
-        # # self.controller.firebase_database.child('pi_test_status').child("audio_status").update(dataSet)
-        # fbFuncs.postFirebase(mySet['fb_data_url'], dataSet, self.controller.firebase_database)
+        fbFuncs.postFirebase(mySet['fb_data_url'], data, self.controller.firebase_database)
         return False
         # print(dataSet)
 
