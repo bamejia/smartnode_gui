@@ -110,12 +110,17 @@ class OCRMenu(tk.Frame):
 
         print("\nOCR data Captured:")
         dataSet = ocrData['dataset']
+
+        #   blank dict to send to firebase
+        fbDict = {}
+
         #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
         for entry in dataSet:
             print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
+            fbDict[dataSet[entry]['name']] = dataSet[entry]['text']
 
-        #   update firebase
-
+        #   post name:text values firebase
+        fbFuncs.postFirebase(mySet['fb_data_url'], fbDict)
 
 
         #   loop control variables
