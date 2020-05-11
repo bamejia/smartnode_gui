@@ -71,6 +71,14 @@ LOOP_TYPES = ['infinite', 'single', 'timed', 'press']
 AUDIO_LOOP_TYPES = ['infinite', 'single', 'timed', 'press']
 OCR_LOOP_TYPES = ['infinite', 'single', 'timed', 'press']
 
+
+#   list of psm options
+PSM_OPTIONS = ['7', '8']
+
+
+#   list of language options
+LANG_OPTIONS = ['eng', 'ssd']
+
 #   touchscreen dimensions
 SCREEN_DIMS = {'width': 800, 'height': 480}
 

@@ -68,3 +68,9 @@ def next_mode(current_mode):
     index = myDeque.index(current_mode)
     myDeque.rotate(-1)
     return myDeque[index]
+
+def next_option(current_option, options):
+    myDeque = collections.deque(options)
+    index = myDeque.index(current_option)
+    myDeque.rotate(-1)
+    return myDeque[index]
