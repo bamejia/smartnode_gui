@@ -51,7 +51,7 @@ class SmartnodeGUI(tk.Tk):
             ocr_gui.OCRMenu,
             ocr_gui.OCRSettings,
             ocr_gui.CropSetup,
-            ocr_gui.CropSetup2,
+            ocr_gui.OCRSetup,
             ocr_gui.OCRModeSetup,
             ocr_gui.OCRStatus,
             audio_gui.AudioMenu,

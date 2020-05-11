@@ -127,6 +127,9 @@ class OCRMenu(tk.Frame):
         dataSet = ocrData['dataset']
         print("DATA SET: " + str(dataSet))
         self.controller.frames['OCRStatus'].update_status(dataSet)
+        # mySet = settings.loadSettings('OCRSettings.json')
+        # # self.controller.firebase_database.child('pi_test_status').child("audio_status").update(dataSet)
+        # fbFuncs.postFirebase(mySet['fb_data_url'], dataSet, self.controller.firebase_database)
         return False
         # print(dataSet)
 
@@ -155,6 +158,7 @@ class OCRMenu(tk.Frame):
         self.change_running_label('True')
         mySet = settings.loadSettings('OCRSettings.json')
         mySet = settings.changeSetting(mySet, 'running', 'True')
+
         # fb_message = {'audio_detected': "not detected"}
         # fbFuncs.postFirebase(mySet['fb_data_url'], fb_message, self.controller.firebase_database)
 
@@ -326,7 +330,7 @@ class CropSetup(tk.Frame):
             btn_objs[btn].configure(command=btn_funcs[btn])
             btn_objs[btn].pack(pady=gv.BUTTON_SPACE)
 
-class CropSetup2(tk.Frame):
+class OCRSetup(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
