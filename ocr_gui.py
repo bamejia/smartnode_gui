@@ -7,6 +7,7 @@ import global_variables as gv
 import image_functions as image
 import ocr_functions as ocr
 import ocr_gui_btns as ocrBtns
+import collections
 
 UPDATE_RATE = 500
 
@@ -192,7 +193,6 @@ class OCRStatus(tk.Frame):
         self.orc_data_labels = {}
 
         back_btn_func = lambda: (
-            # ,
             controller.show_frame("OCRMenu"))
 
         self.back_button = gbl.GButton(self, text="Go back",
@@ -202,6 +202,7 @@ class OCRStatus(tk.Frame):
 
         self.update_status(settings.loadSettings('OCRData.json')['dataset'])
 
+    # Dynamically creates or destroys labels according to the dataset dict passed from OCRData.json
     def update_status(self, status_update):
         if status_update == []:
             if self.orc_data_labels == {}:
@@ -253,8 +254,6 @@ class OCRStatus(tk.Frame):
                     found = False
 
 
-
-
 class OCRSettings(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -264,7 +263,7 @@ class OCRSettings(tk.Frame):
         label.pack(side="top", fill="x", pady=10)
 
         btn_funcs = {
-            'setup': lambda: (
+            'crop_setup': lambda: (
                 #   make sure all the settings for OCR are loaded
                 settings.loadSettings('OCRSettings.json'),
                 settings.loadSettings('OCRData.json'),
@@ -279,10 +278,8 @@ class OCRSettings(tk.Frame):
                 controller.show_frame("OCRModeSetup")
             ),
 
-            'test': lambda: (
-                # ,
-                controller.set_return_frame("OCRSettings"),
-                controller.show_frame("OCRMenu")
+            'ocr_setup': lambda: (
+                controller.show_frame("OCRSetup")
             ),
 
             'back': lambda: (
@@ -292,9 +289,9 @@ class OCRSettings(tk.Frame):
         }
 
         btn_objs = {
-            'setup': gbl.GButton(self, text="Cropping Setup"),
+            'crop_setup': gbl.GButton(self, text="Cropping Setup"),
             'mode': gbl.GButton(self, text="Loop Mode: "),
-            'test': gbl.GButton(self, text="Test Run"),
+            'ocr_setup': gbl.GButton(self, text="OCR Setup"),
             'back': gbl.GButton(self, text="Go back"),
         }
 
@@ -325,8 +322,8 @@ class CropSetup(tk.Frame):
             ),
 
             'back': lambda: (
-                # ,
-                controller.show_frame("OCRSettings")
+                controller.show_frame("OCRSettings"),
+                controller.frames['OCRSetup'].update_obj_names()
             )
         }
 
@@ -350,25 +347,61 @@ class OCRSetup(tk.Frame):
         label = gbl.GLabel(self, text="OCR Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        back_btn_func = lambda: (
-            controller.show_frame("OCRSettings")
+        self.ocr_obj_names = []
+        self.choosen_obj_label = gbl.DLabel(self, text='No Cropped Images')
+        self.choosen_obj_label.pack(pady=gv.BUTTON_SPACE)
+
+        next_func = lambda: (
+            self.choose_next_ocr_obj()
         )
-        back_btn_func = lambda: (
-            controller.show_frame("OCRSettings")
+        prev_func = lambda: (
+            self.choose_prev_ocr_obj()
         )
-        back_btn_func = lambda: (
+        confirm_func = lambda: (
             controller.show_frame("OCRSettings")
         )
         back_btn_func = lambda: (
             controller.show_frame("OCRSettings")
         )
 
+        next_btn = gbl.GButton(self, text="Next Crop", command=next_func)
+        prev_btn = gbl.GButton(self, text="Prev Crop", command=prev_func)
+        confirm_btn = gbl.GButton(self, text="Confirm", command=confirm_func)
         back_btn = gbl.GButton(self, text="Go back", command=back_btn_func)
 
+        next_btn.pack(pady=gv.BUTTON_SPACE)
+        prev_btn.pack(pady=gv.BUTTON_SPACE)
+        confirm_btn.pack(pady=gv.BUTTON_SPACE)
         back_btn.pack(pady=gv.BUTTON_SPACE)
 
-    def update_status(self, status_update):
-        self.label_status.configure(text="Time detected: %s" % status_update)
+        self.update_obj_names()
+
+    def choose_next_ocr_obj(self):
+        myDeque = collections.deque(self.ocr_obj_names)
+        index = myDeque.index(self.choosen_obj_label['text'])
+        myDeque.rotate(-1)
+        self.choosen_obj_label.configure(text=myDeque[index])
+
+    def choose_prev_ocr_obj(self):
+        myDeque = collections.deque(self.ocr_obj_names)
+        index = myDeque.index(self.choosen_obj_label['text'])
+        myDeque.rotate(1)
+        self.choosen_obj_label.configure(text=myDeque[index])
+
+    # Not the most optimal way to do it for a very large lists, but works well for small lists
+    # Basically remakes the whole list every time with the new ocr data objects
+    def update_obj_names(self):
+        dataSet = settings.loadSettings("OCRData.json")['dataset']
+        obj_ref_list = []
+        for obj_ref in dataSet:
+            obj_ref_list.append(obj_ref)
+        if obj_ref_list == []:
+            self.choosen_obj_label.configure(text='No Cropped Images')
+        else:
+            for obj_ref in obj_ref_list:
+                self.choosen_obj_label.configure(text=obj_ref)
+                break
+        self.ocr_obj_names = obj_ref_list
 
 
 class OCRModeSetup(tk.Frame):
