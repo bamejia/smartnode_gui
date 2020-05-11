@@ -38,6 +38,14 @@ pip3 install pytesseract
 #check tesseract version		-	should be 4.0.0
 tesseract --version
 
+#7-segment display trained data
+-> download file from:
+https://drive.google.com/file/d/1LBWIkB24gcSu_rV0zg1SwX0YEQToRidW/view
+
+copy file to this directory (sudo needed):
+/usr/share/tesseract-ocr/4.00/tessdata/
+
+
 
 #	stuff needed for audio
 pip3 install scipy
