@@ -110,10 +110,13 @@ class OCRMenu(tk.Frame):
 
         print("\nOCR data Captured:")
         dataSet = ocrData['dataset']
-
         #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
         for entry in dataSet:
             print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
+
+        #   update firebase
+
+
 
         #   loop control variables
         endLoop = settings.check_LoopMode(mySet)

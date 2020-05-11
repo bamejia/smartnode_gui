@@ -33,6 +33,9 @@ OCR_DATA = {
     }
 }
 
+#   7 // ssd -> clock display
+#   8 // eng -> single line of text
+
 #   default OCR_DATA['dataset'] entry
 OCR_DATA_ENTRY = {
     'name': 'crop1',
