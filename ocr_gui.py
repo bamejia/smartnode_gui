@@ -80,6 +80,7 @@ class OCRMenu(tk.Frame):
             # return values of external functions can change will_update flag or user_setup
             # self.will_update = False
             self.after(UPDATE_RATE, self.ocr_updater)
+
         else:
             mySet = settings.changeSetting(settings.loadSettings('OCRSettings.json'), 'running', 'False')
             self.change_running_label('False')
@@ -124,6 +125,10 @@ class OCRMenu(tk.Frame):
     def ocr_run_once(self):
         ocrData = settings.loadSettings('OCRData.json')
         dataSet = ocrData['dataset']
+        print("DATA SET: " + str(dataSet))
+        self.controller.frames['OCRStatus'].update_status(dataSet)
+        return False
+        # print(dataSet)
 
 
     # Starts the loop to call OCR called by button
@@ -156,7 +161,7 @@ class OCRMenu(tk.Frame):
         fb_message = {'running': "True"}
         fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, self.controller.firebase_database)
 
-        self.controller.frames['OCRStatus'].update_status('No Data')
+        self.controller.frames['OCRStatus'].update_status({})
         return mySet
 
 
@@ -168,29 +173,71 @@ class OCRStatus(tk.Frame):
         label = gbl.GLabel(self, text="OCR Status", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        self.orc_data_labels = gbl.DLabel(self, text="No Data")
-        self.orc_data_labels.pack()
+        self.no_data_label = gbl.DLabel(self, text="No Data")
+        self.no_data_label.pack(pady=gv.BUTTON_SPACE)
+
+        self.orc_data_labels = {}
 
         back_btn_func = lambda: (
             # ,
             controller.show_frame("OCRMenu"))
 
-        back_button = gbl.GButton(self, text="Go back",
+        self.back_button = gbl.GButton(self, text="Go back",
                                   command=back_btn_func)
 
-        back_button.pack(pady=gv.BUTTON_SPACE)
+        self.back_button.pack(pady=gv.BUTTON_SPACE)
 
     def update_status(self, status_update):
-        return
-        if type(status_update)  != dict:
-            if type(self.orc_data_labels) == dict:
-                for ocr_label in self.orc_data_labels:
-                    ocr_label.destroy()
-                self.orc_data_labels = gbl.DLabel(self, text="No Data")
+        if status_update == []:
+            if self.orc_data_labels == {}:
+                return
+            else:
+                for ocr_obj_name in list(self.orc_data_labels):
+                    self.orc_data_labels[ocr_obj_name].destroy()
+                    del self.orc_data_labels[ocr_obj_name]
+                self.back_button.pack_forget()
+                self.no_data_label.pack(pady=gv.BUTTON_SPACE)
+                self.back_button.pack(pady=gv.BUTTON_SPACE)
         else:
-            for ocr_obj in status_update:
-                pass
-            self.orc_data_labels.configure(text=status_update)
+            if self.orc_data_labels == {}:
+                self.no_data_label.pack_forget()
+                self.back_button.pack_forget()
+                for ocr_obj_name in status_update:
+                    ocr_obj = status_update[ocr_obj_name]
+                    label_string = "%s: %s" % (ocr_obj_name, ocr_obj['text'])
+                    obj_label = gbl.DLabel(self, text=label_string)
+                    self.orc_data_labels[ocr_obj_name] = obj_label
+                    obj_label.pack(pady=gv.BUTTON_SPACE)
+                self.back_button.pack(pady=gv.BUTTON_SPACE)
+            else:
+                found = False
+                for ocr_label_name in list(self.orc_data_labels):
+                    for ocr_obj_name in status_update:
+                        if ocr_obj_name == ocr_label_name:
+                            found = True
+                            ocr_obj_text = str(status_update[ocr_obj_name]['text'])
+                            print(type(ocr_obj_text))
+                            self.orc_data_labels[ocr_label_name].configure(text=ocr_obj_text)
+                            break
+                    if not found:
+                        self.orc_data_labels[ocr_label_name].destroy()
+                        del self.orc_data_labels[ocr_label_name]
+                    found = False
+                for ocr_obj_name in status_update:
+                    for ocr_label_name in list(self.orc_data_labels):
+                        if ocr_obj_name == ocr_label_name:
+                            found = True
+                            break
+                    if not found:
+                        self.back_button.pack_forget()
+                        ocr_obj_text = status_update[ocr_obj_name]['text']
+                        ocr_label = gbl.DLabel(self, text=ocr_obj_text)
+                        self.orc_data_labels[ocr_obj_name] = ocr_label
+                        ocr_label.pack(pady=gv.BUTTON_SPACE)
+                        self.back_button.pack(pady=gv.BUTTON_SPACE)
+                    found = False
+
+
 
 
 class OCRSettings(tk.Frame):
