@@ -119,8 +119,9 @@ class OCRMenu(tk.Frame):
             print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
             fbDict[dataSet[entry]['name']] = dataSet[entry]['text']
 
+        print(fbDict)
         #   post name:text values firebase
-        fbFuncs.postFirebase(mySet['fb_data_url'], fbDict)
+        fbFuncs.postFirebase(mySet['fb_data_url'], fbDict, self.controller.firebase_database)
 
 
         #   loop control variables

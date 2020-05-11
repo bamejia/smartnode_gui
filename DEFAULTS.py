@@ -12,7 +12,7 @@ MAIN_OBJ = {
 #   default ocr process settings
 OCR_OBJ = {
     'self': 'OCRSettings.json',
-    'fb_data_url': '/pi_test_status/ocr_status/ocr_data/',
+    'fb_data_url': '/pi_test_status/ocr_status/',
     'fb_status_url': '/pi_test_status/ocr_status/',
     'running': 'False',
     'loopMode': 'infinite',

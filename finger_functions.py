@@ -1,14 +1,16 @@
-import RPi.GPIO as GPIO
-from time import sleep
 import DEFAULTS as default
 
+try:
+    import RPi.GPIO as GPIO
 
-default_delay = 300
+    default_delay = 300
 
+    GPIO.setmode(GPIO.BOARD)  # Set GPIO usage
+    GPIO.setup(default.FINGER_GPIO, GPIO.OUT)  # Set up pin 32 for GPIO usage
+    pwm = GPIO.PWM(default.FINGER_GPIO, 50)  # Set up pwm on pin 32
 
-GPIO.setmode(GPIO.BOARD)  # Set GPIO usage
-GPIO.setup(default.FINGER_GPIO, GPIO.OUT)  # Set up pin 32 for GPIO usage
-pwm = GPIO.PWM(default.FINGER_GPIO, 50)  # Set up pwm on pin 32
+except ModuleNotFoundError:
+    print("GPIO library not imported!")
 
 
 #####    Moves finger to starting, retracted position with value of 1
@@ -67,7 +69,10 @@ def pin_off(next_func, data):
 
 
 def cleanup():
-    GPIO.cleanup()
+    try:
+        GPIO.cleanup()
+    except NameError:
+        print("unable to clean up GPIO")
 
 
 # presses finger, holds it, and releases it according to input parameters
