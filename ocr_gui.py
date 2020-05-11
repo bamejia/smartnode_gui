@@ -209,9 +209,9 @@ class OCRStatus(tk.Frame):
             if self.orc_data_labels == {}:
                 return
             else:
-                for ocr_obj_name in list(self.orc_data_labels):
-                    self.orc_data_labels[ocr_obj_name].destroy()
-                    del self.orc_data_labels[ocr_obj_name]
+                for ocr_obj_key in list(self.orc_data_labels):
+                    self.orc_data_labels[ocr_obj_key].destroy()
+                    del self.orc_data_labels[ocr_obj_key]
                 self.back_button.pack_forget()
                 self.no_data_label.pack(pady=gv.BUTTON_SPACE)
                 self.back_button.pack(pady=gv.BUTTON_SPACE)
@@ -219,37 +219,36 @@ class OCRStatus(tk.Frame):
             if self.orc_data_labels == {}:
                 self.no_data_label.pack_forget()
                 self.back_button.pack_forget()
-                for ocr_obj_name in status_update:
-                    ocr_obj = status_update[ocr_obj_name]
-                    label_string = "%s: %s" % (ocr_obj_name, ocr_obj['text'])
+                for ocr_obj_key in status_update:
+                    ocr_obj = status_update[ocr_obj_key]
+                    label_string = "%s: %s" % (status_update[ocr_obj_key]['name'], status_update[ocr_obj_key]['text'])
                     obj_label = gbl.DLabel(self, text=label_string)
-                    self.orc_data_labels[ocr_obj_name] = obj_label
+                    self.orc_data_labels[ocr_obj_key] = obj_label
                     obj_label.pack(pady=gv.BUTTON_SPACE)
                 self.back_button.pack(pady=gv.BUTTON_SPACE)
             else:
                 found = False
                 for ocr_label_name in list(self.orc_data_labels):
-                    for ocr_obj_name in status_update:
-                        if ocr_obj_name == ocr_label_name:
+                    for ocr_obj_key in status_update:
+                        if ocr_obj_key == ocr_label_name:
                             found = True
-                            ocr_obj_text = str(status_update[ocr_obj_name]['text'])
-                            print(type(ocr_obj_text))
-                            self.orc_data_labels[ocr_label_name].configure(text=ocr_obj_text)
+                            label_string = "%s: %s" % (status_update[ocr_obj_key]['name'], status_update[ocr_obj_key]['text'])
+                            self.orc_data_labels[ocr_label_name].configure(text=label_string)
                             break
                     if not found:
                         self.orc_data_labels[ocr_label_name].destroy()
                         del self.orc_data_labels[ocr_label_name]
                     found = False
-                for ocr_obj_name in status_update:
+                for ocr_obj_key in status_update:
                     for ocr_label_name in list(self.orc_data_labels):
-                        if ocr_obj_name == ocr_label_name:
+                        if ocr_obj_key == ocr_label_name:
                             found = True
                             break
                     if not found:
                         self.back_button.pack_forget()
-                        ocr_obj_text = status_update[ocr_obj_name]['text']
-                        ocr_label = gbl.DLabel(self, text=ocr_obj_text)
-                        self.orc_data_labels[ocr_obj_name] = ocr_label
+                        label_string = "%s: %s" % (status_update[ocr_obj_key]['name'], status_update[ocr_obj_key]['text'])
+                        ocr_label = gbl.DLabel(self, text=label_string)
+                        self.orc_data_labels[ocr_obj_key] = ocr_label
                         ocr_label.pack(pady=gv.BUTTON_SPACE)
                         self.back_button.pack(pady=gv.BUTTON_SPACE)
                     found = False
@@ -324,6 +323,10 @@ class CropSetup(tk.Frame):
 
             'back': lambda: (
                 controller.show_frame("OCRSettings"),
+                controller.frames['OCRStatus'].update_status(settings.loadSettings('OCRData.json')['dataset']),
+                fbFuncs.postFirebase(settings.loadSettings("OCRSettings.json")['fb_data_url'],
+                                     {'ocr_data' : settings.loadSettings("OCRData.json")['dataset']},
+                                     self.controller.firebase_database),
                 controller.frames['OCRSetup'].update_obj_names()
             )
         }
@@ -348,7 +351,7 @@ class OCRSetup(tk.Frame):
         label = gbl.GLabel(self, text="OCR Setup", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        self.ocr_obj_names = []
+        self.ocr_obj_names = {}
         self.chosen_obj_key = ""
         self.chosen_obj_label = gbl.DLabel(self, text='No Cropped Images')
         self.chosen_obj_label.pack(pady=gv.BUTTON_SPACE)
@@ -409,7 +412,7 @@ class OCRSetup(tk.Frame):
         obj_ref_dict = {}
         for obj_ref_name in dataSet:
             obj_ref_dict[obj_ref_name] = dataSet[obj_ref_name]['name']
-        if obj_ref_dict == []:
+        if obj_ref_dict == {}:
             self.chosen_obj_label.configure(text='No Cropped Images')
         else:
             if self.chosen_obj_key not in obj_ref_dict.keys():
@@ -454,6 +457,7 @@ class OCRCropConfig(tk.Frame):
             controller.show_frame("CropSettingConfig")
         )
         back_func = lambda: (
+            controller.frames['OCRStatus'].update_status(settings.loadSettings('OCRData.json')['dataset']),
             controller.show_frame("OCRSetup")
         )
 
@@ -560,7 +564,7 @@ class CropNameChange(tk.Frame):
 
         btn_objs = {
             'save': gbl.GButton(self, text="Save"),
-            'back': gbl.GButton(self, text="Cancel"),
+            'back': gbl.GButton(self, text="Go Back"),
         }
 
         for btn in btn_objs:
