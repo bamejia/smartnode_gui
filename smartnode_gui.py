@@ -141,7 +141,15 @@ class MainMenu(tk.Frame):
                                 controller.show_frame("Settings"))
 
         reset_btn_func = lambda: (
-            settings.fullReset()
+            reset_all_running_flags(self.controller),
+            reset_all_reset_mode(self.controller),
+            settings.fullReset(),
+            fbFuncs.postFirebase(settings.loadSettings("OCRSettings.json")['fb_data_url'],
+                                 {'ocr_data': settings.loadSettings("OCRData.json")['dataset']},
+                                 self.controller.firebase_database),
+            fbFuncs.postFirebase(settings.loadSettings("audioSettings.json")['fb_data_url'],
+                                 {'audio_detected': settings.loadSettings("audioSettings.json")['detected']},
+                                 self.controller.firebase_database)
         )
         quit_btn_func = lambda: (
                                 controller.destroy())
@@ -239,6 +247,17 @@ def reset_all_running_flags(app):
     mySet = settings.changeSetting(settings.loadSettings('audioSettings.json'), 'running', 'False')
     fb_message = {'running': "False"}
     fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, app.firebase_database)
+
+
+def reset_all_reset_mode(app):
+    mySet = settings.changeSetting(settings.loadSettings('OCRSettings.json'), 'loopMode', 'infinite')
+    fb_message = {'run_mode': "infinite"}
+    fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, app.firebase_database)
+
+    mySet = settings.changeSetting(settings.loadSettings('audioSettings.json'), 'loopMode', 'infinite')
+    fb_message = {'run_mode': "infinite"}
+    fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, app.firebase_database)
+
 
 if __name__ == "__main__":
     app = SmartnodeGUI()
