@@ -105,58 +105,53 @@ class OCRMenu(tk.Frame):
             self.button_off = False
             return
 
-    #   this is the function that handles the individual steps for a single ocr sampling run
-    # def ocr_run_once(self):
-    #     print("OCR_RUNTIME LOOP: " + str(self.count))
-    #     mySet = settings.loadSettings('OCRSettings.json')
-    #
-    #     #   load ocrSettings / ocr output file, OCRData.json
-    #     ocrData = settings.loadSettings('OCRData.json')
-    #
-    #     #   capture / crop source image
-    #     image.takeSource()
-    #     image.cropSource(debug=True)
-    #
-    #     #   perform ocr on all cropped images
-    #     ocrData = ocr.do_OCR_all(ocrData, debug=True)
-    #
-    #     #   temporary printout of data captured during this run
-    #     #   this information needs to be passed to display, firebase
-    #     #   dataset is a dict saved in ocrData.json
-    #     #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
-    #
-    #     print("\nOCR data Captured:")
-    #     dataSet = ocrData['dataset']
-    #     data = {'ocr_data' : ""}
-    #     mySet = settings.loadSettings("OCRSettings.json")
-    #     print("DATA SET: " + str(dataSet))
-    #     self.controller.frames['OCRStatus'].update_status(dataSet)
-    #     fbFuncs.postFirebase(mySet['fb_data_url'], data, self.controller.firebase_database)
-    #     return False
-    #     # print(dataSet)
-    #
-    #     #   blank dict to send to firebase
-    #     fbDict = {}
-    #
-    #     #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
-    #     for entry in dataSet:
-    #         print(f"\t{dataSet[entry]['name']}: '{dataSet[entry]['text']}'")
-    #         fbDict[dataSet[entry]['name']] = dataSet[entry]['text']
-    #
-    #     print(fbDict)
-    #     #   post name:text values firebase
-    #     fbFuncs.postFirebase(mySet['fb_data_url'], fbDict, self.controller.firebase_database)
-    #
-    #
-    #     #   loop control variables
-    #     endLoop = settings.check_LoopMode(mySet)
-    #     loop_again = not endLoop
-    #     return loop_again
-
+    #this is the function that handles the individual steps for a single ocr sampling run
     def ocr_run_once(self):
+        mySet = settings.loadSettings('OCRSettings.json')
+
+        #   load ocrSettings / ocr output file, OCRData.json
         ocrData = settings.loadSettings('OCRData.json')
+
+        #   capture / crop source image
+        image.takeSource()
+        image.cropSource(debug=True)
+
+        #   perform ocr on all cropped images
+        ocrData = ocr.do_OCR_all(ocrData, debug=True)
+
+        #   temporary printout of data captured during this run
+        #   this information needs to be passed to display, firebase
+        #   dataset is a dict saved in ocrData.json
+        #       -> objects have same format as OCR_DATA_ENTRY in DEFAULTS
+
+        print("\nOCR data Captured:")
         dataSet = ocrData['dataset']
+        mySet = settings.loadSettings("OCRSettings.json")
+
+        #   updates OCRStatus frame with current loop mode
         self.controller.frames['OCRStatus'].update_status(dataSet)
+
+        #   blank dict to send to firebase
+        fbDict = {}
+
+        #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
+        for entry in dataSet:
+            fbDict[entry] = {'name': dataSet[entry]['name'], 'text': dataSet[entry]['text']}
+
+        print(fbDict)
+        #   post name:text values firebase
+        fbFuncs.postFirebase(mySet['fb_data_url'], fbDict, self.controller.firebase_database)
+
+
+        #   loop control variables
+        endLoop = settings.check_LoopMode(mySet)
+        loop_again = not endLoop
+        return loop_again
+
+    # def ocr_run_once(self):
+    #     ocrData = settings.loadSettings('OCRData.json')
+    #     dataSet = ocrData['dataset']
+    #     self.controller.frames['OCRStatus'].update_status(dataSet)
 
 
     # Starts the loop to call OCR called by button

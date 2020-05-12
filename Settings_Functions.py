@@ -1,7 +1,7 @@
 import datetime
 import json
 import os
-
+import finger_functions as finger
 import DEFAULTS as defaults
 import Utility_Functions as util
 from CoordList import coordList
@@ -20,6 +20,7 @@ def check_LoopMode(mySet):
     #   returns true if enough time has passed
     if mySet['loopMode'] == 'timed':
         return util.checkTime(mySet['loopEnd'])
+
 
     else:
         return False

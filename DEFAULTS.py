@@ -12,7 +12,7 @@ MAIN_OBJ = {
 #   default ocr process settings
 OCR_OBJ = {
     'self': 'OCRSettings.json',
-    'fb_data_url': '/pi_test_status/ocr_status/',
+    'fb_data_url': '/pi_test_status/ocr_status/ocr_data',
     'fb_status_url': '/pi_test_status/ocr_status/',
     'running': 'False',
     'loopMode': 'infinite',
@@ -32,8 +32,8 @@ OCR_DATA = {
 OCR_DATA_ENTRY = {
     'name': 'crop1',
     'file': 'crop1.jpg',
-    'psm': '7',
-    'lang': 'ssd',
+    'psm': '8',
+    'lang': 'eng',
     'text': 'null'
 }
 

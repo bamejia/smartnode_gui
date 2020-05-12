@@ -1,6 +1,7 @@
 # from PiResponses import respond, check_LoopMode
 from FireBase_Functions import postFirebase
 import audio_functions as audio
+import finger_functions as finger
 import Settings_Functions as settings
 from datetime import datetime
 import pytz
@@ -62,6 +63,13 @@ def loop(mySet, db):
     detected = processData(mySet['smplPath'], mySet['reference'])
 
     if detected:
+
+        This will break the code
+
+
+        # if mySet['loopMode'] == 'press':
+        #     finger.finger_looper(self.after, self.set_finger_press, delay, repeats, interval)
+        #
         tz_NY = pytz.timezone('America/New_York')
         time_detected = datetime.now(tz_NY).strftime('%Y_%m_%d__%H_%M_%S__%f')[:-3]
 
