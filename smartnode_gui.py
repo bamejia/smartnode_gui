@@ -149,7 +149,8 @@ class MainMenu(tk.Frame):
                                  self.controller.firebase_database),
             fbFuncs.postFirebase(settings.loadSettings("audioSettings.json")['fb_data_url'],
                                  {'audio_detected': settings.loadSettings("audioSettings.json")['detected']},
-                                 self.controller.firebase_database)
+                                 self.controller.firebase_database),
+            self.controller.frames['OCRSetup'].update_obj_names()
         )
         quit_btn_func = lambda: (
                                 controller.destroy())
