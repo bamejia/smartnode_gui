@@ -246,7 +246,7 @@ class AudioModeSetup(tk.Frame):
 
         self.current_mode = settings.loadSettings('audioSettings.json')['loopMode']
 
-        self.mode_label = gbl.DLabel(self, text=self.current_mode)
+        self.mode_label = gbl.DLabel(self, text="mode: " + self.current_mode)
         self.mode_label.pack(pady=gv.BUTTON_SPACE)
 
         next_mode_func = lambda: (
@@ -256,6 +256,7 @@ class AudioModeSetup(tk.Frame):
             settings.changeSetting(settings.loadSettings("audioSettings.json"), 'loopMode', self.current_mode),
             fbFuncs.postFirebase(settings.loadSettings("audioSettings.json")['fb_status_url'],
                                  {'run_mode': self.current_mode}, controller.firebase_database),
+            self.controller.frames['AudioMenu'].change_mode_label(self.current_mode),
             controller.show_frame("AudioSettings")
         )
         cancel_func = lambda: (
@@ -276,5 +277,4 @@ class AudioModeSetup(tk.Frame):
 
     def change_current_mode_display(self, display_text):
         self.current_mode = display_text
-        self.mode_label.configure(text=display_text)
-        self.controller.frames['AudioMenu'].change_mode_label(display_text)
+        self.mode_label.configure(text="mode: " + display_text)

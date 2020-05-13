@@ -51,9 +51,9 @@ def pin_off(next_func, data):
     elif next_func == "press_pos":
         tkinter_after_func(data[0] - default_delay, pressPos, 'check_loop', data)
     elif next_func == "check_loop":
-        delay, repeats, interval = data
-        repeats -= 1
-        tkinter_after_func(interval, finger_looper, delay, repeats, interval)
+        delay, num_presses, interval = data
+        num_presses -= 1
+        tkinter_after_func(interval, finger_looper, delay, num_presses, interval)
 
 
 def cleanup():
@@ -69,8 +69,8 @@ def finger_looper(*data):
     print("in finger_looper")
 
     global can_finger_press
-    repeats = data[1]
-    if repeats >= 0:
+    num_presses = data[1]
+    if num_presses > 0:
         pressPos("start_pos", data)
     else:
         can_finger_press = True

@@ -25,7 +25,7 @@ class SmartnodeGUI(tk.Tk):
         window_y = round(gv.WINDOW_L * 2 / 5)
         geometry_dimensions = "%dx%d+%d+%d" % (window_width, window_length, window_x, window_y)
 
-        # self.attributes('-fullscreen', True)  # 800x480
+        self.attributes('-fullscreen', True)  # 800x480
         # self.attributes('-zoomed', True)
         # self.overrideredirect(True)  # gets rid of top minimizing, maximizing, and closing buttons bar
 
@@ -104,8 +104,8 @@ class SmartnodeGUI(tk.Tk):
             self.frames['AudioMenu'].audio_on_off()
         elif command == "press":
             print("App command: " + command)
-            delay, repeats, interval = 300, 0, 300
-            finger.finger_handler(delay, repeats, interval)
+            delay, num_presses, interval = 300, 1, 300
+            finger.finger_handler(delay, num_presses, interval)
 
     def addFirebaseDatabase(self, db):
         self.firebase_database = db
@@ -172,10 +172,8 @@ class Settings(tk.Frame):
         self.access_audio_settings = True
 
         ocr_settings_func = lambda: (
-            self.switch_access_setting("ocr"),
             self.try_access(self.access_ocr_settings, "ocr"))
         audio_settings_func = lambda: (
-            self.switch_access_setting("audio"),
             self.try_access(self.access_audio_settings, "audio"))
         finger_settings_func = lambda: (
             controller.show_frame("FingerSettings"))

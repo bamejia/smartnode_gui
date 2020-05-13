@@ -31,5 +31,5 @@ class FingerSettings(tk.Frame):
         back_btn.pack(pady=gv.BUTTON_SPACE)
 
     def press_finger(self):
-        delay, repeats, interval = 300, 0, 300
-        finger.finger_handler(delay, repeats, interval)
+        delay, num_presses, interval = 300, 1, 300
+        finger.finger_handler(delay, num_presses, interval)
