@@ -568,8 +568,6 @@ class CropSettingConfig(tk.Frame):
             return "language: " + setting_text
 
 
-
-
 class CropNameChange(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -609,11 +607,13 @@ class CropNameChange(tk.Frame):
     def chosen_selected_obj(self, selected_obj, dataset):
         self.dataSet = dataset
         self.selected_obj = selected_obj
-        self.name_label.configure(text=selected_obj['name'])
+        display_text = "name: " + selected_obj["name"]
+        self.name_label.configure(text=display_text)
 
     def save_function(self):
         user_text = self.user_input_entry.get()
-        self.name_label.configure(text=user_text)
+        display_text = "name :" + user_text
+        self.name_label.configure(text=display_text)
         self.selected_obj['name'] = user_text
         settings.changeSetting(settings.loadSettings("OCRData.json"), 'dataset', self.dataSet)
         fbFuncs.postFirebase(settings.loadSettings("OCRSettings.json")['fb_data_url'],
