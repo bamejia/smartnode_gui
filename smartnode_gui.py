@@ -206,7 +206,7 @@ class Settings(tk.Frame):
         else:
             self.controller.set_return_frame("Settings")
             self.controller.frames["PopUp"].set_notification("Please stop running " + setting +
-                                                             " before changing settings")
+                                                             " \nbefore changing settings")
             self.controller.show_frame("PopUp")
 
 

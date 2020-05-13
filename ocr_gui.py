@@ -545,17 +545,9 @@ class CropSettingConfig(tk.Frame):
 
     def change_to_user_friendly(self, setting_text):
         if self.current_setting == "psm":
-            if setting_text == "7":
-                setting_text = "single word"
-            elif setting_text == "8":
-                setting_text = "line of text"
-            return "psm: " + setting_text
+            return "psm: " + defaults.USER_READABLE_PSM[setting_text]
         elif self.current_setting == "lang":
-            if setting_text == "ssd":
-                setting_text = "seven segment display"
-            elif setting_text == "eng":
-                setting_text = "English"
-            return "language: " + setting_text
+            return "language: " + defaults.USER_READABLE_LANG[setting_text]
 
 
 class CropNameChange(tk.Frame):

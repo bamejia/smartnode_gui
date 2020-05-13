@@ -74,10 +74,18 @@ OCR_LOOP_TYPES = ['infinite', 'single', 'timed']
 
 #   list of psm options
 PSM_OPTIONS = ['7', '8']
+USER_READABLE_PSM = {
+    "7": "line of text",
+    "8": "single word"
+}
 
 
 #   list of language options
 LANG_OPTIONS = ['eng', 'ssd']
+USER_READABLE_LANG = {
+    "eng": "English",
+    "ssd": "Seven Segment Display"
+}
 
 #   touchscreen dimensions
 SCREEN_DIMS = {'width': 800, 'height': 480}
