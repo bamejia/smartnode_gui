@@ -130,7 +130,7 @@ def removeLast_OCRData(ocrData):
         #   if size is now zero set ocrSetup flag in mainSettings to True
         if len(dataset) == 0:
             mainSet = settings.loadSettings('mainSettings.json')
-            settings.changeSetting(mainSet, 'OCR_Setup', 'True')
+            settings.changeSetting(mainSet, 'OCR_Setup', 'False')
 
         #   save changes
         return settings.changeSetting(ocrData, 'dataset', dict(dataset))
