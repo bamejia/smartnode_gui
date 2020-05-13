@@ -12,9 +12,6 @@ import ocr_gui
 import finger_functions as finger
 
 
-UPDATE_RATE = 1000
-
-
 class SmartnodeGUI(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -166,19 +163,6 @@ class MainMenu(tk.Frame):
         settings_btn.pack(pady=gv.BUTTON_SPACE)
         reset_btn.pack(pady=gv.BUTTON_SPACE)
         quit_btn.pack(pady=gv.BUTTON_SPACE)
-
-        self.count = 0
-        self.will_update = True
-        # self.updater()
-
-    def update_button1(self):
-        if self.will_update:
-            self.start_stop_ocr_btn["text"] = str(self.count)
-            self.count += 1
-
-    def updater(self):
-        self.update_button1()
-        self.after(UPDATE_RATE, self.updater)
 
 
 class Settings(tk.Frame):

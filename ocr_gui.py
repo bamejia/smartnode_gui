@@ -12,7 +12,7 @@ import DEFAULTS as defaults
 from tkinter import font as tkfont
 
 
-UPDATE_RATE = 1000
+UPDATE_RATE = 2000
 
 
 #   This Screen Displays when the app is currently running the OCR sampling loop
