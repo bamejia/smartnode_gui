@@ -551,7 +551,7 @@ class CropSettingConfig(tk.Frame):
             self.setting_value = ocrBtns.next_option(self.setting_value, defaults.LANG_OPTIONS)
             new_setting_text = self.change_to_user_friendly(self.setting_value)
             self.current_setting_val_label.configure(text=new_setting_text)
-        self.selected_obj[self.current_setting] = self.current_setting_val_label['text']
+        self.selected_obj[self.current_setting] = self.setting_value
 
     def change_to_user_friendly(self, setting_text):
         if self.current_setting == "psm":
