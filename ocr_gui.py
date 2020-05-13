@@ -544,11 +544,11 @@ class CropSettingConfig(tk.Frame):
 
     def cycle_current_setting(self):
         if self.current_setting == 'psm':
-            new_setting = ocrBtns.next_option(self.current_setting_val_label['text'], defaults.PSM_OPTIONS)
+            new_setting = ocrBtns.next_option(self.setting_value, defaults.PSM_OPTIONS)
             new_setting_text = self.change_to_user_friendly(new_setting)
             self.current_setting_val_label.configure(text=new_setting_text)
         elif self.current_setting == 'lang':
-            new_setting = ocrBtns.next_option(self.current_setting_val_label['text'], defaults.LANG_OPTIONS)
+            new_setting = ocrBtns.next_option(self.setting_value, defaults.LANG_OPTIONS)
             new_setting_text = self.change_to_user_friendly(new_setting)
             self.current_setting_val_label.configure(text=new_setting_text)
         self.selected_obj[self.current_setting] = self.current_setting_val_label['text']
