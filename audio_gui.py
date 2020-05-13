@@ -12,7 +12,7 @@ import Utility_Functions as util
 from tkinter import font as tkfont
 
 
-UPDATE_RATE = 600   # set flag for recording audio sample to see how small this can be made
+UPDATE_RATE = 1000   # set flag for recording audio sample to see how small this can be made
 
 
 class AudioMenu(tk.Frame):
