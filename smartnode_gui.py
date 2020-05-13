@@ -18,7 +18,6 @@ class SmartnodeGUI(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         self.firebase_database = None
-        self.finger_press = True
 
         window_width = round(gv.WINDOW_W / 1)
         window_length = round(gv.WINDOW_L / 1)
@@ -26,7 +25,7 @@ class SmartnodeGUI(tk.Tk):
         window_y = round(gv.WINDOW_L * 2 / 5)
         geometry_dimensions = "%dx%d+%d+%d" % (window_width, window_length, window_x, window_y)
 
-        self.attributes('-fullscreen', True)  # 800x480
+        # self.attributes('-fullscreen', True)  # 800x480
         # self.attributes('-zoomed', True)
         # self.overrideredirect(True)  # gets rid of top minimizing, maximizing, and closing buttons bar
 
@@ -84,6 +83,9 @@ class SmartnodeGUI(tk.Tk):
         }
         self.show_frame("MainMenu")
 
+        # gives finger functions this tk object's timed interrupt function
+        finger.set_after_function(self.after)
+
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
         self.current_frame = page_name
@@ -102,18 +104,11 @@ class SmartnodeGUI(tk.Tk):
             self.frames['AudioMenu'].audio_on_off()
         elif command == "press":
             print("App command: " + command)
-            if self.finger_press:
-                self.finger_press = False
-                delay, repeats, interval = 500, 0, 500
-                finger.finger_looper(self.after, self.set_finger_press, delay, repeats, interval)
-            else:
-                print("Cannot press finger that fast")
+            delay, repeats, interval = 300, 0, 300
+            finger.finger_handler(delay, repeats, interval)
 
     def addFirebaseDatabase(self, db):
         self.firebase_database = db
-
-    def set_finger_press(self, val):
-        self.finger_press = val
 
 
 class MainMenu(tk.Frame):
@@ -173,14 +168,19 @@ class Settings(tk.Frame):
         label = gbl.GLabel(self, "Settings", controller.title_font)
         label.pack(side="top", fill="x", pady=8)
 
+        self.access_ocr_settings = True
+        self.access_audio_settings = True
+
         ocr_settings_func = lambda: (
-                                controller.show_frame("OCRSettings"))
+            self.switch_access_setting("ocr"),
+            self.try_access(self.access_ocr_settings, "ocr"))
         audio_settings_func = lambda: (
-                             controller.show_frame("AudioSettings"))
+            self.switch_access_setting("audio"),
+            self.try_access(self.access_audio_settings, "audio"))
         finger_settings_func = lambda: (
-                             controller.show_frame("FingerSettings"))
+            controller.show_frame("FingerSettings"))
         back_btn_func = lambda: (
-                             controller.show_frame("MainMenu"))
+            controller.show_frame("MainMenu"))
 
         ocr_settings_btn = gbl.GButton(self, "OCR Settings", ocr_settings_func)
         audio_settings_btn = gbl.GButton(self, "Audio Settings", audio_settings_func)
@@ -191,6 +191,21 @@ class Settings(tk.Frame):
         audio_settings_btn.pack(pady=gv.BUTTON_SPACE)
         finger_settings_btn.pack(pady=gv.BUTTON_SPACE)
         back_button_btn.pack(pady=gv.BUTTON_SPACE)
+
+    def switch_access_setting(self, setting):
+        if setting == "ocr":
+            self.access_ocr_settings = not self.access_ocr_settings
+        elif setting == "audio":
+            self.access_audio_settings = not self.access_audio_settings
+
+    def try_access(self, setting_access, setting):
+        if setting_access:
+            if setting == "ocr":
+                self.controller.show_frame("OCRSettings")
+            elif setting == "audio":
+                self.controller.show_frame("AudioSettings")
+        else:
+            print("Please stop running " + setting + " before changing settings")
 
 
 class PopUp(tk.Frame):

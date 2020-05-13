@@ -97,6 +97,7 @@ class AudioMenu(tk.Frame):
             fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, self.controller.firebase_database)
             self.button_off = False
             self.will_update = False
+            self.controller.frames["Settings"].switch_access_setting("audio")
 
     # Starts the loop to call OCR called by button
     def audio_on_off(self):
@@ -128,6 +129,7 @@ class AudioMenu(tk.Frame):
         self.running_display_label.configure(text='Running: ' + running)
 
     def preloop_flag_assignments(self):
+        self.controller.frames["Settings"].switch_access_setting("audio")
         self.change_running_label('True')
         mySet = settings.loadSettings('audioSettings.json')
         mySet = settings.changeSetting(mySet, 'detected', 'Not Detected')

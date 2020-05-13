@@ -55,7 +55,6 @@ class OCRMenu(tk.Frame):
 
         btn_funcs = {
             'toggle': lambda: (
-                # ,
                 self.ocr_on_off()
             ),
 
@@ -88,14 +87,13 @@ class OCRMenu(tk.Frame):
 
         self.count = 0
 
-    def ocr_updater(self):
+    def ocr_updater(self, mySet, ocrData):
         # This is the ocr loop by recursion
         if self.will_update and not self.button_off:
 
-            self.will_update = self.ocr_run_once()
+            self.ocr_run_once(mySet, ocrData)
             # return values of external functions can change will_update flag or user_setup
             # self.will_update = False
-            self.after(UPDATE_RATE, self.ocr_updater)
 
         else:
             mySet = settings.changeSetting(settings.loadSettings('OCRSettings.json'), 'running', 'False')
@@ -104,14 +102,10 @@ class OCRMenu(tk.Frame):
             fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, self.controller.firebase_database)
             self.will_update = False
             self.button_off = False
-            return
+            self.controller.frames["Settings"].switch_access_setting("ocr")
 
-    #this is the function that handles the individual steps for a single ocr sampling run
-    def ocr_run_once(self):
-        mySet = settings.loadSettings('OCRSettings.json')
-
-        #   load ocrSettings / ocr output file, OCRData.json
-        ocrData = settings.loadSettings('OCRData.json')
+    # this is the function that handles the individual steps for a single ocr sampling run
+    def ocr_run_once(self, mySet, ocrData):
 
         #   capture / crop source image
         image.takeSource()
@@ -120,6 +114,8 @@ class OCRMenu(tk.Frame):
         #   perform ocr on all cropped images
         ocrData = ocr.do_OCR_all(ocrData, debug=True)
 
+        print("ocrData: " + str(ocrData))
+
         #   temporary printout of data captured during this run
         #   this information needs to be passed to display, firebase
         #   dataset is a dict saved in ocrData.json
@@ -127,17 +123,9 @@ class OCRMenu(tk.Frame):
 
         print("\nOCR data Captured:")
         dataSet = ocrData['dataset']
-        mySet = settings.loadSettings("OCRSettings.json")
 
         #   updates OCRStatus frame with current loop mode
         self.controller.frames['OCRStatus'].update_status(dataSet)
-
-        # #   blank dict to send to firebase
-        # fbDict = {}
-        #
-        # #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
-        # for entry in dataSet:
-        #     fbDict[entry] = {'name': dataSet[entry]['name'], 'text': dataSet[entry]['text']}
 
         # print(fbDict)
 
@@ -154,9 +142,9 @@ class OCRMenu(tk.Frame):
 
         #   loop control variables
         endLoop = settings.check_LoopMode(mySet)
-        loop_again = not endLoop
-        return loop_again
+        self.will_update = not endLoop
 
+        self.after(UPDATE_RATE, self.ocr_updater, mySet, ocrData)
 
     # Starts the loop to call OCR called by button
     def ocr_on_off(self):
@@ -165,7 +153,8 @@ class OCRMenu(tk.Frame):
             self.user_setup = settings.loadSettings("mainSettings.json")['OCR_Setup'] == 'True'
             if self.user_setup:
                 mySet = self.preloop_flag_assignments()
-                self.ocr_updater()
+                ocrData = settings.loadSettings('OCRData.json')
+                self.ocr_updater(mySet, ocrData)
             else:
                 self.will_update = False
                 self.controller.show_frame("CropSetup")
@@ -179,6 +168,7 @@ class OCRMenu(tk.Frame):
         self.running_display_label.configure(text='Running: ' + running)
 
     def preloop_flag_assignments(self):
+        self.controller.frames["Settings"].switch_access_setting("ocr")
         self.change_running_label('True')
         mySet = settings.loadSettings('OCRSettings.json')
         mySet = settings.changeSetting(mySet, 'running', 'True')

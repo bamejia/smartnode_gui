@@ -13,8 +13,6 @@ class FingerSettings(tk.Frame):
         label = gbl.GLabel(self, text="Finger Settings", font=controller.title_font)
         label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
-        self.finger_press = True
-
         press_finger_func = lambda :(
             self.press_finger()
         )
@@ -33,10 +31,5 @@ class FingerSettings(tk.Frame):
         back_btn.pack(pady=gv.BUTTON_SPACE)
 
     def press_finger(self):
-        if self.finger_press:
-            self.finger_press = False
-            delay, repeats, interval = 500, 0, 500
-            finger.finger_looper(self.after, self.set_finger_press, delay, repeats, interval)
-
-    def set_finger_press(self, val):
-        self.finger_press = val
+        delay, repeats, interval = 300, 0, 300
+        finger.finger_handler(delay, repeats, interval)

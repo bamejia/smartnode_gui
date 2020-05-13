@@ -64,7 +64,6 @@ def loop(mySet, db):
 
     if detected:
 
-
         # if mySet['loopMode'] == 'press':
         #     finger.finger_looper(self.after, self.set_finger_press, delay, repeats, interval)
         #
