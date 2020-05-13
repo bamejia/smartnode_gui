@@ -21,13 +21,13 @@ def check_LoopMode(mySet):
     if mySet['loopMode'] == 'timed':
         return util.checkTime(mySet['loopEnd'])
 
-    if mySet['loopMode'] == 'press and stop':
+    if mySet['loopMode'] == 'press once':
         if loadSettings("audioSettings.json")["detected"] != "Not Detected":
             delay, num_presses, interval = 300, 1, 300
             finger.finger_looper(delay, num_presses, interval)
             return True
 
-    if mySet['loopMode'] == 'press once':
+    if mySet['loopMode'] == 'press inf':
         if loadSettings("audioSettings.json")["detected"] != "Not Detected":
             delay, num_presses, interval = 300, 1, 300
             finger.finger_looper(delay, num_presses, interval)

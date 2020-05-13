@@ -68,7 +68,7 @@ LIST_ALL = {
 
 #   list of valid loop types
 LOOP_TYPES = ['infinite', 'single', 'timed', 'press']
-AUDIO_LOOP_TYPES = ['infinite', 'single', 'timed', 'press once', 'press and stop']
+AUDIO_LOOP_TYPES = ['infinite', 'single', 'timed', 'press once', 'press inf']
 OCR_LOOP_TYPES = ['infinite', 'single', 'timed']
 
 
