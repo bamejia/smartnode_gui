@@ -44,6 +44,7 @@ class SmartnodeGUI(tk.Tk):
         frame_classes = (
             MainMenu,
             Settings,
+            PopUp,
             ocr_gui.OCRMenu,
             ocr_gui.OCRSettings,
             ocr_gui.CropSetup,
@@ -203,7 +204,10 @@ class Settings(tk.Frame):
             elif setting == "audio":
                 self.controller.show_frame("AudioSettings")
         else:
-            print("Please stop running " + setting + " before changing settings")
+            self.controller.set_return_frame("Settings")
+            self.controller.frames["PopUp"].set_notification("Please stop running " + setting +
+                                                             " before changing settings")
+            self.controller.show_frame("PopUp")
 
 
 class PopUp(tk.Frame):
@@ -212,27 +216,25 @@ class PopUp(tk.Frame):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
 
-        label = gbl.GLabel(self, "Settings", controller.title_font)
-        label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
+        # label = gbl.GLabel(self, "Settings", controller.title_font)
+        # label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
-        ocr_settings_func = lambda: (
-            controller.show_frame("OCRSettings"))
-        audio_settings_func = lambda: (
-            controller.show_frame("AudioSettings"))
-        finger_settings_func = lambda: (
-            controller.show_frame("FingerSettings"))
+        self.notification_label = gbl.DLabel(self, text="Nothing")
+        self.notification_label.grid(pady=gv.BUTTON_SPACE*10, sticky="s")
+
         back_btn_func = lambda: (
-            controller.show_frame("MainMenu"))
+            controller.show_frame(controller.return_frame))
 
-        ocr_settings_btn = gbl.GButton(self, "OCR Settings", ocr_settings_func)
-        audio_settings_btn = gbl.GButton(self, "Audio Settings", audio_settings_func)
-        finger_settings_btn = gbl.GButton(self, "Finger Settings", finger_settings_func)
-        back_button_btn = gbl.GButton(self, "Go back", back_btn_func)
+        back_button_btn = gbl.GButton(self, "Ok", back_btn_func)
 
-        ocr_settings_btn.pack(pady=gv.BUTTON_SPACE)
-        audio_settings_btn.pack(pady=gv.BUTTON_SPACE)
-        finger_settings_btn.pack(pady=gv.BUTTON_SPACE)
-        back_button_btn.pack(pady=gv.BUTTON_SPACE)
+        back_button_btn.grid(row=1, sticky="n", pady=gv.BUTTON_SPACE)
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+
+    def set_notification(self, notificatoin_text):
+        self.notification_label.configure(text=notificatoin_text)
 
 
 def reset_all_running_flags(app):
