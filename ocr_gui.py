@@ -502,6 +502,7 @@ class CropSettingConfig(tk.Frame):
         self.dataSet = None
         self.selected_obj = None
         self.current_setting = None
+        self.setting_value = None
 
         self.current_setting_val_label = gbl.DLabel(self, text="None")
         self.current_setting_val_label.pack(pady=gv.BUTTON_SPACE)
@@ -537,26 +538,36 @@ class CropSettingConfig(tk.Frame):
         self.dataSet = dataSet
         self.selected_obj = selected_obj
         self.current_setting = chosen_setting
-        self.current_setting_val_label.configure(text=selected_obj[chosen_setting])
+        self.setting_value = selected_obj[chosen_setting]
+        new_setting_text = self.change_to_user_friendly(self.setting_value)
+        self.current_setting_val_label.configure(text=new_setting_text)
 
     def cycle_current_setting(self):
         if self.current_setting == 'psm':
             new_setting = ocrBtns.next_option(self.current_setting_val_label['text'], defaults.PSM_OPTIONS)
-            if new_setting == "7":
-                new_setting = "single word"
-            elif new_setting == "8":
-                new_setting = "line of text"
-            new_setting_text = "psm: " + new_setting
+            new_setting_text = self.change_to_user_friendly(new_setting)
             self.current_setting_val_label.configure(text=new_setting_text)
         elif self.current_setting == 'lang':
             new_setting = ocrBtns.next_option(self.current_setting_val_label['text'], defaults.LANG_OPTIONS)
-            if new_setting == "ssd":
-                new_setting = "seven segment display"
-            elif new_setting == "eng":
-                new_setting = "English"
-            new_setting_text = "language: " + new_setting
+            new_setting_text = self.change_to_user_friendly(new_setting)
             self.current_setting_val_label.configure(text=new_setting_text)
         self.selected_obj[self.current_setting] = self.current_setting_val_label['text']
+
+    def change_to_user_friendly(self, setting_text):
+        if self.current_setting == "psm":
+            if setting_text == "7":
+                setting_text = "single word"
+            elif setting_text == "8":
+                setting_text = "line of text"
+            return "psm: " + setting_text
+        elif self.current_setting == "lang":
+            if setting_text == "ssd":
+                setting_text = "seven segment display"
+            elif setting_text == "eng":
+                setting_text = "English"
+            return "language: " + setting_text
+
+
 
 
 class CropNameChange(tk.Frame):
