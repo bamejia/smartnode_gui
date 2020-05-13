@@ -52,7 +52,7 @@ class SmartnodeGUI(tk.Tk):
             ocr_gui.OCRSettings,
             ocr_gui.CropSetup,
             ocr_gui.OCRSetup,
-            ocr_gui.OCRCropConfig,
+            ocr_gui.OCRConfig,
             ocr_gui.CropSettingConfig,
             ocr_gui.CropNameChange,
             ocr_gui.OCRModeSetup,
@@ -112,10 +112,8 @@ class SmartnodeGUI(tk.Tk):
             else:
                 print("Cannot press finger that fast")
 
-
     def addFirebaseDatabase(self, db):
         self.firebase_database = db
-
 
     def set_finger_press(self, val):
         self.finger_press = val

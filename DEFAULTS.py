@@ -32,7 +32,7 @@ OCR_DATA = {
 OCR_DATA_ENTRY = {
     'name': 'crop1',
     'file': 'crop1.jpg',
-    'psm': '8',
+    'psm': '7',
     'lang': 'eng',
     'text': 'null'
 }

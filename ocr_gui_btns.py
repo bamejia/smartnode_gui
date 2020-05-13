@@ -63,12 +63,15 @@ def cropSetup_show():
     image.showVid()
 
 
+# used for choosing between run modes
 def next_mode(current_mode):
     myDeque = collections.deque(defaults.OCR_LOOP_TYPES)
     index = myDeque.index(current_mode)
     myDeque.rotate(-1)
     return myDeque[index]
 
+
+# used when configuring the ocr settings for each crop object
 def next_option(current_option, options):
     myDeque = collections.deque(options)
     index = myDeque.index(current_option)

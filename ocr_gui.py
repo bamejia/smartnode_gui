@@ -11,7 +11,8 @@ import collections
 import DEFAULTS as defaults
 from tkinter import font as tkfont
 
-UPDATE_RATE = 500
+
+UPDATE_RATE = 1000
 
 
 #   This Screen Displays when the app is currently running the OCR sampling loop
@@ -131,27 +132,30 @@ class OCRMenu(tk.Frame):
         #   updates OCRStatus frame with current loop mode
         self.controller.frames['OCRStatus'].update_status(dataSet)
 
-        #   blank dict to send to firebase
-        fbDict = {}
+        # #   blank dict to send to firebase
+        # fbDict = {}
+        #
+        # #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
+        # for entry in dataSet:
+        #     fbDict[entry] = {'name': dataSet[entry]['name'], 'text': dataSet[entry]['text']}
 
-        #   note -> dataSet[entry] and dataSet[entry]['name'] are the same string...
-        for entry in dataSet:
-            fbDict[entry] = {'name': dataSet[entry]['name'], 'text': dataSet[entry]['text']}
+        # print(fbDict)
 
-        print(fbDict)
-        #   post name:text values firebase
-        fbFuncs.postFirebase(mySet['fb_data_url'], fbDict, self.controller.firebase_database)
+        directory = mySet['fb_data_url']
 
+        # if dataSet:
+        #     fbFuncs.postFirebase(directory, "{"name": dataSet[crop_key]['name']}",
+        #                         self.controller.firebase_database)
+
+        #   post name:text values firebase as individual attributes
+        for crop_key in dataSet:
+            fbFuncs.postFirebase(directory + "/" + crop_key + "/", {"text" : dataSet[crop_key]['text']},
+                                 self.controller.firebase_database)
 
         #   loop control variables
         endLoop = settings.check_LoopMode(mySet)
         loop_again = not endLoop
         return loop_again
-
-    # def ocr_run_once(self):
-    #     ocrData = settings.loadSettings('OCRData.json')
-    #     dataSet = ocrData['dataset']
-    #     self.controller.frames['OCRStatus'].update_status(dataSet)
 
 
     # Starts the loop to call OCR called by button
@@ -331,12 +335,12 @@ class CropSetup(tk.Frame):
             ),
 
             'back': lambda: (
+                controller.frames['OCRSetup'].update_obj_names(),
                 controller.show_frame("OCRSettings"),
                 controller.frames['OCRStatus'].update_status(settings.loadSettings('OCRData.json')['dataset']),
-                fbFuncs.postFirebase(settings.loadSettings("OCRSettings.json")['fb_data_url'],
-                                     {'ocr_data' : settings.loadSettings("OCRData.json")['dataset']},
-                                     self.controller.firebase_database),
-                controller.frames['OCRSetup'].update_obj_names()
+                fbFuncs.postFirebase(settings.loadSettings("OCRSettings.json")['fb_status_url'],
+                                     {"ocr_data": settings.loadSettings("OCRData.json")['dataset']},
+                                     self.controller.firebase_database)
             )
         }
 
@@ -437,17 +441,16 @@ class OCRSetup(tk.Frame):
         if self.chosen_obj_label['text'] == 'No Cropped Images':
             return
         else:
-            self.controller.frames["OCRCropConfig"].update_selected_obj(self.chosen_obj_key)
-            self.controller.show_frame("OCRCropConfig")
+            self.controller.frames["OCRConfig"].update_selected_obj(self.chosen_obj_key)
+            self.controller.show_frame("OCRConfig")
 
 
-
-class OCRCropConfig(tk.Frame):
+class OCRConfig(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent, bg=gv.BACKGROUND_COLOR)
         self.controller = controller
-        label = gbl.GLabel(self, text="OCR Crop Config", font=controller.title_font)
+        label = gbl.GLabel(self, text="OCR Config", font=controller.title_font)
         label.pack(side="top", fill="x", pady=gv.TITLE_PADY)
 
         self.dataSet = None
@@ -511,12 +514,12 @@ class CropSettingConfig(tk.Frame):
             'save': lambda: (
                 settings.changeSetting(settings.loadSettings("OCRData.json"), 'dataset', self.dataSet),
                 fbFuncs.postFirebase(settings.loadSettings("OCRSettings.json")['fb_data_url'],
-                                     {'ocr_data': self.dataSet}, controller.firebase_database),
-                controller.show_frame("OCRCropConfig")
+                                     self.dataSet, controller.firebase_database),
+                controller.show_frame("OCRConfig")
             ),
 
             'cancel': lambda: (
-                controller.show_frame("OCRCropConfig")
+                controller.show_frame("OCRConfig")
             )
         }
 
@@ -538,9 +541,21 @@ class CropSettingConfig(tk.Frame):
 
     def cycle_current_setting(self):
         if self.current_setting == 'psm':
-            self.current_setting_val_label.configure(text=ocrBtns.next_option(self.current_setting_val_label['text'], defaults.PSM_OPTIONS))
+            new_setting = ocrBtns.next_option(self.current_setting_val_label['text'], defaults.PSM_OPTIONS)
+            if new_setting == "7":
+                new_setting = "single word"
+            elif new_setting == "8":
+                new_setting = "line of text"
+            new_setting_text = "psm: " + new_setting
+            self.current_setting_val_label.configure(text=new_setting_text)
         elif self.current_setting == 'lang':
-            self.current_setting_val_label.configure(text=ocrBtns.next_option(self.current_setting_val_label['text'], defaults.LANG_OPTIONS))
+            new_setting = ocrBtns.next_option(self.current_setting_val_label['text'], defaults.LANG_OPTIONS)
+            if new_setting == "ssd":
+                new_setting = "seven segment display"
+            elif new_setting == "eng":
+                new_setting = "English"
+            new_setting_text = "language: " + new_setting
+            self.current_setting_val_label.configure(text=new_setting_text)
         self.selected_obj[self.current_setting] = self.current_setting_val_label['text']
 
 
@@ -567,7 +582,7 @@ class CropNameChange(tk.Frame):
             ),
 
             'back': lambda: (
-                controller.show_frame("OCRCropConfig")
+                controller.show_frame("OCRConfig")
             )
         }
 
@@ -591,7 +606,7 @@ class CropNameChange(tk.Frame):
         self.selected_obj['name'] = user_text
         settings.changeSetting(settings.loadSettings("OCRData.json"), 'dataset', self.dataSet)
         fbFuncs.postFirebase(settings.loadSettings("OCRSettings.json")['fb_data_url'],
-                             {'ocr_data': self.dataSet}, self.controller.firebase_database)
+                             self.dataSet, self.controller.firebase_database)
         self.controller.frames['OCRSetup'].update_obj_names()
 
 
