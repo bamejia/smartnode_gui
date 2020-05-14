@@ -20,11 +20,11 @@ def getFullPath(fileName):
 #   This is the least secure code I think i have ever written
 #   attempts to run the bash script based on the name provided
 #   args are optional, but
-def runBashScript(scriptName, args=()):
+def runBashScript(scriptName, args=""):
     directory = os.path.dirname(__file__)
     filePath = os.path.join(directory, scriptName)
-    try:
-        subprocess.call([filePath, args])
+    try:        subprocess.call([filePath, args])
+
     except PermissionError:
         print(f"'{scriptName}' has not been set to executable!")
         print(f"while in this directory run sudo chmod +x {scriptName}")

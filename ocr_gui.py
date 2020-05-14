@@ -2,6 +2,7 @@ import tkinter as tk
 
 import FireBase_Functions as fbFuncs
 import Settings_Functions as settings
+import Utility_Functions as util
 import general_button_label as gbl
 import global_variables as gv
 import image_functions as image
@@ -448,7 +449,8 @@ class OCRConfig(tk.Frame):
 
         change_name_func = lambda: (
             controller.frames["CropNameChange"].chosen_selected_obj(self.selected_obj, self.dataSet),
-            controller.show_frame("CropNameChange")
+            controller.show_frame("CropNameChange"),
+            controller.frames["CropNameChange"].focus_entry()
         )
         change_psm_func = lambda: (
             controller.frames["CropSettingConfig"].chosen_selected_obj(self.selected_obj, self.dataSet, "psm"),
@@ -601,6 +603,11 @@ class CropNameChange(tk.Frame):
         fbFuncs.postFirebase(settings.loadSettings("OCRSettings.json")['fb_data_url'],
                              self.dataSet, self.controller.firebase_database)
         self.controller.frames['OCRSetup'].update_obj_names()
+        self.user_input_entry.delete(0, tk.END)
+
+    def focus_entry(self):
+        self.user_input_entry.focus()
+        # util.runBashScript("keyToggle.sh", '')
 
 
 class OCRModeSetup(tk.Frame):
