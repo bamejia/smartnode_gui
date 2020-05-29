@@ -33,7 +33,7 @@ OCR_DATA_ENTRY = {
     'name': 'crop1',
     'file': 'crop1.jpg',
     'psm': '7',
-    'lang': 'eng',
+    'lang': 'ssd',
     'text': 'null'
 }
 
@@ -67,9 +67,9 @@ LIST_ALL = {
 }
 
 #   list of valid loop types
-LOOP_TYPES = ['infinite', 'single', 'timed', 'press']
-AUDIO_LOOP_TYPES = ['infinite', 'single', 'timed', 'press once', 'press inf']
-OCR_LOOP_TYPES = ['infinite', 'single', 'timed']
+LOOP_TYPES = ['infinite', 'single', 'press']
+AUDIO_LOOP_TYPES = ['infinite', 'single', 'press once']
+OCR_LOOP_TYPES = ['infinite', 'single']
 
 
 #   list of psm options
@@ -84,7 +84,7 @@ USER_READABLE_PSM = {
 LANG_OPTIONS = ['eng', 'ssd']
 USER_READABLE_LANG = {
     "eng": "English",
-    "ssd": "Seven Segment Display"
+    "ssd": "7 Segment Display"
 }
 
 #   touchscreen dimensions

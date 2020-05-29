@@ -103,7 +103,7 @@ class OCRMenu(tk.Frame):
             fbFuncs.postFirebase(mySet['fb_status_url'], fb_message, self.controller.firebase_database)
             self.will_update = False
             self.button_off = False
-            self.controller.frames["Settings"].switch_access_setting("ocr")
+            self.controller.frames["Settings"].access_on("ocr")
 
     # this is the function that handles the individual steps for a single ocr sampling run
     def ocr_run_once(self, mySet, ocrData):
@@ -169,7 +169,7 @@ class OCRMenu(tk.Frame):
         self.running_display_label.configure(text='Running: ' + running)
 
     def preloop_flag_assignments(self):
-        self.controller.frames["Settings"].switch_access_setting("ocr")
+        self.controller.frames["Settings"].access_off("ocr")
         self.change_running_label('True')
         mySet = settings.loadSettings('OCRSettings.json')
         mySet = settings.changeSetting(mySet, 'running', 'True')
@@ -209,7 +209,7 @@ class OCRStatus(tk.Frame):
 
     # Dynamically creates or destroys labels according to the dataset dict passed from OCRData.json
     def update_status(self, status_update):
-        if status_update == []:
+        if status_update == {}:
             if self.orc_data_labels == {}:
                 return
             else:

@@ -197,6 +197,18 @@ class Settings(tk.Frame):
         elif setting == "audio":
             self.access_audio_settings = not self.access_audio_settings
 
+    def access_on(self, setting):
+        if setting == "ocr":
+            self.access_ocr_settings = True
+        elif setting == "audio":
+            self.access_audio_settings = True
+
+    def access_off(self, setting):
+        if setting == "ocr":
+            self.access_ocr_settings = False
+        elif setting == "audio":
+            self.access_audio_settings = False
+
     def try_access(self, setting_access, setting):
         if setting_access:
             if setting == "ocr":
